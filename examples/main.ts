@@ -4,7 +4,7 @@ import TileLayer from "ol/layer/Tile.js";
 import OSM from "ol/source/OSM.js";
 import { fromLonLat } from "ol/proj.js";
 
-import { GestureMapController } from "../src/index.js";
+import { GestureMapController } from "@map-gesture-controls/ol";
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
 

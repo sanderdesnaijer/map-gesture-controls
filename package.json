@@ -1,48 +1,23 @@
 {
-  "name": "@opengeoweb/ol-gesture-controls",
-  "version": "0.1.0",
-  "description": "Control OpenLayers maps with hand gestures via MediaPipe",
+  "name": "map-gesture-controls",
+  "private": true,
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./style.css": "./dist/style.css"
-  },
-  "files": [
-    "dist"
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts",
-    "preview": "vite preview",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@mediapipe/tasks-vision": "^0.10.14"
-  },
-  "peerDependencies": {
-    "ol": "^10.2.1"
+    "build": "npm run build --workspace=packages/map-gesture-core && npm run build --workspace=packages/ol-gesture-controls",
+    "build:libs": "npm run build:lib --workspace=packages/map-gesture-core && npm run build:lib --workspace=packages/ol-gesture-controls",
+    "type-check": "npm run type-check --workspaces",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "ol": "^10.2.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11"
   },
-  "keywords": [
-    "openlayers",
-    "mediapipe",
-    "hand-gestures",
-    "map",
-    "gesture-control"
-  ],
   "overrides": {
     "esbuild": "^0.25.0"
-  },
-  "license": "MIT"
+  }
 }

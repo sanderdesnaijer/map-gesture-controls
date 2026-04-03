@@ -1,4 +1,4 @@
-# @opengeoweb/ol-gesture-controls
+# @map-gesture-controls/ol
 
 Hand-gesture control for [OpenLayers](https://openlayers.org/) maps using [MediaPipe](https://developers.google.com/mediapipe) hand tracking in the browser. Pan with a closed fist; zoom by moving both hands apart or together.
 
@@ -10,7 +10,7 @@ Hand-gesture control for [OpenLayers](https://openlayers.org/) maps using [Media
 ## Install
 
 ```bash
-npm install @opengeoweb/ol-gesture-controls ol
+npm install @map-gesture-controls/ol ol
 ```
 
 Publish flow: run `npm run build:lib` so the `dist/` folder exists before `npm publish` (this repo does not commit `dist/`).
@@ -19,8 +19,8 @@ Publish flow: run `npm run build:lib` so the `dist/` folder exists before `npm p
 
 ```ts
 import Map from 'ol/Map.js';
-import { GestureMapController } from '@opengeoweb/ol-gesture-controls';
-import '@opengeoweb/ol-gesture-controls/style.css';
+import { GestureMapController } from '@map-gesture-controls/ol';
+import '@map-gesture-controls/ol/style.css';
 
 const controller = new GestureMapController({ map });
 

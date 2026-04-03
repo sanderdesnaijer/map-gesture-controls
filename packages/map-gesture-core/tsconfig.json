@@ -13,12 +13,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@map-gesture-controls/core": ["packages/map-gesture-core/src/index.ts"],
-      "@map-gesture-controls/ol": ["packages/ol-gesture-controls/src/index.ts"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["examples", "packages/*/src"]
+  "include": ["src"]
 }

@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { resolve } from 'path';
 import { defineConfig, type Plugin } from 'vite';
 
 /** @mediapipe/tasks-vision references vision_bundle_mjs.js.map but only ships vision_bundle.mjs.map */
@@ -26,6 +27,12 @@ export default defineConfig({
   root: 'examples',
   base: './',
   plugins: [mediapipeBrokenSourcemapWorkaround()],
+  resolve: {
+    alias: {
+      '@map-gesture-controls/core': resolve(__dirname, 'packages/map-gesture-core/src/index.ts'),
+      '@map-gesture-controls/ol': resolve(__dirname, 'packages/ol-gesture-controls/src/index.ts'),
+    },
+  },
   server: {
     port: 5173,
     open: true,
