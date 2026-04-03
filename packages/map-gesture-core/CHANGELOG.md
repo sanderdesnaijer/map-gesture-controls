@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.4...core-v0.1.5) (2026-04-03)
+
+
+### Bug Fixes
+
+* copy and documentation for npm packages ([5b12dba](https://github.com/sanderdesnaijer/map-gesture-controls/commit/5b12dba4036f05dc913cc23cd914bb3d0fa754a6))
+
 ## [0.1.4](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.3...core-v0.1.4) (2026-04-03)
 
 
