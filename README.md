@@ -17,10 +17,22 @@ Publish flow: run `npm run build:lib` so the `dist/` folder exists before `npm p
 
 ## Usage
 
+You need a container element in your HTML (e.g. `<div id="map"></div>`) and an [OpenLayers](https://openlayers.org/) `Map` instance. Then wire in the gesture controller:
+
 ```ts
 import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import TileLayer from 'ol/layer/Tile.js';
+import OSM from 'ol/source/OSM.js';
+import { fromLonLat } from 'ol/proj.js';
 import { GestureMapController } from '@map-gesture-controls/ol';
 import '@map-gesture-controls/ol/style.css';
+
+const map = new Map({
+  target: 'map',
+  layers: [new TileLayer({ source: new OSM() })],
+  view: new View({ center: fromLonLat([0, 0]), zoom: 2 }),
+});
 
 const controller = new GestureMapController({ map });
 
@@ -37,6 +49,7 @@ Optional config: `webcam`, `tuning`, and `debug` — see the [Configuration](#co
 All options are optional. Pass only the keys you want to override; the rest use sensible defaults.
 
 ```ts
+// `map` is your `ol/Map` instance (see Usage above)
 const controller = new GestureMapController({
   map,
   webcam: {
