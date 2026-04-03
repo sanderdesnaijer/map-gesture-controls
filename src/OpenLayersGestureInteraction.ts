@@ -75,7 +75,7 @@ export class OpenLayersGestureInteraction {
     view.animate({
       zoom: currentZoom + delta * this.zoomScale,
       center: zoomCenter,
-      duration: 50,
+      duration: 0,
     });
   }
 }

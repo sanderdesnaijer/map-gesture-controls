@@ -36,3 +36,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# AI generated files
+.cursor/
+.claude/
