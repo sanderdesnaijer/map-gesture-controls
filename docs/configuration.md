@@ -1,3 +1,18 @@
+---
+title: Configuration - Map Gesture Controls
+description: Configure webcam overlay, gesture sensitivity, smoothing, dead zones, and debug mode for Map Gesture Controls. Full reference of all available options.
+head:
+  - - meta
+    - property: og:title
+      content: Configuration Reference - Map Gesture Controls
+  - - meta
+    - property: og:description
+      content: Configure webcam overlay, gesture sensitivity, smoothing, and debug mode for Map Gesture Controls.
+  - - meta
+    - property: og:url
+      content: https://sanderdesnaijer.github.io/map-gesture-controls/configuration
+---
+
 # Configuration
 
 All configuration is passed to `GestureMapController` at construction time. Every key is optional; unspecified keys use the defaults shown below.

@@ -175,6 +175,13 @@ Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam a
 
 Full docs, live demos, and API reference at **[sanderdesnaijer.github.io/map-gesture-controls](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
+To build and preview the docs locally:
+
+```bash
+npm run docs:build
+npm run docs:preview
+```
+
 ## License
 
 MIT

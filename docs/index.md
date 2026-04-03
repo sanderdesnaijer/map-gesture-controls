@@ -1,10 +1,25 @@
 ---
 layout: home
+title: Map Gesture Controls - Hand Gesture Navigation for OpenLayers Maps
+description: Control OpenLayers maps with hand gestures using your webcam. Browser-native, privacy-first, powered by MediaPipe. No backend required.
+head:
+  - - meta
+    - property: og:title
+      content: Map Gesture Controls - Hand Gesture Navigation for OpenLayers Maps
+  - - meta
+    - property: og:description
+      content: Control OpenLayers maps with hand gestures using your webcam. Browser-native, privacy-first, powered by MediaPipe.
+  - - meta
+    - property: og:url
+      content: https://sanderdesnaijer.github.io/map-gesture-controls/
 
 hero:
-  name: "map-gesture-controls"
+  name: "Map Gesture Controls"
   text: "Control maps with your hands"
   tagline: "Browser-native hand gesture controls for OpenLayers. Powered by MediaPipe. No backend required."
+  image:
+    src: /og-image.png
+    alt: Hand gesture controlling an OpenLayers map - pan with a fist, zoom with two open hands, powered by MediaPipe in the browser
   actions:
     - theme: brand
       text: Get Started

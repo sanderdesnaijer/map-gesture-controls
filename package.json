@@ -2,6 +2,26 @@
   "name": "map-gesture-controls",
   "private": true,
   "type": "module",
+  "description": "Browser-native hand gesture controls for OpenLayers maps. Pan, zoom, and navigate maps using hand gestures powered by MediaPipe. No backend required.",
+  "keywords": [
+    "map",
+    "gesture",
+    "hand-tracking",
+    "openlayers",
+    "mediapipe",
+    "webcam",
+    "accessibility",
+    "touchless",
+    "gesture-control",
+    "browser"
+  ],
+  "homepage": "https://sanderdesnaijer.github.io/map-gesture-controls/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls.git"
+  },
+  "author": "Sander de Snaijer",
+  "license": "MIT",
   "workspaces": [
     "packages/*"
   ],

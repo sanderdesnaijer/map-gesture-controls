@@ -1,3 +1,18 @@
+---
+title: Architecture - Map Gesture Controls
+description: Understand the internal architecture of Map Gesture Controls. Data flow from webcam frames through MediaPipe to OpenLayers map interactions.
+head:
+  - - meta
+    - property: og:title
+      content: Architecture Overview - Map Gesture Controls
+  - - meta
+    - property: og:description
+      content: Internal architecture and data flow of the gesture control pipeline.
+  - - meta
+    - property: og:url
+      content: https://sanderdesnaijer.github.io/map-gesture-controls/advanced/architecture
+---
+
 # Architecture
 
 ## Data flow

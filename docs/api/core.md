@@ -1,3 +1,18 @@
+---
+title: Core API Reference - Map Gesture Controls
+description: API documentation for @map-gesture-controls/core. GestureController, GestureStateMachine, gesture classifier, and all core types.
+head:
+  - - meta
+    - property: og:title
+      content: "@map-gesture-controls/core API Reference"
+  - - meta
+    - property: og:description
+      content: API reference for the map-agnostic gesture detection engine. GestureController, state machine, and classifier.
+  - - meta
+    - property: og:url
+      content: https://sanderdesnaijer.github.io/map-gesture-controls/api/core
+---
+
 # @map-gesture-controls/core
 
 The map-agnostic gesture detection engine. All exports are also available from `@map-gesture-controls/ol`.

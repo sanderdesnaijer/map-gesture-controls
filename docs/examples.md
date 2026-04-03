@@ -1,3 +1,18 @@
+---
+title: Examples - Map Gesture Controls
+description: Live demos and code examples for hand gesture map controls. Basic setup, sensitivity tuning, custom overlays, and toggle controls.
+head:
+  - - meta
+    - property: og:title
+      content: Examples and Demos - Map Gesture Controls
+  - - meta
+    - property: og:description
+      content: Live demos and code examples for hand gesture map controls. Basic setup, sensitivity tuning, and more.
+  - - meta
+    - property: og:url
+      content: https://sanderdesnaijer.github.io/map-gesture-controls/examples
+---
+
 # Examples
 
 All examples are self-contained TypeScript snippets. Each assumes you have an HTML element with the appropriate `id` and `@map-gesture-controls/ol/style.css` imported in your entry file.

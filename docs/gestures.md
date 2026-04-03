@@ -1,3 +1,18 @@
+---
+title: Gestures - Map Gesture Controls
+description: Learn the hand gestures for controlling maps. Fist to pan, two open hands to zoom. Understand gesture modes, recognition pipeline, and smoothing.
+head:
+  - - meta
+    - property: og:title
+      content: Supported Hand Gestures - Map Gesture Controls
+  - - meta
+    - property: og:description
+      content: Learn the hand gestures for controlling OpenLayers maps. Fist to pan, two open hands to zoom.
+  - - meta
+    - property: og:url
+      content: https://sanderdesnaijer.github.io/map-gesture-controls/gestures
+---
+
 # Gestures
 
 ## Gesture modes

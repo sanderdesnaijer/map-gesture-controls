@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sanderdesnaijer.github.io/map-gesture-controls/sitemap.xml
