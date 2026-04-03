@@ -1,0 +1,53 @@
+/* ── Gesture overlay container ─────────────────────────────────────────────── */
+.ol-gesture-overlay {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.3s ease;
+}
+
+.ol-gesture-overlay:hover {
+  box-shadow: 0 4px 32px rgba(68, 136, 255, 0.35);
+}
+
+/* ── Webcam video ──────────────────────────────────────────────────────────── */
+.ol-gesture-video {
+  display: block;
+}
+
+/* ── Landmark canvas sits above video ─────────────────────────────────────── */
+.ol-gesture-canvas {
+  /* pointer-events:none set inline so it never blocks map interaction */
+}
+
+/* ── Mode badge ────────────────────────────────────────────────────────────── */
+.ol-gesture-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: background 0.2s, color 0.2s;
+  z-index: 1;
+}
+
+.ol-gesture-badge--idle {
+  background: rgba(80, 80, 80, 0.75);
+  color: #ccc;
+}
+
+.ol-gesture-badge--panning {
+  background: rgba(0, 204, 255, 0.85);
+  color: #000;
+  box-shadow: 0 0 8px rgba(0, 204, 255, 0.6);
+}
+
+.ol-gesture-badge--zooming {
+  background: rgba(0, 255, 204, 0.85);
+  color: #000;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+}

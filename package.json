@@ -1,0 +1,42 @@
+{
+  "name": "@opengeoweb/ol-gesture-controls",
+  "version": "0.1.0",
+  "description": "Control OpenLayers maps with hand gestures via MediaPipe",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.14",
+    "ol": "^10.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  },
+  "keywords": [
+    "openlayers",
+    "mediapipe",
+    "hand-gestures",
+    "map",
+    "gesture-control"
+  ],
+  "license": "MIT"
+}

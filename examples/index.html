@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OL Gesture Controls – Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.2.1/ol.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: system-ui, sans-serif; background: #0a0a0a; color: #eee; }
+    #map { width: 100%; height: 100vh; }
+
+    #controls {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(0,0,0,0.7);
+      padding: 10px 20px;
+      border-radius: 40px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    button {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(68,136,255,0.2);
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    button:hover { background: rgba(68,136,255,0.5); }
+    button:disabled { opacity: 0.4; cursor: default; }
+
+    #status {
+      font-size: 13px;
+      color: #aaa;
+      min-width: 140px;
+      text-align: center;
+    }
+
+    .legend {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      z-index: 1000;
+      background: rgba(0,0,0,0.7);
+      padding: 14px 18px;
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .legend h3 { margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #888; }
+    .legend-row { display: flex; gap: 10px; align-items: center; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="controls">
+    <button id="btn-start">Enable Gestures</button>
+    <button id="btn-stop" disabled>Disable</button>
+    <span id="status">Click "Enable Gestures" to begin</span>
+  </div>
+
+  <div class="legend">
+    <h3>Gesture Controls</h3>
+    <div class="legend-row"><div class="legend-dot" style="background:#00ccff"></div> One fist, move hand → Pan</div>
+    <div class="legend-row"><div class="legend-dot" style="background:#00ffcc"></div> Both hands in frame → Zoom (spread apart / together)</div>
+    <div class="legend-row"><div class="legend-dot" style="background:#888"></div> No gesture → Idle</div>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
