@@ -14,7 +14,7 @@ function dist(a: HandLandmark, b: HandLandmark): number {
  * Returns true if all four fingers (index–pinky) are extended AND spread apart.
  *
  * "Extended": tip is farther from the wrist than its MCP joint (allows slightly
- * bent fingers — the 0.9 factor gives ~10% slack).
+ * bent fingers; the 0.9 factor gives ~10% slack).
  *
  * "Spread": the minimum distance between any two adjacent fingertips (index–middle,
  * middle–ring, ring–pinky) must be at least spreadThreshold × handSize. Using the
@@ -35,7 +35,7 @@ function areAllFingersExtended(landmarks: HandLandmark[]): boolean {
 
   // Spread check: minimum pairwise distance between adjacent fingertips vs hand size.
   // Using the minimum (not mean) catches duck/pinch shapes where adjacent fingertips
-  // touch — the mean can stay high because the outer pair (index↔pinky) is still far
+  // touch: the mean can stay high because the outer pair (index↔pinky) is still far
   // apart, but the minimum collapses to near zero when any two tips cluster together.
   // A natural open hand has even adjacent tips ~20–35% of handSize apart.
   // A duck has adjacent tips at ~2–8% of handSize. Threshold of 0.18 separates them.
@@ -72,8 +72,8 @@ function areAllFingersCurled(landmarks: HandLandmark[]): boolean {
 
 /**
  * Returns the apparent 2D size of the hand: wrist-to-middle-MCP distance
- * in normalised screen space (0–1). Used as a depth proxy — hand grows
- * larger as it moves toward the camera.
+ * in normalised screen space (0-1). Used as a depth proxy (hand grows
+ * larger as it moves toward the camera).
  */
 export function getHandSize(landmarks: HandLandmark[]): number {
   const wrist = landmarks[LANDMARKS.WRIST];
@@ -84,7 +84,7 @@ export function getHandSize(landmarks: HandLandmark[]): number {
 
 /**
  * Returns the Euclidean distance between the index fingertips of two hands
- * in normalised screen space (0–1). Used as the two-hand zoom metric —
+ * in normalised screen space (0-1). Used as the two-hand zoom metric:
  * hands moving apart = positive delta = zoom in.
  */
 export function getTwoHandDistance(

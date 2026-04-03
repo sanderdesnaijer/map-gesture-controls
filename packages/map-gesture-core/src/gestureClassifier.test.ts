@@ -34,7 +34,7 @@ function makeOpenPalmLandmarks(): HandLandmark[] {
   lm[LANDMARKS.MIDDLE_MCP] = { x: 0.4, y: 0.5, z: 0 };
   lm[LANDMARKS.RING_MCP]   = { x: 0.5, y: 0.5, z: 0 };
   lm[LANDMARKS.PINKY_MCP]  = { x: 0.6, y: 0.5, z: 0 };
-  // Fingertips — extended (farther from wrist than MCPs) and spread
+  // Fingertips: extended (farther from wrist than MCPs) and spread
   lm[LANDMARKS.INDEX_TIP]  = { x: 0.2, y: 0.1, z: 0 };
   lm[LANDMARKS.MIDDLE_TIP] = { x: 0.35, y: 0.1, z: 0 };
   lm[LANDMARKS.RING_TIP]   = { x: 0.5, y: 0.1, z: 0 };
@@ -46,7 +46,7 @@ function makeOpenPalmLandmarks(): HandLandmark[] {
  * Build a fist hand.
  *
  * Strategy: wrist at (0.5, 0.8), MCP joints at (0.5, 0.5),
- * fingertips curled back to (0.5, 0.7) — closer to wrist than MCPs.
+ * fingertips curled back to (0.5, 0.7), closer to wrist than MCPs.
  *
  * dist(tip, wrist) ≈ 0.1 < dist(mcp, wrist) * 1.1 ≈ 0.33  ✓
  */
@@ -81,7 +81,7 @@ describe('classifyGesture', () => {
   });
 
   it('returns "none" for an ambiguous / neutral hand', () => {
-    // All landmarks at the same point — fingers neither extended nor curled
+    // All landmarks at the same point, fingers neither extended nor curled
     expect(classifyGesture(makeLandmarks())).toBe('none');
   });
 

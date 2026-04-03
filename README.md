@@ -5,13 +5,13 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@map-gesture-controls/ol?style=flat-square&label=minzipped)](https://bundlephobia.com/package/@map-gesture-controls/ol)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-Control [OpenLayers](https://openlayers.org/) maps with hand gestures — no mouse, no touch, no backend. Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with a closed fist and zoom by moving two open hands apart or together. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences — all with camera data that never leaves the device.
+Control [OpenLayers](https://openlayers.org/) maps with hand gestures: no mouse, no touch, no backend. Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with a closed fist and zoom by moving two open hands apart or together. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences, all with camera data that never leaves the device.
 
 ## How it works
 
-1. **Webcam capture** — `GestureController` opens the user's camera and feeds each frame to MediaPipe Hand Landmarker, which returns 21 3-D landmarks per detected hand.
-2. **Gesture classification** — `GestureStateMachine` classifies each frame using `classifyGesture()`: one hand with 3+ fingers curled = `fist` (pan); two hands each with all 4 fingers extended and spread = `openPalm` (zoom); anything else = `none` (idle). A configurable dwell timer (`actionDwellMs`, default 80 ms) prevents flickering, and a grace period (`releaseGraceMs`, default 150 ms) smooths gesture releases.
-3. **OL integration** — `OpenLayersGestureInteraction` translates frame-over-frame hand deltas into `ol/Map` pan pixel offsets and zoom-level adjustments, applying dead-zone filtering and exponential smoothing before every update.
+1. **Webcam capture**: `GestureController` opens the user's camera and feeds each frame to MediaPipe Hand Landmarker, which returns 21 3-D landmarks per detected hand.
+2. **Gesture classification**: `GestureStateMachine` classifies each frame using `classifyGesture()`: one hand with 3+ fingers curled = `fist` (pan); two hands each with all 4 fingers extended and spread = `openPalm` (zoom); anything else = `none` (idle). A configurable dwell timer (`actionDwellMs`, default 80 ms) prevents flickering, and a grace period (`releaseGraceMs`, default 150 ms) smooths gesture releases.
+3. **OL integration**: `OpenLayersGestureInteraction` translates frame-over-frame hand deltas into `ol/Map` pan pixel offsets and zoom-level adjustments, applying dead-zone filtering and exponential smoothing before every update.
 
 ## Packages
 
@@ -20,7 +20,7 @@ Control [OpenLayers](https://openlayers.org/) maps with hand gestures — no mou
 | `@map-gesture-controls/core` | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
 | `@map-gesture-controls/ol` | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`. |
 
-> Most users only need the `ol` package — it re-exports everything from core.
+> Most users only need the `ol` package. It re-exports everything from core.
 
 ## Requirements
 
@@ -62,7 +62,7 @@ await controller.start();
 controller.stop(); // tear down webcam and overlay
 ```
 
-Optional config: `webcam`, `tuning`, and `debug` — see the [Configuration](#configuration) section below.
+Optional config: `webcam`, `tuning`, and `debug`. See the [Configuration](#configuration) section below.
 
 ## Configuration
 
@@ -139,7 +139,7 @@ npm run type-check
 |------|-----------|--------|----------------|
 | Pan | One hand, fist gesture | Move hand | Curl all fingers into a fist, then move your hand in any direction to pan the map |
 | Zoom | Both hands visible, open palms | Spread / pinch | Show both open hands (all fingers extended and spread), then move them apart to zoom in or together to zoom out |
-| Idle | Any other hand position | — | Let your hands rest or hold any non-recognised pose; the map does nothing |
+| Idle | Any other hand position | None | Let your hands rest or hold any non-recognised pose; the map does nothing |
 
 Gestures are confirmed after a short dwell period (default 80 ms) to avoid accidental triggers, and released after a grace period (default 150 ms) to prevent flickering when hands briefly lose tracking.
 
@@ -158,13 +158,13 @@ Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam a
 ## Roadmap & Contributing
 
 **Planned features:**
-- `@map-gesture-controls/gmaps` — Google Maps adapter
+- `@map-gesture-controls/gmaps`: Google Maps adapter
 - Additional gesture types: tilt, rotate
 - Framework wrappers for React and Vue
 
 **Contributing:**
 - This project uses [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.)
-- PRs are welcome — please open an [issue](https://github.com/sanderdesnaijer/map-gesture-controls/issues) first for significant changes
+- PRs are welcome. Please open an [issue](https://github.com/sanderdesnaijer/map-gesture-controls/issues) first for significant changes
 - Run `npm run type-check` and ensure no TS errors before submitting
 
 ## License

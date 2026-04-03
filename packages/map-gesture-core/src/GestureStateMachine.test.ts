@@ -10,7 +10,7 @@ const FAST_TUNING: TuningConfig = {
   releaseGraceMs: 0,      // grace=0: idle on the SECOND frame after release
   panDeadzonePx: 0,
   zoomDeadzoneRatio: 0,
-  smoothingAlpha: 1,      // no smoothing — raw values pass through
+  smoothingAlpha: 1,      // no smoothing, raw values pass through
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
   minPresenceConfidence: 0.60,
@@ -133,9 +133,9 @@ describe('GestureStateMachine', () => {
     fsm.update(makeFrame(0, makeHand('fist', lm1), null));
     // Frame 2: transition fires → panning, but buildOutput returns from idle branch (panDelta=null)
     fsm.update(makeFrame(0, makeHand('fist', lm1), null));
-    // Frame 3: first real panning frame — sets prevPanPos = wristPos1, no delta yet
+    // Frame 3: first real panning frame, sets prevPanPos = wristPos1, no delta yet
     fsm.update(makeFrame(1, makeHand('fist', lm1), null));
-    // Frame 4: second panning frame — emits delta
+    // Frame 4: second panning frame, emits delta
     const out = fsm.update(makeFrame(2, makeHand('fist', lm2), null));
 
     expect(out.mode).toBe('panning');
@@ -163,7 +163,7 @@ describe('GestureStateMachine', () => {
     // Frame 1+2: dwell + transition (zooming entered on frame 2, but output comes from idle branch)
     fsm.update(makeFrame(0, makeHand('openPalm', lmL1), makeHand('openPalm', lmR1)));
     fsm.update(makeFrame(0, makeHand('openPalm', lmL1), makeHand('openPalm', lmR1)));
-    // Frame 3: first real zooming frame — sets prevZoomDist, no delta yet
+    // Frame 3: first real zooming frame, sets prevZoomDist, no delta yet
     fsm.update(makeFrame(1, makeHand('openPalm', lmL1), makeHand('openPalm', lmR1)));
     // Frame 4: wider spread → positive delta
     const out = fsm.update(makeFrame(2, makeHand('openPalm', lmL2), makeHand('openPalm', lmR2)));

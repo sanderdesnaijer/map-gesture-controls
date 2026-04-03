@@ -6,7 +6,7 @@
 npm install @map-gesture-controls/ol ol
 ```
 
-`ol` (OpenLayers) is a **peer dependency** — you must install it separately alongside the package. This keeps your bundle free of a duplicate copy if you already depend on OpenLayers.
+`ol` (OpenLayers) is a **peer dependency**. You must install it separately alongside the package. This keeps your bundle free of a duplicate copy if you already depend on OpenLayers.
 
 ## Minimal working example
 
@@ -34,8 +34,8 @@ const map = new Map({
 // 2. Create the gesture controller
 const controller = new GestureMapController({ map });
 
-// 3. Start from a user gesture — browsers require a user interaction
-//    before granting webcam access
+// 3. Start from a user gesture (browsers require a user interaction
+//    before granting webcam access)
 document.getElementById('start-btn')!.addEventListener('click', async () => {
   await controller.start();
 });
@@ -88,7 +88,7 @@ const controller = new GestureMapController(config);
 
 ## Next steps
 
-- [Configuration](./configuration) — full reference for `webcam` and `tuning` options
-- [Gestures](./gestures) — how gestures are classified and tuned
-- [Examples](./examples) — copy-pasteable recipes
-- [API Reference](./api/ol) — full API documentation
+- [Configuration](./configuration): full reference for `webcam` and `tuning` options
+- [Gestures](./gestures): how gestures are classified and tuned
+- [Examples](./examples): copy-pasteable recipes
+- [API Reference](./api/ol): full API documentation

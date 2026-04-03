@@ -63,7 +63,7 @@ class EMAScalar {
 }
 
 /**
- * GestureStateMachine — 3-state FSM
+ * GestureStateMachine: 3-state FSM
  *
  * Priority rules (evaluated every frame):
  *   both hands visible AND both open palm → desired = 'zooming'

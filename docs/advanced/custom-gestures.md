@@ -82,4 +82,4 @@ await controller.init();
 controller.start();
 ```
 
-This gives you full control over every step — you can replace `GestureStateMachine` with your own implementation, add logging, or fan out to multiple interactions.
+This gives you full control over every step. You can replace `GestureStateMachine` with your own implementation, add logging, or fan out to multiple interactions.

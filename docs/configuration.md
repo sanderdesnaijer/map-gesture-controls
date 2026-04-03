@@ -83,7 +83,7 @@ Higher smoothing and dead zones for slow, deliberate control:
 const controller = new GestureMapController({
   map,
   tuning: {
-    smoothingAlpha: 0.2,     // heavy smoothing — slow but stable
+    smoothingAlpha: 0.2,     // heavy smoothing, slow but stable
     panDeadzonePx: 20,       // require larger movements
     zoomDeadzoneRatio: 0.01, // require larger zoom gesture
     actionDwellMs: 120,      // require longer hold before confirming

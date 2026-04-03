@@ -62,7 +62,7 @@ describe('OpenLayersGestureInteraction', () => {
 
   beforeEach(() => {
     mocks = makeMapMock({ center: [0, 0], zoom: 5, resolution: 100, size: [800, 600] });
-    // @ts-expect-error — we pass a minimal mock, not a full ol/Map instance
+    // @ts-expect-error - we pass a minimal mock, not a full ol/Map instance
     interaction = new OpenLayersGestureInteraction(mocks.map);
   });
 

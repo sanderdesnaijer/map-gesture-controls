@@ -27,10 +27,10 @@ new GestureMapController(config: GestureMapControllerConfig)
 
 ```ts
 interface GestureMapControllerConfig {
-  map: Map;                        // ol/Map instance — required
-  webcam?: Partial<WebcamConfig>;  // optional — see WebcamConfig
-  tuning?: Partial<TuningConfig>;  // optional — see TuningConfig
-  debug?: boolean;                 // optional — log gesture mode to console
+  map: Map;                        // ol/Map instance (required)
+  webcam?: Partial<WebcamConfig>;  // optional, see WebcamConfig
+  tuning?: Partial<TuningConfig>;  // optional, see TuningConfig
+  debug?: boolean;                 // optional, log gesture mode to console
 }
 ```
 
@@ -53,7 +53,7 @@ Lower-level class for advanced use cases where you want to manage the gesture pi
 new OpenLayersGestureInteraction(map: Map)
 ```
 
-Creates a gesture interaction bound to the given OpenLayers `Map` instance. Does not start any webcam or detection — you are responsible for providing `StateMachineOutput` frames.
+Creates a gesture interaction bound to the given OpenLayers `Map` instance. Does not start any webcam or detection. You are responsible for providing `StateMachineOutput` frames.
 
 ### Methods
 

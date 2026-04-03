@@ -34,7 +34,7 @@ Each video frame flows through four layers before reaching the map:
 
 ### GestureController (`core`)
 
-Owns the webcam stream and the MediaPipe hand landmarker session. On every animation frame it runs detection and calls `onFrame(GestureFrame)` with the raw landmark data for all detected hands. It does not interpret gestures — it only delivers raw data.
+Owns the webcam stream and the MediaPipe hand landmarker session. On every animation frame it runs detection and calls `onFrame(GestureFrame)` with the raw landmark data for all detected hands. It does not interpret gestures. It only delivers raw data.
 
 ### GestureStateMachine (`core`)
 
@@ -42,11 +42,11 @@ Interprets raw `GestureFrame` data. It calls `classifyGesture()` for each hand, 
 
 ### OpenLayersGestureInteraction (`ol`)
 
-Consumes `StateMachineOutput` and calls OpenLayers view APIs. For panning it calls `view.adjustCenter()` with pixel-space deltas; for zooming it calls `view.adjustZoom()` with the computed delta. It contains no gesture logic — it only translates state machine output into OL API calls.
+Consumes `StateMachineOutput` and calls OpenLayers view APIs. For panning it calls `view.adjustCenter()` with pixel-space deltas; for zooming it calls `view.adjustZoom()` with the computed delta. It contains no gesture logic, it only translates state machine output into OL API calls.
 
 ### WebcamOverlay (`core`)
 
-Renders the visual feedback layer. It draws the webcam video feed to a canvas, overlays the hand skeleton (connection lines + landmark dots), applies colour coding per `GestureMode`, and positions the canvas element within the map container. It is also map-agnostic — it only needs an `HTMLElement` to mount into.
+Renders the visual feedback layer. It draws the webcam video feed to a canvas, overlays the hand skeleton (connection lines + landmark dots), applies colour coding per `GestureMode`, and positions the canvas element within the map container. It is also map-agnostic and only needs an `HTMLElement` to mount into.
 
 ## Why the core / ol split?
 
@@ -54,6 +54,6 @@ The split follows the **adapter pattern**: `core` is a pure gesture-detection li
 
 This means:
 
-- The `core` package can be used independently to build gesture controls for any framework — Leaflet, MapLibre, Google Maps, or a completely custom canvas.
-- The `ol` package stays small and focused — it only contains OL-specific code.
+- The `core` package can be used independently to build gesture controls for any framework (Leaflet, MapLibre, Google Maps, or a completely custom canvas).
+- The `ol` package stays small and focused. It only contains OL-specific code.
 - Adding a new map adapter (e.g. `@map-gesture-controls/gmaps`) requires only implementing `apply(output: StateMachineOutput)` against the target map API, without touching gesture detection logic.

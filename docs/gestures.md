@@ -6,7 +6,7 @@ The system operates in one of three modes at any time:
 
 | Mode | Trigger | Map effect |
 | --- | --- | --- |
-| **Idle** | No recognised gesture | None — map stays still |
+| **Idle** | No recognised gesture | None (map stays still) |
 | **Panning** | One hand in a fist | Hand movement pans the map |
 | **Zooming** | Two open hands visible | Moving hands apart zooms in; together zooms out |
 
@@ -18,7 +18,7 @@ Each video frame is processed by `classifyGesture()`, which inspects MediaPipe's
 
 ### Fist (pan)
 
-A fist is detected when **3 or more fingers are curled**. A finger is considered curled when its tip landmark is closer to the wrist than its MCP (knuckle) landmark — the hand is closed inward. The thumb is not counted. When exactly one hand is detected and classified as a fist, the system enters **panning** mode.
+A fist is detected when **3 or more fingers are curled**. A finger is considered curled when its tip landmark is closer to the wrist than its MCP (knuckle) landmark, meaning the hand is closed inward. The thumb is not counted. When exactly one hand is detected and classified as a fist, the system enters **panning** mode.
 
 ### Open palm (zoom)
 
