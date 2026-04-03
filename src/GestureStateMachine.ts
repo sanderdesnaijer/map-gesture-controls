@@ -66,7 +66,7 @@ class EMAScalar {
  * GestureStateMachine — 3-state FSM
  *
  * Priority rules (evaluated every frame):
- *   both hands visible                    → desired = 'zooming'
+ *   both hands visible AND both open palm → desired = 'zooming'
  *   one hand visible AND gesture = 'fist' → desired = 'panning'
  *   otherwise                             → desired = 'idle'
  *
@@ -99,12 +99,16 @@ export class GestureStateMachine {
     const { leftHand, rightHand } = frame;
 
     // ── Determine desired mode for this frame ─────────────────────────────────
-    const bothHands = leftHand !== null && rightHand !== null;
+    const bothOpen =
+      leftHand !== null &&
+      rightHand !== null &&
+      leftHand.gesture === 'openPalm' &&
+      rightHand.gesture === 'openPalm';
     const oneFist =
       (leftHand !== null && leftHand.gesture === 'fist' && rightHand === null) ||
       (rightHand !== null && rightHand.gesture === 'fist' && leftHand === null);
 
-    const desired: GestureMode = bothHands ? 'zooming' : oneFist ? 'panning' : 'idle';
+    const desired: GestureMode = bothOpen ? 'zooming' : oneFist ? 'panning' : 'idle';
 
     // ── idle ──────────────────────────────────────────────────────────────────
     if (this.mode === 'idle') {
