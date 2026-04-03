@@ -1,11 +1,15 @@
-# @map-gesture-controls/ol
+# map-gesture-controls
 
 [![npm version](https://img.shields.io/npm/v/@map-gesture-controls/ol?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/ol)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@map-gesture-controls/ol?style=flat-square&label=minzipped)](https://bundlephobia.com/package/@map-gesture-controls/ol)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-Control [OpenLayers](https://openlayers.org/) maps with hand gestures: no mouse, no touch, no backend. Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with a closed fist and zoom by moving two open hands apart or together. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences, all with camera data that never leaves the device.
+**Control web maps with hand gestures. No mouse, no touch, no backend.**
+
+Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with a closed fist and zoom by moving two open hands apart or together. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
+
+**[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
 ## How it works
 
@@ -33,7 +37,7 @@ Control [OpenLayers](https://openlayers.org/) maps with hand gestures: no mouse,
 npm install @map-gesture-controls/ol ol
 ```
 
-Publish flow: run `npm run build:libs` so the `dist/` folder exists before `npm publish` (this repo does not commit `dist/`).
+> **Publish flow (maintainers):** run `npm run build:libs` so the `dist/` folder exists before `npm publish` (this repo does not commit `dist/`).
 
 ## Usage
 
@@ -166,6 +170,10 @@ Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam a
 - This project uses [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.)
 - PRs are welcome. Please open an [issue](https://github.com/sanderdesnaijer/map-gesture-controls/issues) first for significant changes
 - Run `npm run type-check` and ensure no TS errors before submitting
+
+## Documentation
+
+Full docs, live demos, and API reference at **[sanderdesnaijer.github.io/map-gesture-controls](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
 ## License
 

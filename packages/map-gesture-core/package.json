@@ -30,8 +30,29 @@
   "keywords": [
     "mediapipe",
     "hand-gestures",
-    "gesture-detection"
+    "gesture-detection",
+    "gesture-recognition",
+    "hand-tracking",
+    "webcam",
+    "touchless",
+    "hands-free",
+    "accessibility",
+    "computer-vision",
+    "wasm",
+    "kiosk",
+    "map",
+    "interaction"
   ],
+  "homepage": "https://sanderdesnaijer.github.io/map-gesture-controls/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls.git",
+    "directory": "packages/map-gesture-core"
+  },
+  "bugs": {
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls/issues"
+  },
+  "author": "Sander de Snaijer",
   "overrides": {
     "esbuild": "^0.25.0"
   },

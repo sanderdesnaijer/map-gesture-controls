@@ -35,9 +35,32 @@
     "openlayers",
     "mediapipe",
     "hand-gestures",
+    "gesture-control",
+    "gesture-recognition",
+    "hand-tracking",
     "map",
-    "gesture-control"
+    "maps",
+    "gis",
+    "webcam",
+    "touchless",
+    "hands-free",
+    "accessibility",
+    "kiosk",
+    "computer-vision",
+    "wasm",
+    "interaction",
+    "ol"
   ],
+  "homepage": "https://sanderdesnaijer.github.io/map-gesture-controls/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls.git",
+    "directory": "packages/ol-gesture-controls"
+  },
+  "bugs": {
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls/issues"
+  },
+  "author": "Sander de Snaijer",
   "overrides": {
     "esbuild": "^0.25.0"
   },
