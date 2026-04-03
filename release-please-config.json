@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "node",
+  "packages": {
+    "packages/map-gesture-core": {
+      "release-type": "node",
+      "package-name": "@map-gesture-controls/core",
+      "changelog-path": "CHANGELOG.md"
+    },
+    "packages/ol-gesture-controls": {
+      "release-type": "node",
+      "package-name": "@map-gesture-controls/ol",
+      "changelog-path": "CHANGELOG.md"
+    }
+  }
+}
