@@ -4,6 +4,7 @@ node_modules/
 # Build outputs
 dist/
 examples/dist/
+docs/public/demo/
 
 # Vite
 *.local

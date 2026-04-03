@@ -10,12 +10,17 @@
     "build": "npm run build --workspace=packages/map-gesture-core && npm run build --workspace=packages/ol-gesture-controls",
     "build:libs": "npm run build:lib --workspace=packages/map-gesture-core && npm run build:lib --workspace=packages/ol-gesture-controls",
     "type-check": "npm run type-check --workspaces",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docs:dev": "vitepress dev docs",
+    "docs:build-demos": "vite build --config vite.demo.config.ts",
+    "docs:build": "npm run docs:build-demos && vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "ol": "^10.2.1",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11"
+    "vite": "^5.2.11",
+    "vitepress": "^1.6.3"
   },
   "overrides": {
     "esbuild": "^0.25.0"

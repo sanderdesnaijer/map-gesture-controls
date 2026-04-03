@@ -27,7 +27,9 @@ function mediapipeBrokenSourcemapWorkaround(): Plugin {
 
 export default defineConfig({
   root: 'examples',
-  base: '/map-gesture-controls/',
+  // Demos are served from /map-gesture-controls/demo/ on GitHub Pages
+  // and from docs/public/demo/ during local VitePress preview.
+  base: '/map-gesture-controls/demo/',
   plugins: [mediapipeBrokenSourcemapWorkaround()],
   resolve: {
     alias: {
@@ -35,15 +37,15 @@ export default defineConfig({
       '@map-gesture-controls/ol': resolve(root, 'packages/ol-gesture-controls/src/index.ts'),
     },
   },
-  server: {
-    port: 5173,
-    open: true,
-  },
   build: {
+    outDir: resolve(root, 'docs/public/demo'),
+    emptyOutDir: true,
     rollupOptions: {
       input: {
-        index:    resolve(root, 'examples/index.html'),
-        examples: resolve(root, 'examples/examples.html'),
+        'demo-basic':          resolve(root, 'examples/demo-basic.html'),
+        'demo-toggle':         resolve(root, 'examples/demo-toggle.html'),
+        'demo-custom-overlay': resolve(root, 'examples/demo-custom-overlay.html'),
+        'demo-sensitivity':    resolve(root, 'examples/demo-sensitivity.html'),
       },
     },
   },

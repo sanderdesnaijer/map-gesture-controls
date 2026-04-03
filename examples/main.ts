@@ -20,7 +20,6 @@ const map = new Map({
     zoom: 12,
   }),
 });
-console.log("welcome back commander");
 // ── Gesture controller ────────────────────────────────────────────────────────
 
 let gestureCtrl: GestureMapController | null = null;
@@ -43,9 +42,9 @@ btnStart.addEventListener("click", async () => {
       webcam: {
         mode: "corner",
         position: "bottom-right",
-        width: 320,
-        height: 240,
-        opacity: 0.9,
+        width: 640,
+        height: 480,
+        opacity: 0.8,
       },
       debug: false,
     });

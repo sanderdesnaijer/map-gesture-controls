@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples – map-gesture-controls</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.2.1/ol.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #4488ff;
+      --code-bg: #161616;
+      --radius: 10px;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── Page header ─────────────────────────────────────────────────────── */
+    .page-header {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 8px;
+    }
+    .page-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .page-header p  { color: var(--muted); font-size: 15px; }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    /* ── Nav ─────────────────────────────────────────────────────────────── */
+    .example-nav {
+      max-width: 860px;
+      margin: 24px auto 0;
+      padding: 0 24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .example-nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .example-nav a:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    /* ── Example section ─────────────────────────────────────────────────── */
+    .example {
+      max-width: 860px;
+      margin: 56px auto 0;
+      padding: 0 24px;
+    }
+    .example-header { margin-bottom: 6px; }
+    .example-title  { font-size: 20px; font-weight: 600; }
+    .example-desc   { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+
+    /* ── Preview (map, controls) ─────────────────────────────────────────── */
+    .preview-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .preview-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-right: auto;
+    }
+    .preview-map {
+      width: 100%;
+      height: 400px;
+      display: block;
+    }
+
+    /* gesture start/stop controls, float over the map */
+    .map-controls {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: rgba(0,0,0,0.75);
+      padding: 7px 16px;
+      border-radius: 40px;
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    button {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(68,136,255,0.2);
+      color: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    button:hover:not(:disabled) { background: rgba(68,136,255,0.45); }
+    button:disabled { opacity: 0.4; cursor: default; }
+
+    .map-status {
+      font-size: 12px;
+      color: var(--muted);
+      min-width: 120px;
+      text-align: center;
+    }
+
+    /* ── Code block (below preview) ──────────────────────────────────────── */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      font-family: monospace;
+    }
+    .code-block pre {
+      padding: 18px 20px;
+      font-family: 'Fira Code', ui-monospace, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #cdd6f4;
+      overflow-x: auto;
+    }
+    /* token colours */
+    .kw   { color: #cba6f7; }
+    .fn   { color: #89b4fa; }
+    .str  { color: #a6e3a1; }
+    .cm   { color: #585b70; }
+    .ty   { color: #f38ba8; }
+    .num  { color: #fab387; }
+    .prop { color: #89dceb; }
+
+    /* bottom spacer */
+    .page-footer { height: 80px; }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <a class="back-link" href="./">← Back</a>
+    <h1>Examples</h1>
+    <p>Each example has a live interactive map. Click "Enable Gestures" in any demo to start gesture control via webcam.</p>
+  </div>
+
+  <nav class="example-nav">
+    <a href="#basic">Basic setup</a>
+    <a href="#toggle">Toggle button</a>
+    <a href="#custom-overlay">Custom overlay</a>
+    <a href="#sensitivity">Sensitivity</a>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       1. Basic OSM setup
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="example" id="basic">
+    <div class="example-header">
+      <h2 class="example-title">1. Basic OSM setup</h2>
+    </div>
+    <p class="example-desc">Minimal controller with default config. Fist pans, two open hands zoom.</p>
+
+    <!-- preview first -->
+    <div class="preview-box">
+      <div class="preview-toolbar">
+        <span class="preview-tag">Live preview</span>
+        <button id="basic-start">Enable Gestures</button>
+        <button id="basic-stop" disabled>Disable</button>
+        <span class="map-status" id="basic-status">Gestures off</span>
+      </div>
+      <div class="preview-map" id="map-basic"></div>
+    </div>
+
+    <!-- code second -->
+    <div class="code-block">
+      <div class="code-block-header"><span>TypeScript</span></div>
+      <pre><code><span class="kw">import</span> { <span class="fn">GestureMapController</span> } <span class="kw">from</span> <span class="str">'@map-gesture-controls/ol'</span>;
+
+<span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">GestureMapController</span>({ map });
+
+<span class="cm">// must be called from a user gesture (button click)</span>
+<span class="kw">await</span> controller.<span class="fn">start</span>();
+
+controller.<span class="fn">stop</span>(); <span class="cm">// tear down webcam and overlay</span></code></pre>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       2. Toggle button
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="example" id="toggle">
+    <div class="example-header">
+      <h2 class="example-title">2. Toggle button with disabled state</h2>
+    </div>
+    <p class="example-desc">Single button starts and stops gesture control. Disabled while loading to prevent double-clicks.</p>
+
+    <div class="preview-box">
+      <div class="preview-toolbar">
+        <span class="preview-tag">Live preview</span>
+        <button id="toggle-btn">Start gesture control</button>
+        <span class="map-status" id="toggle-status">Gestures off</span>
+      </div>
+      <div class="preview-map" id="map-toggle"></div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-header"><span>TypeScript</span></div>
+      <pre><code><span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">GestureMapController</span>({ map });
+<span class="kw">const</span> btn = document.<span class="fn">getElementById</span>(<span class="str">'toggle-btn'</span>) <span class="kw">as</span> <span class="ty">HTMLButtonElement</span>;
+<span class="kw">let</span> active = <span class="kw">false</span>;
+
+btn.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">async</span> () =&gt; {
+  btn.disabled = <span class="kw">true</span>;
+  <span class="kw">if</span> (active) {
+    controller.<span class="fn">stop</span>();
+    active = <span class="kw">false</span>;
+    btn.textContent = <span class="str">'Start gesture control'</span>;
+  } <span class="kw">else</span> {
+    <span class="kw">await</span> controller.<span class="fn">start</span>();
+    active = <span class="kw">true</span>;
+    btn.textContent = <span class="str">'Stop gesture control'</span>;
+  }
+  btn.disabled = <span class="kw">false</span>;
+});</code></pre>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       3. Custom webcam overlay
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="example" id="custom-overlay">
+    <div class="example-header">
+      <h2 class="example-title">3. Custom webcam overlay position</h2>
+    </div>
+    <p class="example-desc">Webcam overlay moved to bottom-left, smaller size, reduced opacity. Enable gestures to see the difference.</p>
+
+    <div class="preview-box">
+      <div class="preview-toolbar">
+        <span class="preview-tag">Live preview · webcam: bottom-left 200×150 opacity 0.6</span>
+        <button id="overlay-start">Enable Gestures</button>
+        <button id="overlay-stop" disabled>Disable</button>
+        <span class="map-status" id="overlay-status">Gestures off</span>
+      </div>
+      <div class="preview-map" id="map-overlay"></div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-header"><span>TypeScript</span></div>
+      <pre><code><span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">GestureMapController</span>({
+  map,
+  webcam: {
+    <span class="prop">position</span>: <span class="str">'bottom-left'</span>,
+    <span class="prop">width</span>:    <span class="num">200</span>,
+    <span class="prop">height</span>:   <span class="num">150</span>,
+    <span class="prop">opacity</span>:  <span class="num">0.6</span>,
+  },
+});</code></pre>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       4. Adjusted sensitivity
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="example" id="sensitivity">
+    <div class="example-header">
+      <h2 class="example-title">4. Adjusted gesture sensitivity</h2>
+    </div>
+    <p class="example-desc">Lower dwell time for faster gesture confirmation, tighter dead zones for more responsive pan and zoom.</p>
+
+    <div class="preview-box">
+      <div class="preview-toolbar">
+        <span class="preview-tag">Live preview · tuning: faster dwell, tighter dead zones</span>
+        <button id="sensitivity-start">Enable Gestures</button>
+        <button id="sensitivity-stop" disabled>Disable</button>
+        <span class="map-status" id="sensitivity-status">Gestures off</span>
+      </div>
+      <div class="preview-map" id="map-sensitivity"></div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-header"><span>TypeScript</span></div>
+      <pre><code><span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">GestureMapController</span>({
+  map,
+  tuning: {
+    <span class="prop">actionDwellMs</span>:     <span class="num">50</span>,    <span class="cm">// confirm gestures faster (default 80 ms)</span>
+    <span class="prop">releaseGraceMs</span>:    <span class="num">100</span>,   <span class="cm">// shorter grace period (default 150 ms)</span>
+    <span class="prop">panDeadzonePx</span>:     <span class="num">5</span>,     <span class="cm">// smaller hand movement threshold (default 10)</span>
+    <span class="prop">zoomDeadzoneRatio</span>: <span class="num">0.003</span>, <span class="cm">// finer zoom control (default 0.005)</span>
+  },
+});</code></pre>
+    </div>
+  </section>
+
+  <div class="page-footer"></div>
+
+  <script type="module" src="./examples.ts"></script>
+</body>
+</html>
