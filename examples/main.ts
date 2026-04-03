@@ -7,7 +7,6 @@ import { fromLonLat } from "ol/proj.js";
 import { GestureMapController } from "@map-gesture-controls/ol";
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
-
 const map = new Map({
   target: "map",
   layers: [
