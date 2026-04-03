@@ -13,6 +13,7 @@ export default defineConfig({
       external: ['@mediapipe/tasks-vision'],
     },
     outDir: 'dist',
+    emptyOutDir: false,
     cssCodeSplit: false,
   },
   optimizeDeps: {

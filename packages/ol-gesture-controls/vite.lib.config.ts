@@ -13,6 +13,7 @@ export default defineConfig({
       external: ['ol', '@mediapipe/tasks-vision', '@map-gesture-controls/core'],
     },
     outDir: 'dist',
+    emptyOutDir: false,
     cssCodeSplit: false,
   },
   optimizeDeps: {
