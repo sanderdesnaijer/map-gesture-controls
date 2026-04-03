@@ -36,7 +36,7 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm run build:libs
-      - run: npm publish --workspace packages/map-gesture-core
+      - run: npm publish --workspace packages/map-gesture-core --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -53,6 +53,6 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm run build:libs
-      - run: npm publish --workspace packages/ol-gesture-controls
+      - run: npm publish --workspace packages/ol-gesture-controls --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
