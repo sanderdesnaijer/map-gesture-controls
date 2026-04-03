@@ -12,13 +12,15 @@ import type { StateMachineOutput } from './GestureStateMachine.js';
  */
 export class OpenLayersGestureInteraction {
   private map: Map;
-  private panScale = 2.0;
   // Two-hand distance delta is ~0.005–0.02 per frame at natural speed.
   // zoomScale=4.0 ≈ 1.2 zoom levels/sec at 30fps. Adjust to taste.
-  private zoomScale = 4.0;
+  private panScale: number;
+  private zoomScale: number;
 
-  constructor(map: Map) {
+  constructor(map: Map, panScale = 2.0, zoomScale = 4.0) {
     this.map = map;
+    this.panScale = panScale;
+    this.zoomScale = zoomScale;
   }
 
   /**

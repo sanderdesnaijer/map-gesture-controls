@@ -24,4 +24,5 @@ export {
   DEFAULT_TUNING_CONFIG,
   LANDMARKS,
   COLORS,
+  mergeConfig,
 } from './constants.js';

@@ -7,6 +7,7 @@ export const DEFAULT_WEBCAM_CONFIG: WebcamConfig = {
   position: 'bottom-right',
   width: 320,
   height: 240,
+  margin: 16,
 };
 
 export const DEFAULT_TUNING_CONFIG: TuningConfig = {
@@ -18,6 +19,8 @@ export const DEFAULT_TUNING_CONFIG: TuningConfig = {
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
   minPresenceConfidence: 0.60,
+  panScale: 2.0,
+  zoomScale: 4.0,
 };
 
 // MediaPipe landmark indices
@@ -61,3 +64,18 @@ export const COLORS = {
 
 export const MEDIAPIPE_WASM_URL =
   'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';
+
+/**
+ * Deep-merge user-supplied partial config with the library defaults.
+ * Each nested section (webcam, tuning) is merged independently so callers
+ * only need to provide the keys they want to override.
+ */
+export function mergeConfig(
+  userWebcam: Partial<WebcamConfig> | undefined,
+  userTuning: Partial<TuningConfig> | undefined,
+): { webcam: WebcamConfig; tuning: TuningConfig } {
+  return {
+    webcam: { ...DEFAULT_WEBCAM_CONFIG, ...userWebcam },
+    tuning: { ...DEFAULT_TUNING_CONFIG, ...userTuning },
+  };
+}

@@ -37,6 +37,8 @@ export interface WebcamConfig {
   position: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   width: number;
   height: number;
+  /** Distance in px from the nearest viewport edge(s). Default: 16 */
+  margin: number;
 }
 
 export interface TuningConfig {
@@ -48,6 +50,10 @@ export interface TuningConfig {
   minDetectionConfidence: number;
   minTrackingConfidence: number;
   minPresenceConfidence: number;
+  /** Multiplier applied to normalised hand delta before converting to map pixels. Default: 2.0 */
+  panScale: number;
+  /** Multiplier applied to two-hand distance delta before updating zoom level. Default: 4.0 */
+  zoomScale: number;
 }
 
 export interface GestureMapControllerConfig {

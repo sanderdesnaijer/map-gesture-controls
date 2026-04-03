@@ -30,7 +30,56 @@ await controller.start();
 controller.stop(); // tear down webcam and overlay
 ```
 
-Optional config: `webcam`, `tuning`, and `debug` — see exported types in `src/types.ts`.
+Optional config: `webcam`, `tuning`, and `debug` — see the [Configuration](#configuration) section below.
+
+## Configuration
+
+All options are optional. Pass only the keys you want to override; the rest use sensible defaults.
+
+```ts
+const controller = new GestureMapController({
+  map,
+  webcam: {
+    position: 'top-left',  // move overlay to top-left corner
+    width: 240,            // narrower overlay
+    height: 180,
+    margin: 24,            // 24 px from viewport edges
+    opacity: 0.7,
+  },
+  tuning: {
+    panScale: 3.0,   // faster panning
+    zoomScale: 2.0,  // slower zooming
+  },
+  debug: true,       // log gesture mode to console
+});
+```
+
+### `webcam` options (`WebcamConfig`)
+
+| Key        | Type                                                       | Default          | Description                                   |
+| ---------- | ---------------------------------------------------------- | ---------------- | --------------------------------------------- |
+| `enabled`  | `boolean`                                                  | `true`           | Show/hide the overlay entirely.               |
+| `mode`     | `'corner' \| 'full' \| 'hidden'`                           | `'corner'`       | Display mode.                                 |
+| `position` | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | `'bottom-right'` | Corner when `mode === 'corner'`.              |
+| `width`    | `number`                                                   | `320`            | Overlay width in px (corner mode).            |
+| `height`   | `number`                                                   | `240`            | Overlay height in px (corner mode).           |
+| `margin`   | `number`                                                   | `16`             | Distance in px from the nearest edge(s).      |
+| `opacity`  | `number`                                                   | `0.85`           | CSS opacity (0–1).                            |
+
+### `tuning` options (`TuningConfig`)
+
+| Key                      | Type     | Default | Description                                                          |
+| ------------------------ | -------- | ------- | -------------------------------------------------------------------- |
+| `panScale`               | `number` | `2.0`   | Multiplier on hand delta → map pixels. Higher = faster pan.          |
+| `zoomScale`              | `number` | `4.0`   | Multiplier on two-hand distance delta → zoom level. Higher = faster. |
+| `actionDwellMs`          | `number` | `80`    | Hold time (ms) before a gesture is confirmed.                        |
+| `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.       |
+| `panDeadzonePx`          | `number` | `10`    | Minimum pixel movement to register a pan.                            |
+| `zoomDeadzoneRatio`      | `number` | `0.005` | Minimum distance-ratio change to register a zoom.                    |
+| `smoothingAlpha`         | `number` | `0.5`   | Exponential smoothing factor (0 = max smooth, 1 = raw).              |
+| `minDetectionConfidence` | `number` | `0.65`  | MediaPipe minimum detection confidence.                              |
+| `minTrackingConfidence`  | `number` | `0.65`  | MediaPipe minimum tracking confidence.                               |
+| `minPresenceConfidence`  | `number` | `0.60`  | MediaPipe minimum presence confidence.                               |
 
 ## Development
 

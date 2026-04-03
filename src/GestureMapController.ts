@@ -1,8 +1,5 @@
 import type { GestureMapControllerConfig, GestureFrame, WebcamConfig, TuningConfig } from './types.js';
-import {
-  DEFAULT_WEBCAM_CONFIG,
-  DEFAULT_TUNING_CONFIG,
-} from './constants.js';
+import { mergeConfig } from './constants.js';
 import { GestureController } from './GestureController.js';
 import { GestureStateMachine } from './GestureStateMachine.js';
 import { WebcamOverlay } from './WebcamOverlay.js';
@@ -33,8 +30,7 @@ export class GestureMapController {
   private paused = false;
 
   constructor(userConfig: GestureMapControllerConfig) {
-    const webcamConfig = { ...DEFAULT_WEBCAM_CONFIG, ...userConfig.webcam };
-    const tuningConfig = { ...DEFAULT_TUNING_CONFIG, ...userConfig.tuning };
+    const { webcam: webcamConfig, tuning: tuningConfig } = mergeConfig(userConfig.webcam, userConfig.tuning);
 
     this.config = {
       map: userConfig.map,
@@ -49,7 +45,7 @@ export class GestureMapController {
 
     this.stateMachine = new GestureStateMachine(tuningConfig);
     this.overlay = new WebcamOverlay(webcamConfig);
-    this.interaction = new OpenLayersGestureInteraction(userConfig.map);
+    this.interaction = new OpenLayersGestureInteraction(userConfig.map, tuningConfig.panScale, tuningConfig.zoomScale);
   }
 
   /**

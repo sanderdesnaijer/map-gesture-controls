@@ -152,7 +152,8 @@ export class WebcamOverlay {
   }
 
   private applyContainerStyles(): void {
-    const { mode, position, width, height, opacity } = this.config;
+    const { mode, position, width, height, opacity, margin } = this.config;
+    const marginPx = `${margin}px`;
 
     this.container.style.cssText = '';
     this.container.style.position = 'fixed';
@@ -165,19 +166,18 @@ export class WebcamOverlay {
     if (mode === 'corner') {
       this.container.style.width = `${width}px`;
       this.container.style.height = `${height}px`;
-      const margin = '16px';
       if (position === 'bottom-right') {
-        this.container.style.bottom = margin;
-        this.container.style.right = margin;
+        this.container.style.bottom = marginPx;
+        this.container.style.right = marginPx;
       } else if (position === 'bottom-left') {
-        this.container.style.bottom = margin;
-        this.container.style.left = margin;
+        this.container.style.bottom = marginPx;
+        this.container.style.left = marginPx;
       } else if (position === 'top-right') {
-        this.container.style.top = margin;
-        this.container.style.right = margin;
+        this.container.style.top = marginPx;
+        this.container.style.right = marginPx;
       } else {
-        this.container.style.top = margin;
-        this.container.style.left = margin;
+        this.container.style.top = marginPx;
+        this.container.style.left = marginPx;
       }
     } else if (mode === 'full') {
       this.container.style.top = '0';
