@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.5...core-v0.1.6) (2026-04-04)
+
+
+### Bug Fixes
+
+* added gif ([4175302](https://github.com/sanderdesnaijer/map-gesture-controls/commit/4175302a2c3fcf29e103b06250f951edba2321c2))
+
 ## [0.1.5](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.4...core-v0.1.5) (2026-04-03)
 
 

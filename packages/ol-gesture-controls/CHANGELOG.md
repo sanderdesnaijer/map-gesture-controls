@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.1.3...ol-v0.1.4) (2026-04-04)
+
+
+### Bug Fixes
+
+* added gif ([4175302](https://github.com/sanderdesnaijer/map-gesture-controls/commit/4175302a2c3fcf29e103b06250f951edba2321c2))
+
 ## [0.1.3](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.1.2...ol-v0.1.3) (2026-04-03)
 
 
