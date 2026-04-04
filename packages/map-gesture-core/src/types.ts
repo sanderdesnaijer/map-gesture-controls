@@ -1,4 +1,4 @@
-export type GestureMode = 'idle' | 'panning' | 'zooming';
+export type GestureMode = 'idle' | 'panning' | 'zooming' | 'rotating';
 
 export type HandednessLabel = 'Left' | 'Right';
 

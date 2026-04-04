@@ -7,15 +7,15 @@ import type { StateMachineOutput } from '@map-gesture-controls/core';
  *
  * Translates GestureStateMachine output into actual OL map movements.
  *
- * Pan:  normalised hand delta → pixel offset → new map center
- * Zoom: two-hand index-finger distance delta → zoom level change (hands apart = zoom in)
+ * Pan:  left fist wrist delta → pixel offset → new map center
+ * Zoom: right fist wrist vertical delta → zoom level change (up = in, down = out)
  */
 export class OpenLayersGestureInteraction {
   private map: Map;
   private panScale = 2.0;
-  // Two-hand distance delta is ~0.005–0.02 per frame at natural speed.
-  // zoomScale=4.0 ≈ 1.2 zoom levels/sec at 30fps. Adjust to taste.
-  private zoomScale = 4.0;
+  // Wrist vertical delta is ~0.005–0.02 per frame at natural speed (same as pan).
+  // zoomScale=15 ≈ 1 zoom level/sec at 30fps with moderate hand movement.
+  private zoomScale = 15.0;
 
   constructor(map: Map) {
     this.map = map;
@@ -31,6 +31,9 @@ export class OpenLayersGestureInteraction {
     }
     if (output.zoomDelta !== null) {
       this.zoom(output.zoomDelta);
+    }
+    if (output.rotateDelta !== null) {
+      this.rotate(output.rotateDelta);
     }
   }
 
@@ -59,6 +62,15 @@ export class OpenLayersGestureInteraction {
       center[0] - pixelDx * resolution,
       center[1] + pixelDy * resolution,
     ]);
+  }
+
+  /**
+   * Rotate map. delta in radians — positive = clockwise, negative = counter-clockwise.
+   */
+  private rotate(delta: number): void {
+    const view = this.map.getView();
+    const currentRotation = view.getRotation() ?? 0;
+    view.setRotation(currentRotation + delta);
   }
 
   /**

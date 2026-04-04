@@ -39,6 +39,7 @@ function makeFrame(
 
 /**
  * Drive the FSM into 'panning' with dwell=0 (requires two identical frames).
+ * Pan = left fist only.
  */
 function enterPanning(fsm: GestureStateMachine, hand = makeHand('fist')): void {
   fsm.update(makeFrame(0, hand, null)); // starts dwell timer
@@ -47,11 +48,21 @@ function enterPanning(fsm: GestureStateMachine, hand = makeHand('fist')): void {
 
 /**
  * Drive the FSM into 'zooming' with dwell=0 (requires two identical frames).
+ * Zoom = right fist only.
  */
-function enterZooming(
+function enterZooming(fsm: GestureStateMachine, right = makeHand('fist')): void {
+  fsm.update(makeFrame(0, null, right));
+  fsm.update(makeFrame(0, null, right));
+}
+
+/**
+ * Drive the FSM into 'rotating' with dwell=0 (requires two identical frames).
+ * Rotate = both fists.
+ */
+function enterRotating(
   fsm: GestureStateMachine,
-  left = makeHand('openPalm'),
-  right = makeHand('openPalm'),
+  left = makeHand('fist'),
+  right = makeHand('fist'),
 ): void {
   fsm.update(makeFrame(0, left, right));
   fsm.update(makeFrame(0, left, right));
@@ -74,7 +85,7 @@ describe('GestureStateMachine', () => {
 
   // ── idle → panning ─────────────────────────────────────────────────────────
 
-  it('transitions to panning after the dwell elapses (two frames, dwell=0)', () => {
+  it('transitions to panning when left fist is held (two frames, dwell=0)', () => {
     const fistHand = makeHand('fist');
     fsm.update(makeFrame(0, fistHand, null)); // starts dwell
     const out = fsm.update(makeFrame(0, fistHand, null)); // 0 >= 0 → panning
@@ -83,17 +94,35 @@ describe('GestureStateMachine', () => {
 
   // ── idle → zooming ─────────────────────────────────────────────────────────
 
-  it('transitions to zooming when two open palms are held (two frames, dwell=0)', () => {
-    const left  = makeHand('openPalm');
-    const right = makeHand('openPalm');
+  it('transitions to zooming when right fist is held (two frames, dwell=0)', () => {
+    const right = makeHand('fist');
+    fsm.update(makeFrame(0, null, right));
+    const out = fsm.update(makeFrame(0, null, right));
+    expect(out.mode).toBe('zooming');
+  });
+
+  // ── idle → rotating ────────────────────────────────────────────────────────
+
+  it('transitions to rotating when both fists are held (two frames, dwell=0)', () => {
+    const left  = makeHand('fist');
+    const right = makeHand('fist');
     fsm.update(makeFrame(0, left, right));
     const out = fsm.update(makeFrame(0, left, right));
-    expect(out.mode).toBe('zooming');
+    expect(out.mode).toBe('rotating');
+  });
+
+  it('prefers rotating over zooming when both fists are held', () => {
+    const left  = makeHand('fist');
+    const right = makeHand('fist');
+    fsm.update(makeFrame(0, left, right));
+    const out = fsm.update(makeFrame(0, left, right));
+    // both fists = rotating, not zooming
+    expect(out.mode).toBe('rotating');
   });
 
   // ── panning → idle ─────────────────────────────────────────────────────────
 
-  it('returns to idle when the fist is released (releaseGraceMs=0)', () => {
+  it('returns to idle when the left fist is released (releaseGraceMs=0)', () => {
     enterPanning(fsm);
     expect(fsm.getMode()).toBe('panning');
 
@@ -104,9 +133,20 @@ describe('GestureStateMachine', () => {
 
   // ── zooming → idle ─────────────────────────────────────────────────────────
 
-  it('returns to idle when open palms are released (releaseGraceMs=0)', () => {
+  it('returns to idle when right fist is released (releaseGraceMs=0)', () => {
     enterZooming(fsm);
     expect(fsm.getMode()).toBe('zooming');
+
+    fsm.update(makeFrame(1, null, null)); // starts release timer
+    const out = fsm.update(makeFrame(1, null, null)); // 0 >= 0 → idle
+    expect(out.mode).toBe('idle');
+  });
+
+  // ── rotating → idle ────────────────────────────────────────────────────────
+
+  it('returns to idle when both fists are released (releaseGraceMs=0)', () => {
+    enterRotating(fsm);
+    expect(fsm.getMode()).toBe('rotating');
 
     fsm.update(makeFrame(1, null, null)); // starts release timer
     const out = fsm.update(makeFrame(1, null, null)); // 0 >= 0 → idle
@@ -147,30 +187,68 @@ describe('GestureStateMachine', () => {
   // ── zoomDelta output ───────────────────────────────────────────────────────
 
   it('emits no zoomDelta on the first zooming frame', () => {
-    const left  = makeHand('openPalm');
-    const right = makeHand('openPalm');
-    fsm.update(makeFrame(0, left, right));
-    const out = fsm.update(makeFrame(0, left, right)); // enters zooming, sets prevZoomDist
+    const right = makeHand('fist');
+    fsm.update(makeFrame(0, null, right));
+    const out = fsm.update(makeFrame(0, null, right)); // enters zooming, sets prevZoomDist
     expect(out.zoomDelta).toBeNull();
   });
 
-  it('emits zoomDelta once a previous distance is established', () => {
-    const lmL1 = makeLandmarks({ [LANDMARKS.INDEX_TIP]: { x: 0.4, y: 0.5, z: 0 } });
-    const lmR1 = makeLandmarks({ [LANDMARKS.INDEX_TIP]: { x: 0.6, y: 0.5, z: 0 } });
-    const lmL2 = makeLandmarks({ [LANDMARKS.INDEX_TIP]: { x: 0.3, y: 0.5, z: 0 } });
-    const lmR2 = makeLandmarks({ [LANDMARKS.INDEX_TIP]: { x: 0.7, y: 0.5, z: 0 } });
+  it('emits zoomDelta once a previous position is established', () => {
+    // Right wrist starts lower (y=0.6), then moves up (y=0.4) → zoom in (positive delta)
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6, z: 0 } });
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.4, z: 0 } });
 
     // Frame 1+2: dwell + transition (zooming entered on frame 2, but output comes from idle branch)
-    fsm.update(makeFrame(0, makeHand('openPalm', lmL1), makeHand('openPalm', lmR1)));
-    fsm.update(makeFrame(0, makeHand('openPalm', lmL1), makeHand('openPalm', lmR1)));
+    fsm.update(makeFrame(0, null, makeHand('fist', lmR1)));
+    fsm.update(makeFrame(0, null, makeHand('fist', lmR1)));
     // Frame 3: first real zooming frame, sets prevZoomDist, no delta yet
-    fsm.update(makeFrame(1, makeHand('openPalm', lmL1), makeHand('openPalm', lmR1)));
-    // Frame 4: wider spread → positive delta
-    const out = fsm.update(makeFrame(2, makeHand('openPalm', lmL2), makeHand('openPalm', lmR2)));
+    fsm.update(makeFrame(1, null, makeHand('fist', lmR1)));
+    // Frame 4: hand moved up → zoom in (positive delta)
+    const out = fsm.update(makeFrame(2, null, makeHand('fist', lmR2)));
 
     expect(out.mode).toBe('zooming');
     expect(out.zoomDelta).not.toBeNull();
-    expect(out.zoomDelta!).toBeGreaterThan(0);
+    expect(out.zoomDelta!).toBeGreaterThan(0); // hand moved up = zoom in
+  });
+
+  it('emits negative zoomDelta when hand moves down (zoom out)', () => {
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.4, z: 0 } });
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6, z: 0 } });
+
+    fsm.update(makeFrame(0, null, makeHand('fist', lmR1)));
+    fsm.update(makeFrame(0, null, makeHand('fist', lmR1)));
+    fsm.update(makeFrame(1, null, makeHand('fist', lmR1)));
+    const out = fsm.update(makeFrame(2, null, makeHand('fist', lmR2)));
+
+    expect(out.zoomDelta).not.toBeNull();
+    expect(out.zoomDelta!).toBeLessThan(0); // hand moved down = zoom out
+  });
+
+  // ── rotateDelta output ─────────────────────────────────────────────────────
+
+  it('emits no rotateDelta on the first rotating frame', () => {
+    const left  = makeHand('fist');
+    const right = makeHand('fist');
+    fsm.update(makeFrame(0, left, right));
+    const out = fsm.update(makeFrame(0, left, right)); // enters rotating, sets prevRotateAngle
+    expect(out.rotateDelta).toBeNull();
+  });
+
+  it('emits rotateDelta once a previous angle is established', () => {
+    // Left wrist at (0.2, 0.5), right wrist at (0.8, 0.5) → angle = 0 (horizontal)
+    const lmL1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5, z: 0 } });
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
+    // Tilt clockwise: right wrist drops, left wrist rises → angle increases
+    const lmL2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.4, z: 0 } });
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.6, z: 0 } });
+
+    fsm.update(makeFrame(0, makeHand('fist', lmL1), makeHand('fist', lmR1)));
+    fsm.update(makeFrame(0, makeHand('fist', lmL1), makeHand('fist', lmR1)));
+    fsm.update(makeFrame(1, makeHand('fist', lmL1), makeHand('fist', lmR1)));
+    const out = fsm.update(makeFrame(2, makeHand('fist', lmL2), makeHand('fist', lmR2)));
+
+    expect(out.mode).toBe('rotating');
+    expect(out.rotateDelta).not.toBeNull();
   });
 
   // ── reset ──────────────────────────────────────────────────────────────────
@@ -178,6 +256,14 @@ describe('GestureStateMachine', () => {
   it('reset() returns the FSM to idle', () => {
     enterPanning(fsm);
     expect(fsm.getMode()).toBe('panning');
+
+    fsm.reset();
+    expect(fsm.getMode()).toBe('idle');
+  });
+
+  it('reset() returns the FSM to idle from rotating', () => {
+    enterRotating(fsm);
+    expect(fsm.getMode()).toBe('rotating');
 
     fsm.reset();
     expect(fsm.getMode()).toBe('idle');

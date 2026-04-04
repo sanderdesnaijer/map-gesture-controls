@@ -5,14 +5,14 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@map-gesture-controls/ol?style=flat-square&label=minzipped)](https://bundlephobia.com/package/@map-gesture-controls/ol)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-**Control OpenLayers maps with hand gestures.** No mouse, no touch, no backend. Point your webcam, make a fist to pan, show two open hands to zoom. Powered by [MediaPipe](https://developers.google.com/mediapipe) hand-tracking running entirely in the browser. Your camera feed never leaves the device.
+**Control OpenLayers maps with hand gestures.** No mouse, no touch, no backend. Point your webcam, make a left fist to pan, right fist to zoom, or both fists to rotate. Powered by [MediaPipe](https://developers.google.com/mediapipe) hand-tracking running entirely in the browser. Your camera feed never leaves the device.
 
 ## Demo
 
 Try it live at **[sanderdesnaijer.github.io/map-gesture-controls](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sanderdesnaijer/map-gesture-controls/main/docs/public/openlayers-gesture-control-demo.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with a fist and zooms with two open hands, all in the browser via MediaPipe." width="720" />
+  <img src="https://raw.githubusercontent.com/sanderdesnaijer/map-gesture-controls/main/docs/public/openlayers-gesture-control-demo.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with the left fist, zooms with the right fist, and rotates with both fists, all in the browser via MediaPipe." width="720" />
 </p>
 
 ## Install
@@ -50,15 +50,16 @@ controller.stop();
 ## How it works
 
 1. **Webcam capture** - `GestureController` opens the camera and feeds each frame to MediaPipe Hand Landmarker, returning 21 3D landmarks per hand.
-2. **Gesture classification** - `GestureStateMachine` classifies frames in real time: one closed fist means pan, two open palms means zoom, anything else is idle. Dwell timers and grace periods prevent accidental triggers.
-3. **Map integration** - `OpenLayersGestureInteraction` translates hand movement deltas into `ol/Map` pan offsets and zoom adjustments, with dead-zone filtering and exponential smoothing for a natural feel.
+2. **Gesture classification** - `GestureStateMachine` classifies frames in real time: left fist = pan, right fist = zoom (vertical movement), both fists = rotate, anything else is idle. Dwell timers and grace periods prevent accidental triggers.
+3. **Map integration** - `OpenLayersGestureInteraction` translates hand movement deltas into `ol/Map` pan offsets, zoom adjustments, and view rotation, with dead-zone filtering and exponential smoothing for a natural feel.
 
 ## Gestures
 
 | Gesture | How to perform | Map action |
 | --- | --- | --- |
-| **Pan** | Make a fist with one hand, move it around | Drags the map |
-| **Zoom** | Show two open palms, move hands apart or together | Zooms in or out |
+| **Pan** | Left fist, move hand in any direction | Drags the map |
+| **Zoom** | Right fist, move hand up or down | Zooms in (up) or out (down) |
+| **Rotate** | Both fists, tilt wrists clockwise or counter-clockwise | Rotates the map |
 | **Idle** | Any other hand position | Map stays still |
 
 ## Configuration
@@ -76,7 +77,7 @@ const controller = new GestureMapController({
   },
   tuning: {
     panScale: 3.0,          // higher = faster panning
-    zoomScale: 2.0,         // higher = faster zooming
+    zoomScale: 15.0,        // higher = faster zooming
     actionDwellMs: 80,      // ms before confirming a gesture
     releaseGraceMs: 150,    // ms grace period after gesture ends
   },

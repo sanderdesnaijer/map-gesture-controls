@@ -27,7 +27,7 @@ The gesture pipeline has two well-defined extension points: gesture **classifica
 
 ## Extension point 1: classifyGesture
 
-`classifyGesture(landmarks: HandLandmark[]): GestureType` is the function that maps 21 MediaPipe landmarks to a gesture label. The current implementation returns `'fist'`, `'openPalm'`, or `'none'`.
+`classifyGesture(landmarks: HandLandmark[]): GestureType` is the function that maps 21 MediaPipe landmarks to a gesture label. The current implementation returns `'fist'` or `'none'`.
 
 To support additional gesture types, you can:
 
@@ -60,9 +60,9 @@ function classifyExtended(landmarks: HandLandmark[]): ExtendedGestureType {
 ```ts
 class MyCustomInteraction extends OpenLayersGestureInteraction {
   apply(output: StateMachineOutput): void {
-    if (output.mode === 'panning') {
-      // Custom pan behaviour
-      console.log('Custom pan delta:', output.panDelta);
+    if (output.mode === 'rotating') {
+      // Custom rotate behaviour, e.g. snap to 45-degree increments
+      console.log('Rotate delta (radians):', output.rotateDelta);
     }
     // Call super to continue with default behaviour
     super.apply(output);

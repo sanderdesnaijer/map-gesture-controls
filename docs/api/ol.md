@@ -74,7 +74,7 @@ Creates a gesture interaction bound to the given OpenLayers `Map` instance. Does
 
 | Method | Returns | Description |
 | --- | --- | --- |
-| `apply(output: StateMachineOutput)` | `void` | Applies a single `StateMachineOutput` frame to the map. Call this each time the state machine produces output (typically once per video frame). Internally applies pan and zoom deltas using the OL view API. |
+| `apply(output: StateMachineOutput)` | `void` | Applies a single `StateMachineOutput` frame to the map. Call this each time the state machine produces output (typically once per video frame). Internally applies pan, zoom, and rotate deltas using the OL view API. |
 
 This class is useful when you want to wire up your own `GestureController` and `GestureStateMachine` from `@map-gesture-controls/core` and connect them to an OL map without using the higher-level `GestureMapController`.
 

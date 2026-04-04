@@ -7,7 +7,7 @@
 
 **Control web maps with hand gestures. No mouse, no touch, no backend.**
 
-Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with a closed fist and zoom by moving two open hands apart or together. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
+Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left fist, zoom with the right fist, and rotate with both fists. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
 
 **[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
@@ -18,7 +18,7 @@ Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM ru
 ## How it works
 
 1. **Webcam capture**: `GestureController` opens the user's camera and feeds each frame to MediaPipe Hand Landmarker, which returns 21 3-D landmarks per detected hand.
-2. **Gesture classification**: `GestureStateMachine` classifies each frame using `classifyGesture()`: one hand with 3+ fingers curled = `fist` (pan); two hands each with all 4 fingers extended and spread = `openPalm` (zoom); anything else = `none` (idle). A configurable dwell timer (`actionDwellMs`, default 80 ms) prevents flickering, and a grace period (`releaseGraceMs`, default 150 ms) smooths gesture releases.
+2. **Gesture classification**: `GestureStateMachine` classifies each frame using `classifyGesture()`: left fist = pan; right fist = zoom (vertical movement); both fists = rotate; anything else = idle. A configurable dwell timer (`actionDwellMs`, default 80 ms) prevents flickering, and a grace period (`releaseGraceMs`, default 150 ms) smooths gesture releases.
 3. **OL integration**: `OpenLayersGestureInteraction` translates frame-over-frame hand deltas into `ol/Map` pan pixel offsets and zoom-level adjustments, applying dead-zone filtering and exponential smoothing before every update.
 
 ## Packages
@@ -112,7 +112,7 @@ const controller = new GestureMapController({
 | Key                      | Type     | Default | Description                                                          |
 | ------------------------ | -------- | ------- | -------------------------------------------------------------------- |
 | `panScale`               | `number` | `2.0`   | Multiplier on hand delta → map pixels. Higher = faster pan.          |
-| `zoomScale`              | `number` | `4.0`   | Multiplier on two-hand distance delta → zoom level. Higher = faster. |
+| `zoomScale`              | `number` | `15.0`  | Multiplier on right wrist vertical delta → zoom level. Higher = faster. |
 | `actionDwellMs`          | `number` | `80`    | Hold time (ms) before a gesture is confirmed.                        |
 | `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.       |
 | `panDeadzonePx`          | `number` | `10`    | Minimum pixel movement to register a pan.                            |
@@ -145,8 +145,9 @@ npm run type-check
 
 | Mode | Condition | Action | How to perform |
 |------|-----------|--------|----------------|
-| Pan | One hand, fist gesture | Move hand | Curl all fingers into a fist, then move your hand in any direction to pan the map |
-| Zoom | Both hands visible, open palms | Spread / pinch | Show both open hands (all fingers extended and spread), then move them apart to zoom in or together to zoom out |
+| Pan | Left hand fist (right hand absent or open) | Move left hand | Curl the left hand into a fist, then move it in any direction to pan the map |
+| Zoom | Right hand fist (left hand absent or open) | Move right hand up/down | Curl the right hand into a fist, then move it up to zoom in or down to zoom out |
+| Rotate | Both hands in fists | Tilt wrists | Form fists with both hands and tilt them clockwise or counter-clockwise to rotate the map |
 | Idle | Any other hand position | None | Let your hands rest or hold any non-recognised pose; the map does nothing |
 
 Gestures are confirmed after a short dwell period (default 80 ms) to avoid accidental triggers, and released after a grace period (default 150 ms) to prevent flickering when hands briefly lose tracking.
@@ -167,7 +168,7 @@ Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam a
 
 **Planned features:**
 - `@map-gesture-controls/gmaps`: Google Maps adapter
-- Additional gesture types: tilt, rotate
+- Additional gesture types: tilt
 - Framework wrappers for React and Vue
 
 **Contributing:**

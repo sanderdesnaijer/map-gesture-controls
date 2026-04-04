@@ -7,23 +7,28 @@ import type { StateMachineOutput } from '@map-gesture-controls/core';
 function makeMapMock(opts: {
   center?: [number, number];
   zoom?: number;
+  rotation?: number;
   resolution?: number;
   size?: [number, number];
 } = {}) {
   const center: [number, number] = opts.center ?? [0, 0];
   const zoom = opts.zoom ?? 5;
+  const rotation = opts.rotation ?? 0;
   const resolution = opts.resolution ?? 100;
   const size: [number, number] = opts.size ?? [800, 600];
 
-  const setCenter = vi.fn();
-  const animate   = vi.fn();
+  const setCenter   = vi.fn();
+  const animate     = vi.fn();
+  const setRotation = vi.fn();
 
   const view = {
-    getResolution: () => resolution,
-    getZoom:       () => zoom,
-    getCenter:     () => [...center],
+    getResolution:   () => resolution,
+    getZoom:         () => zoom,
+    getRotation:     () => rotation,
+    getCenter:       () => [...center],
     setCenter,
     animate,
+    setRotation,
     calculateExtent: (_size: unknown) => [
       center[0] - 400 * resolution,
       center[1] - 300 * resolution,
@@ -37,21 +42,25 @@ function makeMapMock(opts: {
     getSize: () => size,
   };
 
-  return { map, view, setCenter, animate };
+  return { map, view, setCenter, animate, setRotation };
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function idle(): StateMachineOutput {
-  return { mode: 'idle', panDelta: null, zoomDelta: null };
+  return { mode: 'idle', panDelta: null, zoomDelta: null, rotateDelta: null };
 }
 
 function panning(dx: number, dy: number): StateMachineOutput {
-  return { mode: 'panning', panDelta: { x: dx, y: dy }, zoomDelta: null };
+  return { mode: 'panning', panDelta: { x: dx, y: dy }, zoomDelta: null, rotateDelta: null };
 }
 
 function zooming(delta: number): StateMachineOutput {
-  return { mode: 'zooming', panDelta: null, zoomDelta: delta };
+  return { mode: 'zooming', panDelta: null, zoomDelta: delta, rotateDelta: null };
+}
+
+function rotating(delta: number): StateMachineOutput {
+  return { mode: 'rotating', panDelta: null, zoomDelta: null, rotateDelta: delta };
 }
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -61,17 +70,18 @@ describe('OpenLayersGestureInteraction', () => {
   let mocks: ReturnType<typeof makeMapMock>;
 
   beforeEach(() => {
-    mocks = makeMapMock({ center: [0, 0], zoom: 5, resolution: 100, size: [800, 600] });
+    mocks = makeMapMock({ center: [0, 0], zoom: 5, rotation: 0, resolution: 100, size: [800, 600] });
     // @ts-expect-error - we pass a minimal mock, not a full ol/Map instance
     interaction = new OpenLayersGestureInteraction(mocks.map);
   });
 
   // ── idle output does nothing ───────────────────────────────────────────────
 
-  it('does not call setCenter or animate for idle output', () => {
+  it('does not call setCenter, animate, or setRotation for idle output', () => {
     interaction.apply(idle());
     expect(mocks.setCenter).not.toHaveBeenCalled();
     expect(mocks.animate).not.toHaveBeenCalled();
+    expect(mocks.setRotation).not.toHaveBeenCalled();
   });
 
   // ── pan ───────────────────────────────────────────────────────────────────
@@ -124,7 +134,7 @@ describe('OpenLayersGestureInteraction', () => {
 
   it('applies zoomScale to zoomDelta', () => {
     const delta = 0.01;
-    const zoomScale = 4.0;
+    const zoomScale = 15.0;
     const currentZoom = 5;
 
     interaction.apply(zooming(delta));
@@ -149,6 +159,51 @@ describe('OpenLayersGestureInteraction', () => {
   it('does not call animate when zoomDelta is null', () => {
     interaction.apply(idle());
     expect(mocks.animate).not.toHaveBeenCalled();
+  });
+
+  // ── rotate ────────────────────────────────────────────────────────────────
+
+  it('calls view.setRotation when rotateDelta is present', () => {
+    interaction.apply(rotating(0.1));
+    expect(mocks.setRotation).toHaveBeenCalledOnce();
+  });
+
+  it('adds rotateDelta to the current rotation', () => {
+    const delta = 0.2;
+    const currentRotation = 0;
+
+    interaction.apply(rotating(delta));
+
+    const [newRotation] = mocks.setRotation.mock.calls[0] as [number];
+    expect(newRotation).toBeCloseTo(currentRotation + delta);
+  });
+
+  it('rotates clockwise for positive delta', () => {
+    interaction.apply(rotating(0.5));
+    const [newRotation] = mocks.setRotation.mock.calls[0] as [number];
+    expect(newRotation).toBeGreaterThan(0);
+  });
+
+  it('rotates counter-clockwise for negative delta', () => {
+    interaction.apply(rotating(-0.5));
+    const [newRotation] = mocks.setRotation.mock.calls[0] as [number];
+    expect(newRotation).toBeLessThan(0);
+  });
+
+  it('does not call setRotation when rotateDelta is null', () => {
+    interaction.apply(idle());
+    expect(mocks.setRotation).not.toHaveBeenCalled();
+  });
+
+  it('accumulates rotation from an existing non-zero rotation', () => {
+    const { map } = makeMapMock({ rotation: 1.0 });
+    // @ts-expect-error
+    const i = new OpenLayersGestureInteraction(map);
+    const setRotationSpy = vi.spyOn(map.getView(), 'setRotation');
+
+    i.apply(rotating(0.5));
+
+    expect(setRotationSpy).toHaveBeenCalledWith(expect.closeTo(1.5, 5));
   });
 
   // ── gracefully handles missing view data ──────────────────────────────────
