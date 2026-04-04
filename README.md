@@ -195,6 +195,7 @@ Built by [Sander de Snaijer](https://www.sanderdesnaijer.com).
 
 Thanks to the following people for testing, feedback, and helping improve gesture controls:
 
+- [SupersonicSquirrel](https://www.reddit.com/user/SupersonicSquirrel/) (Reddit)
 - [ThePixelProYT](https://www.reddit.com/user/ThePixelProYT/) (Reddit)
 
 ## License
