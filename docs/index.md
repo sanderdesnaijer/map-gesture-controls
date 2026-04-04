@@ -18,8 +18,8 @@ hero:
   text: "Control maps with your hands"
   tagline: "Browser-native hand gesture controls for OpenLayers. Powered by MediaPipe. No backend required."
   image:
-    src: /og-image.png
-    alt: Hand gesture controlling an OpenLayers map - pan with a fist, zoom with two open hands, powered by MediaPipe in the browser
+    src: /openlayers-gesture-control-demo.gif
+    alt: Screen recording of the map gesture demo—an OpenLayers map with a small webcam preview; the user pans the map with a fist and zooms with two open hands, all in the browser via MediaPipe
   actions:
     - theme: brand
       text: Get Started
