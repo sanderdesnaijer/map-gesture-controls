@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.6...core-v0.1.7) (2026-04-04)
+
+
+### Bug Fixes
+
+* updated readmes with author ([9ffff92](https://github.com/sanderdesnaijer/map-gesture-controls/commit/9ffff9240c99a3aa71da7e098b62a4d93ce8aad9))
+
 ## [0.1.6](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.5...core-v0.1.6) (2026-04-04)
 
 
