@@ -19,7 +19,7 @@ hero:
   tagline: "Browser-native hand gesture controls for OpenLayers. Powered by MediaPipe. No backend required."
   image:
     src: /openlayers-gesture-control-demo.gif
-    alt: Screen recording of the map gesture demo—an OpenLayers map with a small webcam preview; the user pans the map with a fist and zooms with two open hands, all in the browser via MediaPipe
+    alt: Screen recording of the map gesture demo—an OpenLayers map with a small webcam preview; the user pans with the left fist or pinch, zooms with the right fist or pinch, and rotates with both hands, all in the browser via MediaPipe
   actions:
     - theme: brand
       text: Get Started
@@ -32,7 +32,7 @@ features:
   - title: Browser-native
     details: Runs entirely in the browser using MediaPipe WASM. No server, no WebSocket, no data leaves the device.
   - title: OpenLayers integration
-    details: Drop-in gesture controller for OpenLayers maps. Pan with a fist, zoom with two open hands.
+    details: Drop-in gesture controller for OpenLayers maps. Pan with the left hand, zoom with the right hand, rotate with both.
   - title: Configurable
     details: Control webcam overlay position, size, and opacity. Tune gesture sensitivity, smoothing, and dead zones.
   - title: TypeScript

@@ -5,7 +5,7 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@map-gesture-controls/ol?style=flat-square&label=minzipped)](https://bundlephobia.com/package/@map-gesture-controls/ol)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-**Control OpenLayers maps with hand gestures.** No mouse, no touch, no backend. Point your webcam, make a left fist to pan, right fist to zoom, or both fists to rotate. Powered by [MediaPipe](https://developers.google.com/mediapipe) hand-tracking running entirely in the browser. Your camera feed never leaves the device.
+**Control OpenLayers maps with hand gestures.** No mouse, no touch, no backend. Point your webcam and use a fist or pinch to pan, zoom, and rotate. Powered by [MediaPipe](https://developers.google.com/mediapipe) hand-tracking running entirely in the browser. Your camera feed never leaves the device.
 
 ## Demo
 
@@ -50,16 +50,18 @@ controller.stop();
 ## How it works
 
 1. **Webcam capture** - `GestureController` opens the camera and feeds each frame to MediaPipe Hand Landmarker, returning 21 3D landmarks per hand.
-2. **Gesture classification** - `GestureStateMachine` classifies frames in real time: left fist = pan, right fist = zoom (vertical movement), both fists = rotate, anything else is idle. Dwell timers and grace periods prevent accidental triggers.
+2. **Gesture classification** - `GestureStateMachine` classifies frames in real time: left fist or pinch = pan, right fist or pinch = zoom (vertical movement), both hands active = rotate, anything else is idle. Dwell timers and grace periods prevent accidental triggers.
 3. **Map integration** - `OpenLayersGestureInteraction` translates hand movement deltas into `ol/Map` pan offsets, zoom adjustments, and view rotation, with dead-zone filtering and exponential smoothing for a natural feel.
 
 ## Gestures
 
+Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions — use whichever feels more comfortable.
+
 | Gesture | How to perform | Map action |
 | --- | --- | --- |
-| **Pan** | Left fist, move hand in any direction | Drags the map |
-| **Zoom** | Right fist, move hand up or down | Zooms in (up) or out (down) |
-| **Rotate** | Both fists, tilt wrists clockwise or counter-clockwise | Rotates the map |
+| **Pan** | Left fist or pinch, move hand in any direction | Drags the map |
+| **Zoom** | Right fist or pinch, move hand up or down | Zooms in (up) or out (down) |
+| **Rotate** | Both hands fist or pinch, tilt wrists clockwise or counter-clockwise | Rotates the map |
 | **Idle** | Any other hand position | Map stays still |
 
 ## Configuration

@@ -1,5 +1,5 @@
 import type { HandLandmark, GestureType } from './types.js';
-import { LANDMARKS, FINGERTIP_INDICES, FINGER_BASE_INDICES } from './constants.js';
+import { LANDMARKS, FINGERTIP_INDICES, FINGER_BASE_INDICES, PINCH_THRESHOLD, PINCH_RELEASE_THRESHOLD } from './constants.js';
 
 /**
  * Euclidean distance between two landmarks (ignoring Z).
@@ -98,12 +98,41 @@ export function getTwoHandDistance(
 }
 
 /**
+ * Stateless pinch check used only as the entry condition.
+ * Returns true when thumb tip and index tip are within PINCH_THRESHOLD of hand size.
+ */
+function isPinchEnter(landmarks: HandLandmark[]): boolean {
+  const handSize = getHandSize(landmarks);
+  if (handSize === 0) return false;
+  const thumbTip = landmarks[LANDMARKS.THUMB_TIP];
+  const indexTip = landmarks[LANDMARKS.INDEX_TIP];
+  return dist(thumbTip, indexTip) < handSize * PINCH_THRESHOLD;
+}
+
+/**
+ * Returns true when thumb tip and index tip are still within PINCH_RELEASE_THRESHOLD.
+ * Used as the exit condition to implement hysteresis: once pinching, we stay in
+ * 'pinch' until the fingers open wider than the release threshold.
+ */
+function isPinchHeld(landmarks: HandLandmark[]): boolean {
+  const handSize = getHandSize(landmarks);
+  if (handSize === 0) return false;
+  const thumbTip = landmarks[LANDMARKS.THUMB_TIP];
+  const indexTip = landmarks[LANDMARKS.INDEX_TIP];
+  return dist(thumbTip, indexTip) < handSize * PINCH_RELEASE_THRESHOLD;
+}
+
+/**
  * Classify the gesture for a single hand from its landmarks.
  *
- * Priority: fist > openPalm > none
+ * Priority: fist > pinch > openPalm > none
  *
- * Fist: most fingers curled
- * Open palm: all fingers extended
+ * Fist:      most fingers curled
+ * Pinch:     thumb tip and index tip close together
+ * Open palm: all fingers extended and spread
+ *
+ * NOTE: This stateless version has no pinch hysteresis. Use `createHandClassifier`
+ * for a stateful per-hand classifier that prevents pinch flickering.
  */
 export function classifyGesture(landmarks: HandLandmark[]): GestureType {
   if (landmarks.length < 21) return 'none';
@@ -112,9 +141,56 @@ export function classifyGesture(landmarks: HandLandmark[]): GestureType {
     return 'fist';
   }
 
+  if (isPinchEnter(landmarks)) {
+    return 'pinch';
+  }
+
   if (areAllFingersExtended(landmarks)) {
     return 'openPalm';
   }
 
   return 'none';
+}
+
+/**
+ * Returns a stateful classify function for a single hand.
+ *
+ * Pinch uses hysteresis: the hand enters 'pinch' when tips are within
+ * PINCH_THRESHOLD of hand size, and stays in 'pinch' until tips separate
+ * beyond PINCH_RELEASE_THRESHOLD. This prevents rapid toggling when fingers
+ * hover at the entry threshold during a held pinch gesture.
+ *
+ * Use one instance per hand (left / right) and reset between hand sessions.
+ */
+export function createHandClassifier(): (landmarks: HandLandmark[]) => GestureType {
+  let pinching = false;
+
+  return function classify(landmarks: HandLandmark[]): GestureType {
+    if (landmarks.length < 21) {
+      pinching = false;
+      return 'none';
+    }
+
+    if (areAllFingersCurled(landmarks)) {
+      pinching = false;
+      return 'fist';
+    }
+
+    // Hysteresis: enter pinch on PINCH_THRESHOLD, exit on PINCH_RELEASE_THRESHOLD.
+    if (pinching) {
+      pinching = isPinchHeld(landmarks);
+    } else {
+      pinching = isPinchEnter(landmarks);
+    }
+
+    if (pinching) {
+      return 'pinch';
+    }
+
+    if (areAllFingersExtended(landmarks)) {
+      return 'openPalm';
+    }
+
+    return 'none';
+  };
 }

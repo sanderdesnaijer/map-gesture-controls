@@ -27,7 +27,7 @@ The gesture pipeline has two well-defined extension points: gesture **classifica
 
 ## Extension point 1: classifyGesture
 
-`classifyGesture(landmarks: HandLandmark[]): GestureType` is the function that maps 21 MediaPipe landmarks to a gesture label. The current implementation returns `'fist'` or `'none'`.
+`classifyGesture(landmarks: HandLandmark[]): GestureType` is the function that maps 21 MediaPipe landmarks to a gesture label. The current implementation returns `'fist'`, `'pinch'`, `'openPalm'`, or `'none'`.
 
 To support additional gesture types, you can:
 

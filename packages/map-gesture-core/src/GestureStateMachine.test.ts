@@ -56,7 +56,10 @@ function enterZooming(fsm: GestureStateMachine, right = makeHand('fist')): void 
 }
 
 /**
- * Drive the FSM into 'rotating' with dwell=0 (requires two identical frames).
+ * Drive the FSM into 'rotating' with dwell=0.
+ * Requires ESCALATION_FRAMES (3) consecutive both-active frames, then one
+ * more for the dwell to fire (dwell=0 means it fires on the frame that meets
+ * the threshold, so 3 stable frames + 1 dwell frame = 4 total).
  * Rotate = both fists.
  */
 function enterRotating(
@@ -64,6 +67,13 @@ function enterRotating(
   left = makeHand('fist'),
   right = makeHand('fist'),
 ): void {
+  // Frame 1: both active, dwell timer starts (idle branch, no transition yet).
+  // Frame 2: dwell fires → transitionTo('zooming'), resets leftActiveFrames to 0.
+  // Frames 3-5: leftActiveFrames counts 1 → 2 → 3 (= ESCALATION_FRAMES).
+  // Frame 5: bothStable=true → zooming branch escalates to rotating.
+  fsm.update(makeFrame(0, left, right));
+  fsm.update(makeFrame(0, left, right));
+  fsm.update(makeFrame(0, left, right));
   fsm.update(makeFrame(0, left, right));
   fsm.update(makeFrame(0, left, right));
 }
@@ -103,21 +113,38 @@ describe('GestureStateMachine', () => {
 
   // ── idle → rotating ────────────────────────────────────────────────────────
 
-  it('transitions to rotating when both fists are held (two frames, dwell=0)', () => {
+  it('transitions to rotating when both fists are held stably (5 frames: dwell + 3 escalation)', () => {
     const left  = makeHand('fist');
     const right = makeHand('fist');
+    fsm.update(makeFrame(0, left, right));
+    fsm.update(makeFrame(0, left, right));
+    fsm.update(makeFrame(0, left, right));
     fsm.update(makeFrame(0, left, right));
     const out = fsm.update(makeFrame(0, left, right));
     expect(out.mode).toBe('rotating');
   });
 
-  it('prefers rotating over zooming when both fists are held', () => {
+  it('prefers rotating over zooming once both fists are held stably', () => {
     const left  = makeHand('fist');
     const right = makeHand('fist');
     fsm.update(makeFrame(0, left, right));
+    fsm.update(makeFrame(0, left, right));
+    fsm.update(makeFrame(0, left, right));
+    fsm.update(makeFrame(0, left, right));
     const out = fsm.update(makeFrame(0, left, right));
-    // both fists = rotating, not zooming
+    // both fists stable for ESCALATION_FRAMES = rotating, not zooming
     expect(out.mode).toBe('rotating');
+  });
+
+  it('does NOT transition to rotating if second hand only appears for 1-2 frames (noise guard)', () => {
+    const left  = makeHand('fist');
+    const right = makeHand('fist');
+    // Only 2 frames with both hands — below ESCALATION_FRAMES threshold
+    fsm.update(makeFrame(0, left, null));  // establish left pan
+    fsm.update(makeFrame(0, left, null));  // → panning
+    fsm.update(makeFrame(1, left, right)); // right appears — 1 frame, not stable yet
+    const out = fsm.update(makeFrame(1, left, right)); // 2 frames — still below threshold
+    expect(out.mode).toBe('panning');
   });
 
   // ── panning → idle ─────────────────────────────────────────────────────────
@@ -227,10 +254,12 @@ describe('GestureStateMachine', () => {
   // ── rotateDelta output ─────────────────────────────────────────────────────
 
   it('emits no rotateDelta on the first rotating frame', () => {
-    const left  = makeHand('fist');
-    const right = makeHand('fist');
-    fsm.update(makeFrame(0, left, right));
-    const out = fsm.update(makeFrame(0, left, right)); // enters rotating, sets prevRotateAngle
+    // enterRotating drives into rotating mode (5 frames); the escalation frame
+    // itself returns null (no prevAngle yet). The *next* frame sets prevAngle,
+    // still no delta. Only the frame after that can emit a delta.
+    enterRotating(fsm);
+    // First full frame inside rotating — sets prevRotateAngle, no delta yet
+    const out = fsm.update(makeFrame(1, makeHand('fist'), makeHand('fist')));
     expect(out.rotateDelta).toBeNull();
   });
 
@@ -242,9 +271,13 @@ describe('GestureStateMachine', () => {
     const lmL2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.4, z: 0 } });
     const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.6, z: 0 } });
 
-    fsm.update(makeFrame(0, makeHand('fist', lmL1), makeHand('fist', lmR1)));
-    fsm.update(makeFrame(0, makeHand('fist', lmL1), makeHand('fist', lmR1)));
+    // Get into rotating mode (5 frames with lmL1/lmR1)
+    for (let i = 0; i < 5; i++) {
+      fsm.update(makeFrame(0, makeHand('fist', lmL1), makeHand('fist', lmR1)));
+    }
+    // First frame inside rotating: sets prevRotateAngle, no delta
     fsm.update(makeFrame(1, makeHand('fist', lmL1), makeHand('fist', lmR1)));
+    // Second frame: emits delta
     const out = fsm.update(makeFrame(2, makeHand('fist', lmL2), makeHand('fist', lmR2)));
 
     expect(out.mode).toBe('rotating');

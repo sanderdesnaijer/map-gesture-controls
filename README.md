@@ -7,7 +7,7 @@
 
 **Control web maps with hand gestures. No mouse, no touch, no backend.**
 
-Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left fist, zoom with the right fist, and rotate with both fists. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
+Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left hand, zoom with the right hand, and rotate with both hands. Each action can be triggered with either a **fist** or a **pinch** — whichever feels more natural. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
 
 **[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
@@ -18,7 +18,7 @@ Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM ru
 ## How it works
 
 1. **Webcam capture**: `GestureController` opens the user's camera and feeds each frame to MediaPipe Hand Landmarker, which returns 21 3-D landmarks per detected hand.
-2. **Gesture classification**: `GestureStateMachine` classifies each frame using `classifyGesture()`: left fist = pan; right fist = zoom (vertical movement); both fists = rotate; anything else = idle. A configurable dwell timer (`actionDwellMs`, default 80 ms) prevents flickering, and a grace period (`releaseGraceMs`, default 150 ms) smooths gesture releases.
+2. **Gesture classification**: `GestureStateMachine` classifies each frame using `classifyGesture()`: left fist or pinch = pan; right fist or pinch = zoom (vertical movement); both hands active = rotate; anything else = idle. A configurable dwell timer (`actionDwellMs`, default 80 ms) prevents flickering, and a grace period (`releaseGraceMs`, default 150 ms) smooths gesture releases.
 3. **OL integration**: `OpenLayersGestureInteraction` translates frame-over-frame hand deltas into `ol/Map` pan pixel offsets and zoom-level adjustments, applying dead-zone filtering and exponential smoothing before every update.
 
 ## Packages
@@ -143,11 +143,13 @@ npm run type-check
 
 ## Gestures
 
+Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions — use whichever feels more comfortable.
+
 | Mode | Condition | Action | How to perform |
 |------|-----------|--------|----------------|
-| Pan | Left hand fist (right hand absent or open) | Move left hand | Curl the left hand into a fist, then move it in any direction to pan the map |
-| Zoom | Right hand fist (left hand absent or open) | Move right hand up/down | Curl the right hand into a fist, then move it up to zoom in or down to zoom out |
-| Rotate | Both hands in fists | Tilt wrists | Form fists with both hands and tilt them clockwise or counter-clockwise to rotate the map |
+| Pan | Left hand fist or pinch (right hand absent or open) | Move left hand | Make a fist or pinch with the left hand, then move it in any direction to pan the map |
+| Zoom | Right hand fist or pinch (left hand absent or open) | Move right hand up/down | Make a fist or pinch with the right hand, then move it up to zoom in or down to zoom out |
+| Rotate | Both hands fist or pinch | Tilt wrists | Make a fist or pinch with both hands and tilt them clockwise or counter-clockwise to rotate the map |
 | Idle | Any other hand position | None | Let your hands rest or hold any non-recognised pose; the map does nothing |
 
 Gestures are confirmed after a short dwell period (default 80 ms) to avoid accidental triggers, and released after a grace period (default 150 ms) to prevent flickering when hands briefly lose tracking.
@@ -188,6 +190,12 @@ npm run docs:preview
 ```
 
 Built by [Sander de Snaijer](https://www.sanderdesnaijer.com).
+
+## Special Thanks
+
+Thanks to the following people for testing, feedback, and helping improve gesture controls:
+
+- [ThePixelProYT](https://www.reddit.com/user/ThePixelProYT/) (Reddit)
 
 ## License
 
