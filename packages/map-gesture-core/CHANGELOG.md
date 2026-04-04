@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.8...core-v0.1.9) (2026-04-04)
+
+
+### Bug Fixes
+
+* performance improve ([be44739](https://github.com/sanderdesnaijer/map-gesture-controls/commit/be4473937182842670df0805f56cd28a5bfa7b84))
+* performance improve ([af07990](https://github.com/sanderdesnaijer/map-gesture-controls/commit/af079906e3d84990201d0d88a6905c6665d87abb))
+
 ## [0.1.8](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.7...core-v0.1.8) (2026-04-04)
 
 
