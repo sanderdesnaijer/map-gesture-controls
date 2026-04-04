@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.9...core-v0.2.0) (2026-04-04)
+
+
+### Features
+
+* added pray controls to reset ([8ddfb7b](https://github.com/sanderdesnaijer/map-gesture-controls/commit/8ddfb7b1a9a873062a03aeb5dc6253dac696d6b3))
+* added pray controls to reset ([fe24c9c](https://github.com/sanderdesnaijer/map-gesture-controls/commit/fe24c9c750e4e60e17426c0c66658eb046e609ac))
+
+
+### Bug Fixes
+
+* build ([d744158](https://github.com/sanderdesnaijer/map-gesture-controls/commit/d7441584d7a66dfee6b5a1b93ade093258aad09e))
+* perf improvements ([8882872](https://github.com/sanderdesnaijer/map-gesture-controls/commit/88828729a024e1f910f57e4afe4bb42245bf7bbe))
+
 ## [0.1.9](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.8...core-v0.1.9) (2026-04-04)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@map-gesture-controls/core",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Map-agnostic hand gesture detection and state machine (MediaPipe)",
   "type": "module",
   "main": "dist/index.js",

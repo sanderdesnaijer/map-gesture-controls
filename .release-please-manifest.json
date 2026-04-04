@@ -1,4 +1,4 @@
 {
-  "packages/map-gesture-core": "0.1.9",
-  "packages/ol-gesture-controls": "0.1.7"
+  "packages/map-gesture-core": "0.2.0",
+  "packages/ol-gesture-controls": "0.2.0"
 }
