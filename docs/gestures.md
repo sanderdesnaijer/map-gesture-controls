@@ -1,13 +1,13 @@
 ---
 title: Gestures - Map Gesture Controls
-description: Learn the hand gestures for controlling maps. Right fist to zoom, left fist to pan, both fists to rotate. Understand gesture modes, recognition pipeline, and smoothing.
+description: Learn the hand gestures for controlling maps. Right fist or pinch to zoom, left fist or pinch to pan, both hands to rotate. Understand gesture modes, recognition pipeline, and smoothing.
 head:
   - - meta
     - property: og:title
       content: Supported Hand Gestures - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Learn the hand gestures for controlling OpenLayers maps. Right fist to zoom, left fist to pan, both fists to rotate.
+      content: Learn the hand gestures for controlling OpenLayers maps. Right fist or pinch to zoom, left fist or pinch to pan, both hands to rotate.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/gestures
@@ -22,27 +22,35 @@ The system operates in one of four modes at any time:
 | Mode | Trigger | Map effect |
 | --- | --- | --- |
 | **Idle** | No recognised gesture | None (map stays still) |
-| **Panning** | Left hand in a fist (right hand absent or open) | Left wrist movement pans the map in any direction |
-| **Zooming** | Right hand in a fist (left hand absent or open) | Moving right wrist up zooms in; moving down zooms out |
-| **Rotating** | Both hands in fists simultaneously | Tilting the wrist-to-wrist line clockwise rotates the map clockwise |
+| **Panning** | Left hand fist or pinch (right hand absent or open) | Left wrist movement pans the map in any direction |
+| **Zooming** | Right hand fist or pinch (left hand absent or open) | Moving right wrist up zooms in; moving down zooms out |
+| **Rotating** | Both hands fist or pinch simultaneously | Tilting the wrist-to-wrist line clockwise rotates the map clockwise |
 
 ---
 
 ## Gesture classification
 
-Each video frame is processed by `classifyGesture()`, which inspects MediaPipe's 21-landmark hand model to determine what gesture each hand is making.
+Each video frame is processed by a per-hand classifier, which inspects MediaPipe's 21-landmark hand model to determine what gesture each hand is making. Both **fist** and **pinch** trigger the same map actions — use whichever feels more natural.
 
 ### Fist
 
-A fist is detected when **3 or more fingers are curled**. A finger is considered curled when its tip landmark is closer to the wrist than its MCP (knuckle) landmark, meaning the hand is closed inward. The thumb is not counted.
+A fist is detected when **3 or more fingers are curled**. A finger is considered curled when its tip landmark is closer to the wrist than its MCP (knuckle) landmark. The thumb is not counted.
 
-- **Left fist only** → panning mode
-- **Right fist only** → zooming mode
-- **Both fists** → rotating mode (takes priority over single-hand modes)
+### Pinch
+
+A pinch is detected when the **thumb tip and index tip are within 25% of the hand size** apart. The other fingers do not need to be extended, so a relaxed pinch is fine. Once a pinch is registered, the hand stays classified as `'pinch'` until the fingers open beyond **35% of hand size** (hysteresis). This wider release threshold prevents rapid toggling when fingers hover near the boundary.
+
+Fist takes priority: if all fingers are curled, the gesture is classified as `'fist'` rather than `'pinch'`.
+
+### Mode priority
+
+- **Both hands active** (fist or pinch) → rotating mode (takes priority over single-hand modes)
+- **Right hand active only** → zooming mode
+- **Left hand active only** → panning mode
 
 ### None / idle
 
-Any hand configuration that doesn't match a fist (e.g. open palm, pointing, peace sign, partially closed hand) returns `'none'`. If no recognised gesture is held, the system returns to idle after the grace period.
+Any hand configuration that does not match a fist or pinch (e.g. open palm, pointing, peace sign, partially closed hand) returns `'none'`. If no recognised gesture is held, the system returns to idle after the grace period.
 
 ---
 

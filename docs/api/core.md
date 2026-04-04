@@ -82,7 +82,32 @@ new WebcamOverlay(config: WebcamConfig)
 function classifyGesture(landmarks: HandLandmark[]): GestureType
 ```
 
-Classify a single hand from its 21 MediaPipe landmarks. Returns `'fist'` when 3+ fingers are curled (tip closer to wrist than MCP), or `'none'` for any other configuration.
+Stateless classification of a single hand from its 21 MediaPipe landmarks. Priority: `'fist'` (3+ fingers curled) > `'pinch'` (thumb and index tip within 25% of hand size) > `'openPalm'` (all fingers extended and spread) > `'none'`.
+
+This function has no pinch hysteresis. For per-hand stateful classification that prevents pinch flickering, use `createHandClassifier()` instead.
+
+---
+
+### createHandClassifier
+
+```ts
+function createHandClassifier(): (landmarks: HandLandmark[]) => GestureType
+```
+
+Returns a stateful classify function for a single hand. Pinch detection uses hysteresis: the hand enters `'pinch'` when thumb and index tips are within 25% of hand size, and stays in `'pinch'` until they separate beyond 35% of hand size. This prevents rapid toggling when fingers hover at the entry threshold during a held pinch.
+
+Create one instance per hand (left and right) and reuse it across frames. `GestureController` does this internally; you only need this function when building a custom detection pipeline.
+
+```ts
+import { createHandClassifier } from '@map-gesture-controls/core';
+
+const classifyLeft  = createHandClassifier();
+const classifyRight = createHandClassifier();
+
+// In your frame loop:
+const leftGesture  = classifyLeft(leftLandmarks);
+const rightGesture = classifyRight(rightLandmarks);
+```
 
 ---
 
@@ -177,10 +202,10 @@ The active state of the gesture state machine.
 ### GestureType
 
 ```ts
-type GestureType = 'fist' | 'openPalm' | 'none'
+type GestureType = 'fist' | 'pinch' | 'openPalm' | 'none'
 ```
 
-The raw classification result for a single hand from `classifyGesture()`.
+The raw classification result for a single hand from `classifyGesture()` or `createHandClassifier()`.
 
 ### HandednessLabel
 
@@ -195,11 +220,13 @@ Which hand MediaPipe detected.
 ```ts
 interface GestureFrame {
   hands: DetectedHand[];
+  leftHand: DetectedHand | null;
+  rightHand: DetectedHand | null;
   timestamp: number;
 }
 ```
 
-A single processed video frame containing all detected hands and a high-resolution timestamp.
+A single processed video frame. `leftHand` and `rightHand` are convenience references into `hands` for the respective handedness; either is `null` when that hand is not detected.
 
 ### DetectedHand
 
@@ -207,11 +234,12 @@ A single processed video frame containing all detected hands and a high-resoluti
 interface DetectedHand {
   landmarks: HandLandmark[];
   handedness: HandednessLabel;
+  gesture: GestureType;
   score: number;
 }
 ```
 
-A single detected hand within a `GestureFrame`.
+A single detected hand within a `GestureFrame`. `gesture` is the classified result for this hand, computed by `GestureController` using the stateful per-hand classifier.
 
 ### WebcamConfig
 

@@ -34,6 +34,13 @@ export const LANDMARKS = {
   PINKY_MCP: 17,
 } as const;
 
+// Pinch detection thresholds as a fraction of hand size.
+// Hysteresis: enter pinch at PINCH_THRESHOLD, exit (release) at PINCH_RELEASE_THRESHOLD.
+// The wider release threshold prevents the classifier from flickering between
+// 'pinch' and 'none' when the fingers hover at the edge of the enter threshold.
+export const PINCH_THRESHOLD = 0.25;
+export const PINCH_RELEASE_THRESHOLD = 0.35;
+
 // Fingertip indices for open-palm detection
 export const FINGERTIP_INDICES = [
   LANDMARKS.INDEX_TIP,

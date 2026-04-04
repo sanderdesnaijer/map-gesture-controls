@@ -2,7 +2,7 @@ export type GestureMode = 'idle' | 'panning' | 'zooming' | 'rotating';
 
 export type HandednessLabel = 'Left' | 'Right';
 
-export type GestureType = 'openPalm' | 'fist' | 'none';
+export type GestureType = 'openPalm' | 'fist' | 'pinch' | 'none';
 
 export interface Point2D {
   x: number;

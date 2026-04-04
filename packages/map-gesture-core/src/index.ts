@@ -2,7 +2,7 @@ export { GestureController } from './GestureController.js';
 export { GestureStateMachine } from './GestureStateMachine.js';
 export type { StateMachineOutput } from './GestureStateMachine.js';
 export { WebcamOverlay } from './WebcamOverlay.js';
-export { classifyGesture, getHandSize, getTwoHandDistance } from './gestureClassifier.js';
+export { classifyGesture, createHandClassifier, getHandSize, getTwoHandDistance } from './gestureClassifier.js';
 
 export type {
   GestureMode,

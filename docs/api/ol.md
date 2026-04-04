@@ -91,6 +91,7 @@ import {
   GestureStateMachine,
   WebcamOverlay,
   classifyGesture,
+  createHandClassifier,
   getHandSize,
   getTwoHandDistance,
   DEFAULT_WEBCAM_CONFIG,

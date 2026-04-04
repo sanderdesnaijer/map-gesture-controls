@@ -16,7 +16,7 @@
 ## What it does
 
 - Detects hands and classifies gestures at 30+ fps using MediaPipe Hand Landmarker
-- Recognizes **fist** (left = pan, right = zoom, both = rotate) and **idle** states
+- Recognizes **fist** and **pinch** as interchangeable triggers (left = pan, right = zoom, both = rotate)
 - Manages gesture transitions with dwell timers and grace periods to avoid flickering
 - Provides a configurable webcam overlay with corner/full/hidden display modes
 - Ships fully typed TypeScript declarations
@@ -59,7 +59,8 @@ controller.start();
 | `GestureController` | Class | Opens the webcam, runs MediaPipe detection, and emits gesture frames |
 | `GestureStateMachine` | Class | Manages gesture state transitions with dwell and grace timers |
 | `WebcamOverlay` | Class | Renders a configurable camera preview overlay |
-| `classifyGesture` | Function | Classifies a set of hand landmarks into `fist` or `none` |
+| `classifyGesture` | Function | Stateless classifier: returns `fist`, `pinch`, `openPalm`, or `none` for a set of landmarks |
+| `createHandClassifier` | Function | Returns a stateful per-hand classifier with pinch hysteresis (use this instead of `classifyGesture` in custom pipelines) |
 | `getHandSize` | Function | Computes the bounding size of a hand from its landmarks |
 | `getTwoHandDistance` | Function | Measures the distance between two detected hands |
 | `DEFAULT_WEBCAM_CONFIG` | Constant | Default webcam overlay settings |
@@ -69,12 +70,18 @@ Full TypeScript types are exported for `GestureMode`, `GestureFrame`, `DetectedH
 
 ## Gesture recognition
 
-| Gesture | Detection rule | Use case |
+Both **fist** and **pinch** trigger the same map actions — users can use whichever is more comfortable.
+
+| Gesture | Detection rule | Map action |
 | --- | --- | --- |
 | **Left fist** | Left hand, 3+ fingers curled | Pan / drag |
-| **Right fist** | Right hand, 3+ fingers curled | Zoom in/out (vertical movement) |
-| **Both fists** | Both hands, 3+ fingers curled each | Rotate map |
+| **Left pinch** | Left hand, thumb and index tip within 25% of hand size (exits at 35%) | Pan / drag |
+| **Right fist** | Right hand, 3+ fingers curled | Zoom (move up = in, down = out) |
+| **Right pinch** | Right hand, thumb and index tip within 25% of hand size (exits at 35%) | Zoom (move up = in, down = out) |
+| **Both hands active** | Both hands fist or pinch (mixed is fine) | Rotate map |
 | **Idle** | Anything else | No action |
+
+Pinch detection uses hysteresis: the gesture is entered at 25% of hand size and held until fingers open beyond 35%. This prevents flickering when fingers hover near the threshold during a held pinch.
 
 Gestures are confirmed after a configurable dwell period (default 80 ms) and held through a grace period (default 150 ms) to prevent flickering when tracking briefly drops.
 

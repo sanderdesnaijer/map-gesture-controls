@@ -31,7 +31,7 @@ Each video frame flows through four layers before reaching the map:
 │  └─ onFrame(GestureFrame) ──────────────────────┐              │
 │                                                  │              │
 │  GestureStateMachine        (packages/map-gesture-core)         │
-│  ├─ classifyGesture()                            │              │
+│  ├─ createHandClassifier() (per hand, with hysteresis)         │
 │  ├─ dwell + grace timers                         │              │
 │  └─ update(frame) → StateMachineOutput ──────────┤              │
 │                                                  │              │
@@ -55,10 +55,10 @@ Owns the webcam stream and the MediaPipe hand landmarker session. On every anima
 
 Interprets raw `GestureFrame` data. It calls `classifyGesture()` for each hand, applies dwell timing (to confirm gestures) and grace periods (to smooth releases), and emits a `StateMachineOutput` containing the current `GestureMode` and computed `panDelta`, `zoomDelta`, and `rotateDelta` values. It is entirely map-agnostic.
 
-Priority rules evaluated each frame:
-- **Both hands fist** → `'rotating'` (wrist-to-wrist angle delta rotates the map)
-- **Right fist only** → `'zooming'` (right wrist vertical movement controls zoom)
-- **Left fist only** → `'panning'` (left wrist movement pans the map)
+Priority rules evaluated each frame (fist and pinch are treated identically):
+- **Both hands active** (fist or pinch) → `'rotating'` (wrist-to-wrist angle delta rotates the map)
+- **Right hand active only** → `'zooming'` (right wrist vertical movement controls zoom)
+- **Left hand active only** → `'panning'` (left wrist movement pans the map)
 - **Otherwise** → `'idle'`
 
 ### OpenLayersGestureInteraction (`ol`)

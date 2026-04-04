@@ -1,7 +1,7 @@
 import type { HandLandmarker, HandLandmarkerResult } from '@mediapipe/tasks-vision';
 import { FilesetResolver } from '@mediapipe/tasks-vision';
 import type { GestureFrame, TuningConfig } from './types.js';
-import { classifyGesture } from './gestureClassifier.js';
+import { createHandClassifier } from './gestureClassifier.js';
 import { MEDIAPIPE_WASM_URL } from './constants.js';
 
 type FrameCallback = (frame: GestureFrame) => void;
@@ -21,6 +21,9 @@ export class GestureController {
   private onFrame: FrameCallback;
   private tuning: TuningConfig;
   private lastVideoTime = -1;
+  // One stateful classifier per hand label; persists pinch hysteresis across frames.
+  private leftClassifier = createHandClassifier();
+  private rightClassifier = createHandClassifier();
 
   constructor(tuning: TuningConfig, onFrame: FrameCallback) {
     this.tuning = tuning;
@@ -125,7 +128,8 @@ export class GestureController {
       const label: import('./types.js').HandednessLabel =
         rawLabel === 'Left' ? 'Left' : 'Right';
       const score = handednessArr?.[0]?.score ?? 0;
-      const gesture = classifyGesture(landmarks);
+      const classify = label === 'Left' ? this.leftClassifier : this.rightClassifier;
+      const gesture = classify(landmarks);
       return { handedness: label, score, landmarks, gesture };
     });
 
