@@ -70,9 +70,9 @@ Controls gesture detection sensitivity, smoothing, and timing.
 | `panDeadzonePx` | `number` | `10` | Minimum hand movement in normalised-coordinate pixels required to register a pan. Filters out hand tremor. |
 | `zoomDeadzoneRatio` | `number` | `0.005` | Minimum fractional change in right wrist vertical position required to register a zoom step. |
 | `smoothingAlpha` | `number` | `0.5` | Exponential moving average factor for landmark positions. `0` = maximum smoothing (very slow response), `1` = raw unsmoothed input. |
-| `minDetectionConfidence` | `number` | `0.65` | MediaPipe hand detection confidence threshold (0–1). Lower values detect more hands but with more false positives. |
-| `minTrackingConfidence` | `number` | `0.65` | MediaPipe hand tracking confidence threshold (0–1). |
-| `minPresenceConfidence` | `number` | `0.60` | MediaPipe hand presence confidence threshold (0–1). |
+| `minDetectionConfidence` | `number` | `0.65` | MediaPipe hand detection confidence threshold (0 to 1). Lower values detect more hands but with more false positives. |
+| `minTrackingConfidence` | `number` | `0.65` | MediaPipe hand tracking confidence threshold (0 to 1). |
+| `minPresenceConfidence` | `number` | `0.60` | MediaPipe hand presence confidence threshold (0 to 1). |
 
 ### Example: tuning for responsiveness
 

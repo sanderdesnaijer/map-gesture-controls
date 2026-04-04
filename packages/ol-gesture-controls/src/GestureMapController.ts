@@ -1,7 +1,8 @@
-import type { GestureFrame, WebcamConfig, TuningConfig } from '@map-gesture-controls/core';
+import type { GestureFrame, HandLandmark, WebcamConfig, TuningConfig } from '@map-gesture-controls/core';
 import {
   DEFAULT_WEBCAM_CONFIG,
   DEFAULT_TUNING_CONFIG,
+  LANDMARKS,
   GestureController,
   GestureStateMachine,
   WebcamOverlay,
@@ -33,6 +34,12 @@ export class GestureMapController {
   private started = false;
   private paused = false;
 
+  private resetPoseStart: number | null = null;
+  private resetPoseTriggered = false;
+  private readonly resetPoseDurationMs = 1000;
+  private readonly initialZoom: number;
+  private readonly initialCenter: number[];
+
   constructor(userConfig: GestureMapControllerConfig) {
     const webcamConfig = { ...DEFAULT_WEBCAM_CONFIG, ...userConfig.webcam };
     const tuningConfig = { ...DEFAULT_TUNING_CONFIG, ...userConfig.tuning };
@@ -43,6 +50,9 @@ export class GestureMapController {
       tuning: tuningConfig,
       debug: userConfig.debug ?? false,
     };
+
+    this.initialZoom = userConfig.map.getView().getZoom() ?? 10;
+    this.initialCenter = userConfig.map.getView().getCenter() ?? [0, 0];
 
     this.gestureController = new GestureController(tuningConfig, (frame) => {
       this.lastFrame = frame;
@@ -119,11 +129,56 @@ export class GestureMapController {
 
     const output = this.stateMachine.update(frame);
     this.interaction.apply(output);
-    this.overlay.render(frame, output.mode);
+
+    let resetProgress = 0;
+    const { leftHand, rightHand, timestamp } = frame;
+    const resetPoseActive =
+      !!leftHand &&
+      !!rightHand &&
+      leftHand.gesture !== 'fist' &&
+      rightHand.gesture !== 'fist' &&
+      this.isPrayPose(leftHand.landmarks, rightHand.landmarks);
+
+    if (resetPoseActive) {
+      if (this.resetPoseStart === null) {
+        this.resetPoseStart = timestamp;
+        this.resetPoseTriggered = false;
+      }
+      const elapsed = timestamp - this.resetPoseStart;
+      resetProgress = Math.min(1, elapsed / this.resetPoseDurationMs);
+      if (!this.resetPoseTriggered && resetProgress >= 1) {
+        this.resetPoseTriggered = true;
+        const view = this.config.map.getView();
+        view.setCenter(this.initialCenter);
+        view.setZoom(this.initialZoom);
+        view.setRotation(0);
+      }
+    } else {
+      this.resetPoseStart = null;
+      this.resetPoseTriggered = false;
+    }
+
+    this.overlay.render(frame, output.mode, resetProgress);
 
     if (this.config.debug) {
       this.logDebug(output.mode, frame);
     }
+  }
+
+  /**
+   * Returns true when both hands are held together in a "pray" / namaste pose:
+   * wrists close to the horizontal midline and fingertips of both hands near each other.
+   * Uses normalised screen-space coordinates (0 to 1).
+   */
+  private isPrayPose(left: HandLandmark[], right: HandLandmark[]): boolean {
+    const lWrist = left[LANDMARKS.WRIST];
+    const rWrist = right[LANDMARKS.WRIST];
+    if (!lWrist || !rWrist) return false;
+
+    // Hands are together when wrists are close in both X and Y
+    const dx = lWrist.x - rWrist.x;
+    const dy = lWrist.y - rWrist.y;
+    return Math.sqrt(dx * dx + dy * dy) < 0.30;
   }
 
   private handleVisibilityChange = (): void => {

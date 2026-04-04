@@ -55,13 +55,14 @@ controller.stop();
 
 ## Gestures
 
-Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions — use whichever feels more comfortable.
+Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions, use whichever feels more comfortable.
 
 | Gesture | How to perform | Map action |
 | --- | --- | --- |
 | **Pan** | Left fist or pinch, move hand in any direction | Drags the map |
 | **Zoom** | Right fist or pinch, move hand up or down | Zooms in (up) or out (down) |
 | **Rotate** | Both hands fist or pinch, tilt wrists clockwise or counter-clockwise | Rotates the map |
+| **Reset** | Bring both hands together (pray/namaste), hold 1 second | Resets pan, zoom, and rotation to initial state |
 | **Idle** | Any other hand position | Map stays still |
 
 ## Configuration
