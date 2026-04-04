@@ -17,7 +17,7 @@ head:
 
 ## Gesture modes
 
-The system operates in one of five modes at any time:
+The system operates in one of four modes at any time:
 
 | Mode | Trigger | Map effect |
 | --- | --- | --- |
@@ -25,7 +25,14 @@ The system operates in one of five modes at any time:
 | **Panning** | Left hand fist or pinch (right hand absent or open) | Left wrist movement pans the map in any direction |
 | **Zooming** | Right hand fist or pinch (left hand absent or open) | Moving right wrist up zooms in; moving down zooms out |
 | **Rotating** | Both hands fist or pinch simultaneously | Tilting the wrist-to-wrist line clockwise rotates the map clockwise |
-| **Reset** | Both hands brought together (pray / namaste), held for 1 second | Resets pan, zoom, and rotation back to the initial view |
+
+## Reset gesture (OpenLayers only)
+
+The reset is a separate action layered on top of the mode state machine, available in the OpenLayers integration. It does not correspond to a state-machine mode.
+
+| Gesture | How to trigger | Map effect |
+| --- | --- | --- |
+| **Pray / namaste** | Both hands brought together (neither fist nor pinch), held for 1 second | Resets pan, zoom, and rotation back to the initial view |
 
 > **How to reset:** Bring your hands together in a prayer pose, wrists close, palms facing each other. Hold for 1 second while the progress bar fills. The map snaps back to where it started.
 
