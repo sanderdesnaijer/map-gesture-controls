@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.8](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.7...core-v0.1.8) (2026-04-04)
+
+
+### Bug Fixes
+
+* build ([bd10c25](https://github.com/sanderdesnaijer/map-gesture-controls/commit/bd10c25ee9b71f0605e0fe406b29b299789a7e5c))
+* changed controls ([f56efbc](https://github.com/sanderdesnaijer/map-gesture-controls/commit/f56efbc17a7ab9c56530518675129b22054c62d0))
+* changed controls ([cedf8cc](https://github.com/sanderdesnaijer/map-gesture-controls/commit/cedf8cc98d38147a6627cebdb5061a4daf12ae17))
+
 ## [0.1.7](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.1.6...core-v0.1.7) (2026-04-04)
 
 
