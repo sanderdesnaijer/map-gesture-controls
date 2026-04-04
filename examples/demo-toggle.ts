@@ -33,7 +33,7 @@ btn.addEventListener('click', async () => {
       btn.textContent = 'Stop gesture control';
       status.textContent = 'Gestures active';
     } catch {
-      status.textContent = 'Error – check console';
+      status.textContent = 'Error: check console';
     }
   }
   btn.disabled = false;

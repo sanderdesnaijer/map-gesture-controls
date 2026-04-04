@@ -113,7 +113,7 @@ export class GestureStateMachine {
     const { leftHand, rightHand } = frame;
 
     // ── Determine desired mode for this frame ─────────────────────────────────
-    // Both fist and pinch trigger the same modes — users can choose either.
+    // Both fist and pinch trigger the same modes, users can choose either.
     const isActive = (hand: typeof leftHand) =>
       hand !== null && (hand.gesture === 'fist' || hand.gesture === 'pinch');
 

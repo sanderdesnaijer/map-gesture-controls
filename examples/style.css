@@ -51,3 +51,42 @@
   color: #000;
   box-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
 }
+
+/* ── Reset pose progress bar ───────────────────────────────────────────────── */
+.ol-gesture-reset {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 1;
+}
+
+.ol-gesture-reset-label {
+  display: block;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.ol-gesture-reset-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ol-gesture-reset-fill {
+  height: 100%;
+  width: 0%;
+  background: rgba(255, 200, 0, 0.9);
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(255, 200, 0, 0.6);
+  transition: width 0.05s linear;
+}

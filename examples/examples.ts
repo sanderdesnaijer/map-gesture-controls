@@ -32,7 +32,7 @@ function makeMap(targetId: string, center: [number, number], zoom: number): Map 
       btnStop.disabled = false;
       status.textContent = 'Gestures active';
     } catch {
-      status.textContent = 'Error – check console';
+      status.textContent = 'Error: check console';
       btnStart.disabled = false;
     }
   });
@@ -70,7 +70,7 @@ function makeMap(targetId: string, center: [number, number], zoom: number): Map 
         btn.textContent = 'Stop gesture control';
         status.textContent = 'Gestures active';
       } catch {
-        status.textContent = 'Error – check console';
+        status.textContent = 'Error: check console';
       }
     }
     btn.disabled = false;
@@ -99,7 +99,7 @@ function makeMap(targetId: string, center: [number, number], zoom: number): Map 
       btnStop.disabled = false;
       status.textContent = 'Gestures active';
     } catch {
-      status.textContent = 'Error – check console';
+      status.textContent = 'Error: check console';
       btnStart.disabled = false;
     }
   });
@@ -135,7 +135,7 @@ function makeMap(targetId: string, center: [number, number], zoom: number): Map 
       btnStop.disabled = false;
       status.textContent = 'Gestures active';
     } catch {
-      status.textContent = 'Error – check console';
+      status.textContent = 'Error: check console';
       btnStart.disabled = false;
     }
   });
