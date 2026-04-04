@@ -4,12 +4,12 @@ import type {
   TuningConfig,
   SmoothedPoint,
 } from './types.js';
-import { getTwoHandDistance } from './gestureClassifier.js';
 
 export interface StateMachineOutput {
   mode: GestureMode;
   panDelta: SmoothedPoint | null;
   zoomDelta: number | null;
+  rotateDelta: number | null;
 }
 
 interface DwellTimer {
@@ -63,17 +63,21 @@ class EMAScalar {
 }
 
 /**
- * GestureStateMachine: 3-state FSM
+ * GestureStateMachine: 4-state FSM
  *
  * Priority rules (evaluated every frame):
- *   both hands visible AND both open palm → desired = 'zooming'
- *   one hand visible AND gesture = 'fist' → desired = 'panning'
- *   otherwise                             → desired = 'idle'
+ *   both hands fist                            → desired = 'rotating'
+ *     angle of the wrist-to-wrist line; delta rotates the map
+ *   right hand fist (left absent or not fist)  → desired = 'zooming'
+ *     vertical motion of right wrist controls zoom (up = in, down = out)
+ *   left hand fist (right absent or not fist)  → desired = 'panning'
+ *     horizontal and vertical motion of left wrist pans the map
+ *   otherwise                                  → desired = 'idle'
  *
  * Transitions:
- *   idle → panning/zooming : desired stable for actionDwellMs
- *   panning/zooming → idle : desired changes, grace period releaseGraceMs,
- *                            then idle (next frame starts new dwell if needed)
+ *   idle → any active : desired stable for actionDwellMs
+ *   active → idle     : desired changes, grace period releaseGraceMs,
+ *                       then idle (next frame starts new dwell if needed)
  */
 export class GestureStateMachine {
   private mode: GestureMode = 'idle';
@@ -83,10 +87,13 @@ export class GestureStateMachine {
   private prevPanPos: SmoothedPoint | null = null;
   private zoomSmoother: EMAScalar;
   private prevZoomDist: number | null = null;
+  private rotateSmoother: EMAScalar;
+  private prevRotateAngle: number | null = null;
 
   constructor(private tuning: TuningConfig) {
     this.panSmoother = new EMAPoint(tuning.smoothingAlpha);
     this.zoomSmoother = new EMAScalar(tuning.smoothingAlpha);
+    this.rotateSmoother = new EMAScalar(tuning.smoothingAlpha);
   }
 
   getMode(): GestureMode {
@@ -99,16 +106,18 @@ export class GestureStateMachine {
     const { leftHand, rightHand } = frame;
 
     // ── Determine desired mode for this frame ─────────────────────────────────
-    const bothOpen =
-      leftHand !== null &&
-      rightHand !== null &&
-      leftHand.gesture === 'openPalm' &&
-      rightHand.gesture === 'openPalm';
-    const oneFist =
-      (leftHand !== null && leftHand.gesture === 'fist' && rightHand === null) ||
-      (rightHand !== null && rightHand.gesture === 'fist' && leftHand === null);
+    const rightFist = rightHand !== null && rightHand.gesture === 'fist';
+    const leftFist = leftHand !== null && leftHand.gesture === 'fist';
+    const bothFists = rightFist && leftFist;
 
-    const desired: GestureMode = bothOpen ? 'zooming' : oneFist ? 'panning' : 'idle';
+    // Both fists → rotate; right only → zoom; left only → pan
+    const desired: GestureMode = bothFists
+      ? 'rotating'
+      : rightFist
+        ? 'zooming'
+        : leftFist
+          ? 'panning'
+          : 'idle';
 
     // ── idle ──────────────────────────────────────────────────────────────────
     if (this.mode === 'idle') {
@@ -121,7 +130,7 @@ export class GestureStateMachine {
       } else {
         this.actionDwell = null;
       }
-      return this.buildOutput(null, null);
+      return this.buildOutput(null, null, null);
     }
 
     // ── panning ───────────────────────────────────────────────────────────────
@@ -132,14 +141,14 @@ export class GestureStateMachine {
         } else if (now - this.releaseTimer >= releaseGraceMs) {
           this.transitionTo('idle');
         }
-        return this.buildOutput(null, null);
+        return this.buildOutput(null, null, null);
       }
       this.releaseTimer = null;
 
-      const fistHand = leftHand?.gesture === 'fist' ? leftHand : rightHand;
+      const fistHand = leftHand?.gesture === 'fist' ? leftHand : null;
       if (!fistHand) {
         this.transitionTo('idle');
-        return this.buildOutput(null, null);
+        return this.buildOutput(null, null, null);
       }
 
       const wrist = fistHand.landmarks[0];
@@ -155,7 +164,7 @@ export class GestureStateMachine {
         }
       }
       this.prevPanPos = smooth;
-      return this.buildOutput(panDelta, null);
+      return this.buildOutput(panDelta, null, null);
     }
 
     // ── zooming ───────────────────────────────────────────────────────────────
@@ -166,30 +175,69 @@ export class GestureStateMachine {
         } else if (now - this.releaseTimer >= releaseGraceMs) {
           this.transitionTo('idle');
         }
-        return this.buildOutput(null, null);
+        return this.buildOutput(null, null, null);
+      }
+      this.releaseTimer = null;
+
+      if (!rightHand) {
+        this.transitionTo('idle');
+        return this.buildOutput(null, null, null);
+      }
+
+      // Use right wrist vertical position: moving up (lower y) = zoom in, down = zoom out
+      const wrist = rightHand.landmarks[0];
+      const smoothY = this.zoomSmoother.update(wrist.y);
+
+      let zoomDelta: number | null = null;
+      if (this.prevZoomDist !== null) {
+        const delta = smoothY - this.prevZoomDist;
+        if (Math.abs(delta) > this.tuning.zoomDeadzoneRatio) {
+          // Negate: moving hand up (y decreases) → zoom in (positive delta)
+          zoomDelta = -delta;
+        }
+      }
+      this.prevZoomDist = smoothY;
+      return this.buildOutput(null, zoomDelta, null);
+    }
+
+    // ── rotating ─────────────────────────────────────────────────────────────
+    if (this.mode === 'rotating') {
+      if (desired !== 'rotating') {
+        if (this.releaseTimer === null) {
+          this.releaseTimer = now;
+        } else if (now - this.releaseTimer >= releaseGraceMs) {
+          this.transitionTo('idle');
+        }
+        return this.buildOutput(null, null, null);
       }
       this.releaseTimer = null;
 
       if (!leftHand || !rightHand) {
         this.transitionTo('idle');
-        return this.buildOutput(null, null);
+        return this.buildOutput(null, null, null);
       }
 
-      const rawDist = getTwoHandDistance(leftHand.landmarks, rightHand.landmarks);
-      const smoothDist = this.zoomSmoother.update(rawDist);
+      // Angle of the line from left wrist to right wrist (in radians)
+      const lw = leftHand.landmarks[0];
+      const rw = rightHand.landmarks[0];
+      const rawAngle = Math.atan2(rw.y - lw.y, rw.x - lw.x);
+      const smoothAngle = this.rotateSmoother.update(rawAngle);
 
-      let zoomDelta: number | null = null;
-      if (this.prevZoomDist !== null) {
-        const delta = smoothDist - this.prevZoomDist;
-        if (Math.abs(delta) > this.tuning.zoomDeadzoneRatio) {
-          zoomDelta = delta;
+      let rotateDelta: number | null = null;
+      if (this.prevRotateAngle !== null) {
+        // Wrap the delta to [-π, π] to handle the atan2 discontinuity
+        let delta = smoothAngle - this.prevRotateAngle;
+        if (delta > Math.PI) delta -= 2 * Math.PI;
+        if (delta < -Math.PI) delta += 2 * Math.PI;
+        if (Math.abs(delta) > 0.005) {
+          rotateDelta = delta;
         }
       }
-      this.prevZoomDist = smoothDist;
-      return this.buildOutput(null, zoomDelta);
+      this.prevRotateAngle = smoothAngle;
+      return this.buildOutput(null, null, rotateDelta);
     }
 
-    return this.buildOutput(null, null);
+    return this.buildOutput(null, null, null);
   }
 
   private transitionTo(next: GestureMode): void {
@@ -205,13 +253,18 @@ export class GestureStateMachine {
       this.zoomSmoother.reset();
       this.prevZoomDist = null;
     }
+    if (next !== 'rotating') {
+      this.rotateSmoother.reset();
+      this.prevRotateAngle = null;
+    }
   }
 
   private buildOutput(
     panDelta: SmoothedPoint | null,
     zoomDelta: number | null,
+    rotateDelta: number | null,
   ): StateMachineOutput {
-    return { mode: this.mode, panDelta, zoomDelta };
+    return { mode: this.mode, panDelta, zoomDelta, rotateDelta };
   }
 
   reset(): void {

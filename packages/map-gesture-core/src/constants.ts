@@ -54,6 +54,7 @@ export const COLORS = {
   idle: '#888888',
   panning: '#00ccff',
   zooming: '#00ffcc',
+  rotating: '#ff9900',
   landmark: 'rgba(255,255,255,0.6)',
   connection: 'rgba(255,255,255,0.3)',
   fingertipGlow: '#4488ff',

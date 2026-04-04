@@ -53,11 +53,17 @@ Owns the webcam stream and the MediaPipe hand landmarker session. On every anima
 
 ### GestureStateMachine (`core`)
 
-Interprets raw `GestureFrame` data. It calls `classifyGesture()` for each hand, applies dwell timing (to confirm gestures) and grace periods (to smooth releases), and emits a `StateMachineOutput` containing the current `GestureMode` and computed `panDelta` / `zoomDelta` values. It is entirely map-agnostic.
+Interprets raw `GestureFrame` data. It calls `classifyGesture()` for each hand, applies dwell timing (to confirm gestures) and grace periods (to smooth releases), and emits a `StateMachineOutput` containing the current `GestureMode` and computed `panDelta`, `zoomDelta`, and `rotateDelta` values. It is entirely map-agnostic.
+
+Priority rules evaluated each frame:
+- **Both hands fist** → `'rotating'` (wrist-to-wrist angle delta rotates the map)
+- **Right fist only** → `'zooming'` (right wrist vertical movement controls zoom)
+- **Left fist only** → `'panning'` (left wrist movement pans the map)
+- **Otherwise** → `'idle'`
 
 ### OpenLayersGestureInteraction (`ol`)
 
-Consumes `StateMachineOutput` and calls OpenLayers view APIs. For panning it calls `view.adjustCenter()` with pixel-space deltas; for zooming it calls `view.adjustZoom()` with the computed delta. It contains no gesture logic, it only translates state machine output into OL API calls.
+Consumes `StateMachineOutput` and calls OpenLayers view APIs. For panning it calls `view.setCenter()` with pixel-space deltas; for zooming it calls `view.animate()` with the computed zoom delta; for rotating it calls `view.setRotation()` with the radian delta. It contains no gesture logic, it only translates state machine output into OL API calls.
 
 ### WebcamOverlay (`core`)
 

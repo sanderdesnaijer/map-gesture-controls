@@ -10,13 +10,13 @@
 > Building with OpenLayers? Use [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) instead. It wraps this package and adds map integration out of the box.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sanderdesnaijer/map-gesture-controls/main/docs/public/openlayers-gesture-control-demo.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with a fist and zooms with two open hands, all in the browser via MediaPipe." width="720" />
+  <img src="https://raw.githubusercontent.com/sanderdesnaijer/map-gesture-controls/main/docs/public/openlayers-gesture-control-demo.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with the left fist, zooms with the right fist, and rotates with both fists, all in the browser via MediaPipe." width="720" />
 </p>
 
 ## What it does
 
 - Detects hands and classifies gestures at 30+ fps using MediaPipe Hand Landmarker
-- Recognizes **fist** (pan), **open palm** (zoom), and **idle** states
+- Recognizes **fist** (left = pan, right = zoom, both = rotate) and **idle** states
 - Manages gesture transitions with dwell timers and grace periods to avoid flickering
 - Provides a configurable webcam overlay with corner/full/hidden display modes
 - Ships fully typed TypeScript declarations
@@ -30,18 +30,26 @@ npm install @map-gesture-controls/core
 ## Quick start
 
 ```ts
-import { GestureController } from '@map-gesture-controls/core';
+import {
+  GestureController,
+  GestureStateMachine,
+  DEFAULT_TUNING_CONFIG,
+} from '@map-gesture-controls/core';
 import '@map-gesture-controls/core/style.css';
 
-const controller = new GestureController({
-  onGestureFrame(frame) {
-    // frame.hands contains detected hands with landmarks and gesture type
-    console.log(frame);
-  },
+const tuning = DEFAULT_TUNING_CONFIG;
+const stateMachine = new GestureStateMachine(tuning);
+
+const controller = new GestureController(tuning, (frame) => {
+  const output = stateMachine.update(frame);
+  // output.mode: 'idle' | 'panning' | 'zooming' | 'rotating'
+  // output.panDelta, output.zoomDelta, output.rotateDelta
+  console.log(output);
 });
 
 // Must be called from a user interaction (button click) for webcam permission
-await controller.start();
+await controller.init();
+controller.start();
 ```
 
 ## Exports
@@ -51,7 +59,7 @@ await controller.start();
 | `GestureController` | Class | Opens the webcam, runs MediaPipe detection, and emits gesture frames |
 | `GestureStateMachine` | Class | Manages gesture state transitions with dwell and grace timers |
 | `WebcamOverlay` | Class | Renders a configurable camera preview overlay |
-| `classifyGesture` | Function | Classifies a set of hand landmarks into `fist`, `openPalm`, or `none` |
+| `classifyGesture` | Function | Classifies a set of hand landmarks into `fist` or `none` |
 | `getHandSize` | Function | Computes the bounding size of a hand from its landmarks |
 | `getTwoHandDistance` | Function | Measures the distance between two detected hands |
 | `DEFAULT_WEBCAM_CONFIG` | Constant | Default webcam overlay settings |
@@ -63,8 +71,9 @@ Full TypeScript types are exported for `GestureMode`, `GestureFrame`, `DetectedH
 
 | Gesture | Detection rule | Use case |
 | --- | --- | --- |
-| **Fist** | One hand, 3+ fingers curled | Pan / drag |
-| **Open palm** | Two hands, all fingers extended and spread | Zoom in/out |
+| **Left fist** | Left hand, 3+ fingers curled | Pan / drag |
+| **Right fist** | Right hand, 3+ fingers curled | Zoom in/out (vertical movement) |
+| **Both fists** | Both hands, 3+ fingers curled each | Rotate map |
 | **Idle** | Anything else | No action |
 
 Gestures are confirmed after a configurable dwell period (default 80 ms) and held through a grace period (default 150 ms) to prevent flickering when tracking briefly drops.

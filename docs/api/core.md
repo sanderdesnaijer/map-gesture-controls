@@ -82,7 +82,7 @@ new WebcamOverlay(config: WebcamConfig)
 function classifyGesture(landmarks: HandLandmark[]): GestureType
 ```
 
-Classify a single hand from its 21 MediaPipe landmarks. Returns `'fist'` when 3+ fingers are curled (tip closer to wrist than MCP), `'openPalm'` when all 4 fingers are extended and spread, or `'none'` for any other configuration.
+Classify a single hand from its 21 MediaPipe landmarks. Returns `'fist'` when 3+ fingers are curled (tip closer to wrist than MCP), or `'none'` for any other configuration.
 
 ---
 
@@ -105,7 +105,7 @@ function getTwoHandDistance(
 ): number
 ```
 
-Returns the Euclidean distance between the index fingertips of two detected hands. Used by the state machine to compute zoom deltas frame-over-frame.
+Returns the Euclidean distance between the index fingertips of two detected hands.
 
 ---
 
@@ -153,6 +153,7 @@ const COLORS: {
   idle: string;
   panning: string;
   zooming: string;
+  rotating: string;
   landmark: string;
   connection: string;
   fingertipGlow: string;
@@ -168,7 +169,7 @@ CSS colour strings used by `WebcamOverlay` to render the hand skeleton in each g
 ### GestureMode
 
 ```ts
-type GestureMode = 'idle' | 'panning' | 'zooming'
+type GestureMode = 'idle' | 'panning' | 'zooming' | 'rotating'
 ```
 
 The active state of the gesture state machine.
@@ -225,13 +226,17 @@ Full type for gesture tuning configuration. See [Configuration](../configuration
 ```ts
 interface StateMachineOutput {
   mode: GestureMode;
-  panDelta: Point2D | null;
+  panDelta: SmoothedPoint | null;
   zoomDelta: number | null;
-  frame: GestureFrame;
+  rotateDelta: number | null;
 }
 ```
 
 The output of `GestureStateMachine.update()`. Contains the current mode plus computed deltas for map interaction.
+
+- `panDelta` — normalised wrist movement (0–1 range) when `mode === 'panning'`, otherwise `null`
+- `zoomDelta` — signed scalar from right wrist vertical movement when `mode === 'zooming'`, otherwise `null`
+- `rotateDelta` — signed angle in radians from wrist-to-wrist line rotation when `mode === 'rotating'`, otherwise `null`
 
 ### SmoothedPoint
 
