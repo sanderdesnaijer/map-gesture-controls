@@ -14,7 +14,12 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   sitemap: {
-    hostname: siteUrl,
+    hostname: 'https://sanderdesnaijer.github.io',
+    transformItems: (items) =>
+      items.map((item) => ({
+        ...item,
+        url: `/map-gesture-controls/${item.url}`.replace(/\/$/, '') || '/map-gesture-controls',
+      })),
   },
   head: [
     // Primary meta
