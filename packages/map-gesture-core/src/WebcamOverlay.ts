@@ -34,7 +34,10 @@ export class WebcamOverlay {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private badge: HTMLDivElement;
+  private resetBar: HTMLDivElement;
+  private resetFill: HTMLDivElement;
   private config: WebcamConfig;
+  private lastMode: GestureMode | null = null;
 
   constructor(config: WebcamConfig) {
     this.config = config;
@@ -51,8 +54,17 @@ export class WebcamOverlay {
     this.badge.className = 'ol-gesture-badge ol-gesture-badge--idle';
     this.badge.textContent = 'Idle';
 
+    this.resetBar = document.createElement('div');
+    this.resetBar.className = 'ol-gesture-reset';
+    this.resetBar.innerHTML =
+      '<span class="ol-gesture-reset-label">Reset</span>' +
+      '<div class="ol-gesture-reset-track"><div class="ol-gesture-reset-fill"></div></div>';
+    this.resetBar.style.opacity = '0';
+    this.resetFill = this.resetBar.querySelector('.ol-gesture-reset-fill') as HTMLDivElement;
+
     this.container.appendChild(this.canvas);
     this.container.appendChild(this.badge);
+    this.container.appendChild(this.resetBar);
 
     const ctx = this.canvas.getContext('2d');
     if (!ctx) throw new Error('Cannot get 2D canvas context');
@@ -76,14 +88,17 @@ export class WebcamOverlay {
     this.container.parentElement?.removeChild(this.container);
   }
 
-  /** Called each frame with the latest gesture frame and mode. */
-  render(frame: GestureFrame | null, mode: GestureMode): void {
+  /** Called each frame with the latest gesture frame, mode, and optional reset progress (0 to 1). */
+  render(frame: GestureFrame | null, mode: GestureMode, resetProgress = 0): void {
     this.updateBadge(mode);
+    this.updateResetBar(resetProgress);
 
     const w = this.config.width;
     const h = this.config.height;
-    this.canvas.width = w;
-    this.canvas.height = h;
+    if (this.canvas.width !== w || this.canvas.height !== h) {
+      this.canvas.width = w;
+      this.canvas.height = h;
+    }
     this.ctx.clearRect(0, 0, w, h);
 
     if (frame === null) return;
@@ -91,6 +106,11 @@ export class WebcamOverlay {
     for (const hand of frame.hands) {
       this.drawSkeleton(hand.landmarks, mode, hand.gesture === 'fist');
     }
+  }
+
+  private updateResetBar(resetProgress: number): void {
+    this.resetFill.style.width = `${resetProgress * 100}%`;
+    this.resetBar.style.opacity = resetProgress > 0 ? '1' : '0';
   }
 
   private drawSkeleton(
@@ -142,6 +162,8 @@ export class WebcamOverlay {
   }
 
   private updateBadge(mode: GestureMode): void {
+    if (mode === this.lastMode) return;
+    this.lastMode = mode;
     const labels: Record<GestureMode, string> = {
       idle: 'Idle',
       panning: 'Pan',

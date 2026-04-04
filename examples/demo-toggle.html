@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toggle button – map-gesture-controls</title>
+  <meta name="description" content="Single-button toggle pattern for map-gesture-controls: start and stop hand gesture control with disabled state to prevent double-clicks during loading." />
+  <title>Toggle button - map-gesture-controls</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.2.1/ol.css" />
   <link rel="stylesheet" href="./style.css" />
   <style>
@@ -34,13 +35,13 @@
   </style>
 </head>
 <body>
-  <div class="toolbar">
+  <header class="toolbar">
     <span class="label">Toggle button with disabled state</span>
     <button id="toggle-btn">Start gesture control</button>
     <button type="button" id="btn-fullscreen" class="btn-secondary">Fullscreen</button>
     <span id="status">Gestures off</span>
-  </div>
-  <div id="map"></div>
+  </header>
+  <main id="map"></main>
   <script type="module" src="./demo-toggle.ts"></script>
 </body>
 </html>

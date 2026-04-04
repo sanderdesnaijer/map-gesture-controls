@@ -65,7 +65,7 @@ export class OpenLayersGestureInteraction {
   }
 
   /**
-   * Rotate map. delta in radians — positive = clockwise, negative = counter-clockwise.
+   * Rotate map. delta in radians: positive = clockwise, negative = counter-clockwise.
    */
   private rotate(delta: number): void {
     const view = this.map.getView();

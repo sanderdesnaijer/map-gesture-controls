@@ -26,7 +26,7 @@ btnStart.addEventListener("click", async () => {
     btnStop.disabled = false;
     status.textContent = "Gestures active";
   } catch {
-    status.textContent = "Error – check console";
+    status.textContent = "Error: check console";
     btnStart.disabled = false;
   }
 });

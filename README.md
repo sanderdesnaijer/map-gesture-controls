@@ -105,7 +105,7 @@ const controller = new GestureMapController({
 | `width`    | `number`                                                   | `320`            | Overlay width in px (corner mode).            |
 | `height`   | `number`                                                   | `240`            | Overlay height in px (corner mode).           |
 | `margin`   | `number`                                                   | `16`             | Distance in px from the nearest edge(s).      |
-| `opacity`  | `number`                                                   | `0.85`           | CSS opacity (0–1).                            |
+| `opacity`  | `number`                                                   | `0.85`           | CSS opacity (0 to 1).                         |
 
 ### `tuning` options (`TuningConfig`)
 
@@ -143,13 +143,14 @@ npm run type-check
 
 ## Gestures
 
-Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions — use whichever feels more comfortable.
+Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions, use whichever feels more comfortable.
 
 | Mode | Condition | Action | How to perform |
 |------|-----------|--------|----------------|
 | Pan | Left hand fist or pinch (right hand absent or open) | Move left hand | Make a fist or pinch with the left hand, then move it in any direction to pan the map |
 | Zoom | Right hand fist or pinch (left hand absent or open) | Move right hand up/down | Make a fist or pinch with the right hand, then move it up to zoom in or down to zoom out |
 | Rotate | Both hands fist or pinch | Tilt wrists | Make a fist or pinch with both hands and tilt them clockwise or counter-clockwise to rotate the map |
+| Reset | Both hands together (pray / namaste), hold 1 second | Resets view | Bring your hands together with wrists close, hold the pose for 1 second: pan, zoom, and rotation return to their initial values |
 | Idle | Any other hand position | None | Let your hands rest or hold any non-recognised pose; the map does nothing |
 
 Gestures are confirmed after a short dwell period (default 80 ms) to avoid accidental triggers, and released after a grace period (default 150 ms) to prevent flickering when hands briefly lose tracking.

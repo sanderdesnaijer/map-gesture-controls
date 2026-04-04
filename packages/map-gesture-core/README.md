@@ -70,7 +70,7 @@ Full TypeScript types are exported for `GestureMode`, `GestureFrame`, `DetectedH
 
 ## Gesture recognition
 
-Both **fist** and **pinch** trigger the same map actions — users can use whichever is more comfortable.
+Both **fist** and **pinch** trigger the same map actions, users can use whichever is more comfortable.
 
 | Gesture | Detection rule | Map action |
 | --- | --- | --- |
@@ -80,6 +80,8 @@ Both **fist** and **pinch** trigger the same map actions — users can use which
 | **Right pinch** | Right hand, thumb and index tip within 25% of hand size (exits at 35%) | Zoom (move up = in, down = out) |
 | **Both hands active** | Both hands fist or pinch (mixed is fine) | Rotate map |
 | **Idle** | Anything else | No action |
+
+> **Reset (OpenLayers only):** `@map-gesture-controls/ol` adds a reset gesture on top of the above. Bring both hands together in a prayer/namaste pose (wrists close, neither hand making a fist or pinch) and hold for 1 second. A progress bar fills in the webcam overlay; when it completes, pan, zoom, and rotation all snap back to their initial values.
 
 Pinch detection uses hysteresis: the gesture is entered at 25% of hand size and held until fingers open beyond 35%. This prevents flickering when fingers hover near the threshold during a held pinch.
 

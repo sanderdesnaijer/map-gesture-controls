@@ -262,9 +262,9 @@ interface StateMachineOutput {
 
 The output of `GestureStateMachine.update()`. Contains the current mode plus computed deltas for map interaction.
 
-- `panDelta` — normalised wrist movement (0–1 range) when `mode === 'panning'`, otherwise `null`
-- `zoomDelta` — signed scalar from right wrist vertical movement when `mode === 'zooming'`, otherwise `null`
-- `rotateDelta` — signed angle in radians from wrist-to-wrist line rotation when `mode === 'rotating'`, otherwise `null`
+- `panDelta`: normalised wrist movement (0 to 1 range) when `mode === 'panning'`, otherwise `null`
+- `zoomDelta`: signed scalar from right wrist vertical movement when `mode === 'zooming'`, otherwise `null`
+- `rotateDelta`: signed angle in radians from wrist-to-wrist line rotation when `mode === 'rotating'`, otherwise `null`
 
 ### SmoothedPoint
 
@@ -292,8 +292,8 @@ A generic 2-D coordinate.
 
 ```ts
 interface HandLandmark {
-  x: number;  // 0–1 normalised
-  y: number;  // 0–1 normalised
+  x: number;  // 0 to 1, normalised
+  y: number;  // 0 to 1, normalised
   z: number;  // depth (relative to wrist)
 }
 ```

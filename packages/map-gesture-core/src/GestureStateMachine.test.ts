@@ -139,11 +139,11 @@ describe('GestureStateMachine', () => {
   it('does NOT transition to rotating if second hand only appears for 1-2 frames (noise guard)', () => {
     const left  = makeHand('fist');
     const right = makeHand('fist');
-    // Only 2 frames with both hands — below ESCALATION_FRAMES threshold
+    // Only 2 frames with both hands, below ESCALATION_FRAMES threshold
     fsm.update(makeFrame(0, left, null));  // establish left pan
     fsm.update(makeFrame(0, left, null));  // → panning
-    fsm.update(makeFrame(1, left, right)); // right appears — 1 frame, not stable yet
-    const out = fsm.update(makeFrame(1, left, right)); // 2 frames — still below threshold
+    fsm.update(makeFrame(1, left, right)); // right appears, 1 frame, not stable yet
+    const out = fsm.update(makeFrame(1, left, right)); // 2 frames, still below threshold
     expect(out.mode).toBe('panning');
   });
 
@@ -258,7 +258,7 @@ describe('GestureStateMachine', () => {
     // itself returns null (no prevAngle yet). The *next* frame sets prevAngle,
     // still no delta. Only the frame after that can emit a delta.
     enterRotating(fsm);
-    // First full frame inside rotating — sets prevRotateAngle, no delta yet
+    // First full frame inside rotating: sets prevRotateAngle, no delta yet
     const out = fsm.update(makeFrame(1, makeHand('fist'), makeHand('fist')));
     expect(out.rotateDelta).toBeNull();
   });
