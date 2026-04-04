@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.6](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.1.5...ol-v0.1.6) (2026-04-04)
+
+
+### Bug Fixes
+
+* changed controls ([f56efbc](https://github.com/sanderdesnaijer/map-gesture-controls/commit/f56efbc17a7ab9c56530518675129b22054c62d0))
+* changed controls ([cedf8cc](https://github.com/sanderdesnaijer/map-gesture-controls/commit/cedf8cc98d38147a6627cebdb5061a4daf12ae17))
+
 ## [0.1.5](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.1.4...ol-v0.1.5) (2026-04-04)
 
 
