@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Minimal map-gesture-controls setup: enable hand gesture pan and zoom on an OpenStreetMap tile layer with a single GestureMapController call." />
   <title>Basic OSM setup - map-gesture-controls</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.2.1/ol.css" />
   <link rel="stylesheet" href="./style.css" />
@@ -34,14 +35,14 @@
   </style>
 </head>
 <body>
-  <div class="toolbar">
+  <header class="toolbar">
     <span class="label">Basic OSM setup</span>
     <button id="btn-start">Enable Gestures</button>
     <button id="btn-stop" disabled>Disable</button>
     <button type="button" id="btn-fullscreen" class="btn-secondary">Fullscreen</button>
     <span id="status">Gestures off</span>
-  </div>
-  <div id="map"></div>
+  </header>
+  <main id="map"></main>
   <script type="module" src="./demo-basic.ts"></script>
 </body>
 </html>

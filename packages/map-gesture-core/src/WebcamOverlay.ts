@@ -35,7 +35,9 @@ export class WebcamOverlay {
   private ctx: CanvasRenderingContext2D;
   private badge: HTMLDivElement;
   private resetBar: HTMLDivElement;
+  private resetFill: HTMLDivElement;
   private config: WebcamConfig;
+  private lastMode: GestureMode | null = null;
 
   constructor(config: WebcamConfig) {
     this.config = config;
@@ -58,6 +60,7 @@ export class WebcamOverlay {
       '<span class="ol-gesture-reset-label">Reset</span>' +
       '<div class="ol-gesture-reset-track"><div class="ol-gesture-reset-fill"></div></div>';
     this.resetBar.style.opacity = '0';
+    this.resetFill = this.resetBar.querySelector('.ol-gesture-reset-fill') as HTMLDivElement;
 
     this.container.appendChild(this.canvas);
     this.container.appendChild(this.badge);
@@ -92,8 +95,10 @@ export class WebcamOverlay {
 
     const w = this.config.width;
     const h = this.config.height;
-    this.canvas.width = w;
-    this.canvas.height = h;
+    if (this.canvas.width !== w || this.canvas.height !== h) {
+      this.canvas.width = w;
+      this.canvas.height = h;
+    }
     this.ctx.clearRect(0, 0, w, h);
 
     if (frame === null) return;
@@ -104,8 +109,7 @@ export class WebcamOverlay {
   }
 
   private updateResetBar(resetProgress: number): void {
-    const fill = this.resetBar.querySelector('.ol-gesture-reset-fill') as HTMLDivElement;
-    fill.style.width = `${resetProgress * 100}%`;
+    this.resetFill.style.width = `${resetProgress * 100}%`;
     this.resetBar.style.opacity = resetProgress > 0 ? '1' : '0';
   }
 
@@ -158,6 +162,8 @@ export class WebcamOverlay {
   }
 
   private updateBadge(mode: GestureMode): void {
+    if (mode === this.lastMode) return;
+    this.lastMode = mode;
     const labels: Record<GestureMode, string> = {
       idle: 'Idle',
       panning: 'Pan',
