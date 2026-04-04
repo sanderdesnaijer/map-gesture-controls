@@ -146,6 +146,7 @@ export class WebcamOverlay {
       idle: 'Idle',
       panning: 'Pan',
       zooming: 'Zoom',
+      rotating: 'Rotate',
     };
     this.badge.textContent = labels[mode];
     this.badge.className = `ol-gesture-badge ol-gesture-badge--${mode}`;
