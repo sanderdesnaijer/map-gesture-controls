@@ -88,6 +88,8 @@ Full docs, live demos, and configuration reference at **[sanderdesnaijer.github.
 
 MediaPipe WASM and the hand landmarker model are loaded from public CDNs. No video frames are sent to any server. All gesture processing happens locally in the browser.
 
+Built by [Sander de Snaijer](https://www.sanderdesnaijer.com).
+
 ## License
 
 MIT

@@ -123,6 +123,8 @@ Full docs, live demos, and API reference at **[sanderdesnaijer.github.io/map-ges
 
 All gesture processing runs locally in the browser. No video data is sent to any server. MediaPipe WASM and model files are loaded from public CDNs.
 
+Built by [Sander de Snaijer](https://www.sanderdesnaijer.com).
+
 ## License
 
 MIT

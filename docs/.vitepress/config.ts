@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 const siteUrl = 'https://sanderdesnaijer.github.io/map-gesture-controls'
+const authorSite = 'https://www.sanderdesnaijer.com'
 const siteTitle = 'Map Gesture Controls'
 const siteDescription =
   'Browser-native hand gesture controls for OpenLayers maps. Pan, zoom, and navigate maps using hand gestures powered by MediaPipe. No backend required.'
@@ -70,7 +71,8 @@ export default defineConfig({
         author: {
           '@type': 'Person',
           name: 'Sander de Snaijer',
-          url: 'https://github.com/sanderdesnaijer',
+          url: authorSite,
+          sameAs: ['https://github.com/sanderdesnaijer'],
         },
         license: 'https://opensource.org/licenses/MIT',
       }),
@@ -90,7 +92,8 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/getting-started' },
       { text: 'API', link: '/api/ol' },
-      { text: 'GitHub', link: 'https://github.com/sanderdesnaijer/map-gesture-controls' }
+      { text: 'Author', link: authorSite },
+      { text: 'GitHub', link: 'https://github.com/sanderdesnaijer/map-gesture-controls' },
     ],
     sidebar: [
       {

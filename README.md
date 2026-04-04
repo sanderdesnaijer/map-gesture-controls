@@ -186,6 +186,8 @@ npm run docs:build
 npm run docs:preview
 ```
 
+Built by [Sander de Snaijer](https://www.sanderdesnaijer.com).
+
 ## License
 
 MIT
