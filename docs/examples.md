@@ -23,6 +23,8 @@ The iframes below load from the built demo app under `/map-gesture-controls/demo
 ```sh
 npm run docs:build-demos && npm run docs:dev
 ```
+
+Use **Open full screen** under each demo to open it in a new tab with the full toolbar (Enable / Disable and Fullscreen).
 :::
 
 ---
@@ -31,13 +33,19 @@ npm run docs:build-demos && npm run docs:dev
 
 A complete map with gesture controller using OpenStreetMap tiles.
 
+<div class="demo-embed">
+  <p class="demo-actions">
+    <a class="demo-open-btn" href="/map-gesture-controls/demo/demo-basic.html" target="_blank" rel="noopener noreferrer">Open full screen</a>
+  </p>
 <iframe
   src="/map-gesture-controls/demo/demo-basic.html"
   style="width:100%;min-height:420px;border:1px solid var(--vp-c-divider);border-radius:8px;"
   allow="camera; microphone"
+  allowfullscreen
   loading="lazy"
   title="Basic OSM setup demo"
 ></iframe>
+</div>
 
 ```ts
 import Map from 'ol/Map.js';
@@ -77,13 +85,19 @@ HTML:
 
 Start and stop gesture control from a single toggle button. Disable the button while the controller is loading.
 
+<div class="demo-embed">
+  <p class="demo-actions">
+    <a class="demo-open-btn" href="/map-gesture-controls/demo/demo-toggle.html" target="_blank" rel="noopener noreferrer">Open full screen</a>
+  </p>
 <iframe
   src="/map-gesture-controls/demo/demo-toggle.html"
   style="width:100%;min-height:420px;border:1px solid var(--vp-c-divider);border-radius:8px;"
   allow="camera; microphone"
+  allowfullscreen
   loading="lazy"
   title="Toggle button with disabled state demo"
 ></iframe>
+</div>
 
 ```ts
 import Map from 'ol/Map.js';
@@ -134,13 +148,19 @@ HTML:
 
 Move the webcam overlay to the bottom-left corner, make it smaller, and reduce opacity.
 
+<div class="demo-embed">
+  <p class="demo-actions">
+    <a class="demo-open-btn" href="/map-gesture-controls/demo/demo-custom-overlay.html" target="_blank" rel="noopener noreferrer">Open full screen</a>
+  </p>
 <iframe
   src="/map-gesture-controls/demo/demo-custom-overlay.html"
   style="width:100%;min-height:420px;border:1px solid var(--vp-c-divider);border-radius:8px;"
   allow="camera; microphone"
+  allowfullscreen
   loading="lazy"
   title="Custom webcam overlay position demo"
 ></iframe>
+</div>
 
 ```ts
 import Map from 'ol/Map.js';
@@ -178,13 +198,19 @@ document.getElementById('start-btn')!.addEventListener('click', () => {
 
 Lower the dwell time for faster gesture confirmation, and tighten the dead zones for more responsive pan and zoom.
 
+<div class="demo-embed">
+  <p class="demo-actions">
+    <a class="demo-open-btn" href="/map-gesture-controls/demo/demo-sensitivity.html" target="_blank" rel="noopener noreferrer">Open full screen</a>
+  </p>
 <iframe
   src="/map-gesture-controls/demo/demo-sensitivity.html"
   style="width:100%;min-height:420px;border:1px solid var(--vp-c-divider);border-radius:8px;"
   allow="camera; microphone"
+  allowfullscreen
   loading="lazy"
   title="Adjusting gesture sensitivity demo"
 ></iframe>
+</div>
 
 ```ts
 import Map from 'ol/Map.js';

@@ -1,40 +1,40 @@
-import Map from 'ol/Map.js';
-import View from 'ol/View.js';
-import TileLayer from 'ol/layer/Tile.js';
-import OSM from 'ol/source/OSM.js';
-import { fromLonLat } from 'ol/proj.js';
-import { GestureMapController } from '@map-gesture-controls/ol';
+import Map from "ol/Map.js";
+import View from "ol/View.js";
+import TileLayer from "ol/layer/Tile.js";
+import OSM from "ol/source/OSM.js";
+import { fromLonLat } from "ol/proj.js";
+import { GestureMapController } from "@map-gesture-controls/ol";
 
 const map = new Map({
-  target: 'map',
+  target: "map",
   layers: [new TileLayer({ source: new OSM() })],
   view: new View({ center: fromLonLat([4.9, 52.37]), zoom: 6 }),
 });
 map.updateSize();
 
 let ctrl: GestureMapController | null = null;
-const btnStart = document.getElementById('btn-start') as HTMLButtonElement;
-const btnStop  = document.getElementById('btn-stop')  as HTMLButtonElement;
-const status   = document.getElementById('status')    as HTMLSpanElement;
+const btnStart = document.getElementById("btn-start") as HTMLButtonElement;
+const btnStop = document.getElementById("btn-stop") as HTMLButtonElement;
+const status = document.getElementById("status") as HTMLSpanElement;
 
-btnStart.addEventListener('click', async () => {
+btnStart.addEventListener("click", async () => {
   btnStart.disabled = true;
-  status.textContent = 'Starting…';
+  status.textContent = "Starting…";
   try {
     ctrl = new GestureMapController({ map });
     await ctrl.start();
     btnStop.disabled = false;
-    status.textContent = 'Gestures active';
+    status.textContent = "Gestures active";
   } catch {
-    status.textContent = 'Error – check console';
+    status.textContent = "Error – check console";
     btnStart.disabled = false;
   }
 });
 
-btnStop.addEventListener('click', () => {
+btnStop.addEventListener("click", () => {
   ctrl?.stop();
   ctrl = null;
   btnStop.disabled = true;
   btnStart.disabled = false;
-  status.textContent = 'Gestures off';
+  status.textContent = "Gestures off";
 });

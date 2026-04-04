@@ -2,3 +2,31 @@
   max-width: 480px;
   width: 100%;
 }
+
+/* Examples page: actions above embedded demos */
+.demo-embed {
+  margin: 1rem 0;
+}
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.demo-open-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+  border: 1px solid var(--vp-c-brand-1);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.demo-open-btn:hover {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-2);
+}

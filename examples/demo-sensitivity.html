@@ -25,6 +25,11 @@
     }
     button:hover:not(:disabled) { background: rgba(68,136,255,0.45); }
     button:disabled { opacity: 0.4; cursor: default; }
+    button.btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+    }
+    button.btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.12); }
     #status { font-size: 12px; color: #888; min-width: 110px; }
   </style>
 </head>
@@ -33,6 +38,7 @@
     <span class="label">Sensitivity · faster dwell, tighter dead zones</span>
     <button id="btn-start">Enable Gestures</button>
     <button id="btn-stop" disabled>Disable</button>
+    <button type="button" id="btn-fullscreen" class="btn-secondary">Fullscreen</button>
     <span id="status">Gestures off</span>
   </div>
   <div id="map"></div>

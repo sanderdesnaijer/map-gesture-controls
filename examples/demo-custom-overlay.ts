@@ -1,3 +1,4 @@
+import './fullscreen-toolbar';
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import TileLayer from 'ol/layer/Tile.js';
