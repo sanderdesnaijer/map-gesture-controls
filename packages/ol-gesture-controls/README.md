@@ -51,7 +51,7 @@ controller.stop();
 
 1. **Webcam capture** - `GestureController` opens the camera and feeds each frame to MediaPipe Hand Landmarker, returning 21 3D landmarks per hand.
 2. **Gesture classification** - `GestureStateMachine` classifies frames in real time: left fist or pinch = pan, right fist or pinch = zoom (vertical movement), both hands active = rotate, anything else is idle. Dwell timers and grace periods prevent accidental triggers.
-3. **Map integration** - `OpenLayersGestureInteraction` translates hand movement deltas into `ol/Map` pan offsets, zoom adjustments, and view rotation, with dead-zone filtering and exponential smoothing for a natural feel.
+3. **Map integration** - `OpenLayersGestureInteraction` translates hand movement deltas into `ol/Map` pan offsets, zoom adjustments, and view rotation. Pan operates in screen space (using `getPixelFromCoordinate`/`getCoordinateFromPixel`), so moving your hand left always moves the map left on screen regardless of the current map rotation.
 
 ## Gestures
 

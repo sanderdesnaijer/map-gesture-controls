@@ -7,7 +7,9 @@ import type { StateMachineOutput } from '@map-gesture-controls/core';
  *
  * Translates GestureStateMachine output into actual OL map movements.
  *
- * Pan:  left fist wrist delta → pixel offset → new map center
+ * Pan:  left fist wrist delta → screen-space pixel offset → new map center.
+ *       Uses getPixelFromCoordinate/getCoordinateFromPixel so pan direction
+ *       always matches what the user sees on screen, regardless of map rotation.
  * Zoom: right fist wrist vertical delta → zoom level change (up = in, down = out)
  */
 export class OpenLayersGestureInteraction {
@@ -40,28 +42,36 @@ export class OpenLayersGestureInteraction {
   /**
    * Pan map by a normalised delta (0–1 range from webcam space).
    * dx/dy are hand movement as a fraction of frame width/height.
+   *
+   * Translates the current map center by the pixel offset in screen space,
+   * then converts back to map coordinates. This keeps pan direction consistent
+   * with what the user sees on screen regardless of map rotation.
    */
   private pan(dx: number, dy: number): void {
     const view = this.map.getView();
-    const resolution = view.getResolution();
-    if (resolution === undefined) return;
 
     const size = this.map.getSize();
     if (!size) return;
 
+    const center = view.getCenter();
+    if (!center) return;
+
+    const centerPixel = this.map.getPixelFromCoordinate(center);
+    if (!centerPixel) return;
+
     const [mapW, mapH] = size;
-    // Convert normalised webcam delta to map pixels, then to map coords.
+    // Convert normalised webcam delta to screen pixels.
     // Webcam is mirrored so negate dx.
     const pixelDx = -dx * mapW * this.panScale;
     const pixelDy = dy * mapH * this.panScale;
 
-    const center = view.getCenter();
-    if (!center) return;
-
-    view.setCenter([
-      center[0] - pixelDx * resolution,
-      center[1] + pixelDy * resolution,
+    const newCoord = this.map.getCoordinateFromPixel([
+      centerPixel[0] - pixelDx,
+      centerPixel[1] - pixelDy,
     ]);
+    if (!newCoord) return;
+
+    view.setCenter(newCoord);
   }
 
   /**
