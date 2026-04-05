@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.2.1...ol-v0.2.2) (2026-04-05)
+
+
+### Bug Fixes
+
+* gif image v2 ([e44cad4](https://github.com/sanderdesnaijer/map-gesture-controls/commit/e44cad469e0b81fe45ba0e8f4830416feb6486da))
+* pray reset tuning ([0a59b65](https://github.com/sanderdesnaijer/map-gesture-controls/commit/0a59b65d75c336dd500511bcefaf3245db26e872))
+
 ## [0.2.1](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.2.0...ol-v0.2.1) (2026-04-05)
 
 
