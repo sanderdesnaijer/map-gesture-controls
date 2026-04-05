@@ -12,7 +12,7 @@ Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM ru
 **[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
 <p align="center">
-  <img src="docs/public/openlayers-gesture-control-demo.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with a fist and zooms with two open hands, all in the browser via MediaPipe." width="720" />
+  <img src="docs/public/openlayers-gesture-control-demo-v2.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with a fist and zooms with two open hands, all in the browser via MediaPipe." width="720" />
 </p>
 
 ## How it works

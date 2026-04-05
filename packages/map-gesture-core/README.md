@@ -10,7 +10,7 @@
 > Building with OpenLayers? Use [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) instead. It wraps this package and adds map integration out of the box.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sanderdesnaijer/map-gesture-controls/main/docs/public/openlayers-gesture-control-demo.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with the left fist, zooms with the right fist, and rotates with both fists, all in the browser via MediaPipe." width="720" />
+  <img src="https://raw.githubusercontent.com/sanderdesnaijer/map-gesture-controls/main/docs/public/openlayers-gesture-control-demo-v2.gif" alt="Screen recording of the map gesture demo: an OpenLayers map with a small webcam preview; the user pans with the left fist, zooms with the right fist, and rotates with both fists, all in the browser via MediaPipe." width="720" />
 </p>
 
 ## What it does
