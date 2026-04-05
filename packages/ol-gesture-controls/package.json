@@ -1,6 +1,6 @@
 {
   "name": "@map-gesture-controls/ol",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Control OpenLayers maps with hand gestures via MediaPipe",
   "type": "module",
   "main": "dist/index.js",
