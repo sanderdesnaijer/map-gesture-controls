@@ -23,7 +23,7 @@ function isPrayPose(left: HandLandmark[], right: HandLandmark[]): boolean {
   if (!lWrist || !rWrist) return false;
   const dx = lWrist.x - rWrist.x;
   const dy = lWrist.y - rWrist.y;
-  return Math.sqrt(dx * dx + dy * dy) < 0.30;
+  return Math.sqrt(dx * dx + dy * dy) < 0.45;
 }
 
 // ─── isPrayPose ───────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ describe('isPrayPose', () => {
     expect(isPrayPose(left, right)).toBe(true);
   });
 
-  it('returns true when wrists are close (distance < 0.30)', () => {
+  it('returns true when wrists are close (distance < 0.45)', () => {
     const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.45, y: 0.6 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.55, y: 0.6 } });
     // distance = 0.10, well within threshold
@@ -43,15 +43,15 @@ describe('isPrayPose', () => {
   });
 
   it('returns true when wrists are just inside the threshold', () => {
-    // distance = 0.29, just below 0.30
+    // distance = 0.44, just below 0.45
     const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.29, y: 0.5 } });
+    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.44, y: 0.5 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
-  it('returns false when wrists are exactly at the threshold', () => {
+  it('returns false when wrists are outside the threshold', () => {
     const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.30, y: 0.5 } });
+    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.46, y: 0.5 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
@@ -70,16 +70,16 @@ describe('isPrayPose', () => {
   });
 
   it('uses Euclidean distance (diagonal wrists just inside threshold)', () => {
-    // diagonal: dx=0.2, dy=0.2 → distance ≈ 0.283, inside 0.30
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.4, y: 0.4 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.6, y: 0.6 } });
+    // diagonal: dx=0.31, dy=0.31 → distance ≈ 0.438, inside 0.45
+    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.345, y: 0.345 } });
+    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.655, y: 0.655 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('uses Euclidean distance (diagonal wrists just outside threshold)', () => {
-    // diagonal: dx=0.22, dy=0.22 → distance ≈ 0.311, outside 0.30
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.39, y: 0.39 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.61, y: 0.61 } });
+    // diagonal: dx=0.33, dy=0.33 → distance ≈ 0.467, outside 0.45
+    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.335, y: 0.335 } });
+    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.665, y: 0.665 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
 });
@@ -91,14 +91,16 @@ describe('reset dwell logic', () => {
    * Mirrors the dwell logic in GestureMapController.renderLoop so we can
    * test the progress calculation and one-shot trigger in isolation.
    */
-  function makeResetTracker(durationMs = 1000) {
+  function makeResetTracker(durationMs = 1000, graceMs = 300) {
     let resetPoseStart: number | null = null;
     let resetPoseTriggered = false;
+    let resetPoseGraceTimer: number | null = null;
     const resets: number[] = [];
 
     function update(timestamp: number, poseActive: boolean): number {
       let resetProgress = 0;
       if (poseActive) {
+        resetPoseGraceTimer = null;
         if (resetPoseStart === null) {
           resetPoseStart = timestamp;
           resetPoseTriggered = false;
@@ -109,9 +111,20 @@ describe('reset dwell logic', () => {
           resetPoseTriggered = true;
           resets.push(timestamp);
         }
+      } else if (resetPoseStart !== null) {
+        if (resetPoseGraceTimer === null) {
+          resetPoseGraceTimer = timestamp;
+        } else if (timestamp - resetPoseGraceTimer >= graceMs) {
+          resetPoseStart = null;
+          resetPoseTriggered = false;
+          resetPoseGraceTimer = null;
+        }
+        if (resetPoseStart !== null) {
+          const elapsed = timestamp - resetPoseStart;
+          resetProgress = Math.min(1, elapsed / durationMs);
+        }
       } else {
-        resetPoseStart = null;
-        resetPoseTriggered = false;
+        resetPoseGraceTimer = null;
       }
       return resetProgress;
     }
@@ -160,24 +173,37 @@ describe('reset dwell logic', () => {
     expect(resets).toHaveLength(1);
   });
 
-  it('resets the timer when pose is broken before completion', () => {
-    const { update, resets } = makeResetTracker(1000);
+  it('resets the timer when pose is broken and grace period expires', () => {
+    const { update, resets } = makeResetTracker(1000, 300);
     update(0, true);
     update(500, true);
-    update(600, false);   // pose dropped
-    update(700, true);    // restart
-    expect(update(800, true)).toBeCloseTo(0.1); // 100 ms into new attempt
+    update(600, false);   // pose dropped — grace starts
+    update(900, false);   // 300 ms later — grace expires
+    update(1000, true);   // restart from zero
+    expect(update(1100, true)).toBeCloseTo(0.1); // 100 ms into new attempt
     expect(resets).toHaveLength(0);
   });
 
-  it('can trigger again after pose is broken and re-held', () => {
-    const { update, resets } = makeResetTracker(1000);
+  it('survives a brief dropout within the grace period without resetting', () => {
+    const { update, resets } = makeResetTracker(1000, 300);
+    update(0, true);
+    update(500, true);    // 50% progress
+    update(550, false);   // brief dropout — grace starts
+    update(600, true);    // back within grace window (only 50 ms gap)
+    // timer should NOT have reset; progress continues from t=0
+    expect(update(700, true)).toBeCloseTo(0.7); // 700 ms from original start
+    expect(resets).toHaveLength(0);
+  });
+
+  it('can trigger again after pose is broken and grace period expires', () => {
+    const { update, resets } = makeResetTracker(1000, 300);
     update(0, true);
     update(1000, true);   // first trigger
     expect(resets).toHaveLength(1);
-    update(1001, false);  // release
-    update(2000, true);   // new attempt starts
-    update(3000, true);   // second trigger
+    update(1001, false);  // release — grace starts
+    update(1400, false);  // 399 ms later — grace expires, timer cleared
+    update(2000, true);   // new attempt starts from zero
+    update(3000, true);   // 1000 ms later — second trigger
     expect(resets).toHaveLength(2);
   });
 });

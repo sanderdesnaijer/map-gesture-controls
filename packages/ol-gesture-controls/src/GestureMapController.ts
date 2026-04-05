@@ -36,7 +36,9 @@ export class GestureMapController {
 
   private resetPoseStart: number | null = null;
   private resetPoseTriggered = false;
+  private resetPoseGraceTimer: number | null = null;
   private readonly resetPoseDurationMs = 1000;
+  private readonly resetPoseGraceMs = 300;
   private readonly initialZoom: number;
   private readonly initialCenter: number[];
   private readonly initialRotation: number;
@@ -144,6 +146,8 @@ export class GestureMapController {
       this.isPrayPose(leftHand.landmarks, rightHand.landmarks);
 
     if (resetPoseActive) {
+      // Pose is active: clear any grace timer and start/continue dwell
+      this.resetPoseGraceTimer = null;
       if (this.resetPoseStart === null) {
         this.resetPoseStart = timestamp;
         this.resetPoseTriggered = false;
@@ -157,9 +161,22 @@ export class GestureMapController {
         view.setZoom(this.initialZoom);
         view.setRotation(this.initialRotation);
       }
+    } else if (this.resetPoseStart !== null) {
+      // Pose dropped — start grace period before resetting the timer
+      if (this.resetPoseGraceTimer === null) {
+        this.resetPoseGraceTimer = timestamp;
+      } else if (timestamp - this.resetPoseGraceTimer >= this.resetPoseGraceMs) {
+        this.resetPoseStart = null;
+        this.resetPoseTriggered = false;
+        this.resetPoseGraceTimer = null;
+      }
+      // While in grace period, keep showing the last progress value
+      if (this.resetPoseStart !== null) {
+        const elapsed = timestamp - this.resetPoseStart;
+        resetProgress = Math.min(1, elapsed / this.resetPoseDurationMs);
+      }
     } else {
-      this.resetPoseStart = null;
-      this.resetPoseTriggered = false;
+      this.resetPoseGraceTimer = null;
     }
 
     this.overlay.render(frame, output.mode, resetProgress);
@@ -182,7 +199,7 @@ export class GestureMapController {
     // Hands are together when wrists are close in both X and Y
     const dx = lWrist.x - rWrist.x;
     const dy = lWrist.y - rWrist.y;
-    return Math.sqrt(dx * dx + dy * dy) < 0.30;
+    return Math.sqrt(dx * dx + dy * dy) < 0.45;
   }
 
   private handleVisibilityChange = (): void => {
