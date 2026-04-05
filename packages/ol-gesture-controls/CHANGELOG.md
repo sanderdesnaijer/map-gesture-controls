@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.2.0...ol-v0.2.1) (2026-04-05)
+
+
+### Bug Fixes
+
+* rotate pan issue ([e835a85](https://github.com/sanderdesnaijer/map-gesture-controls/commit/e835a85b367f6bd30a33e266c813b857ea3c4f86))
+
 ## [0.2.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.1.7...ol-v0.2.0) (2026-04-04)
 
 
