@@ -81,7 +81,79 @@ HTML:
 
 ---
 
-## 2. Toggle button with disabled state
+## 2. Controls overview
+
+A map with a built-in gesture legend so users can see all available gestures at a glance. Useful as a starting point for any real-world integration.
+
+<div class="demo-embed">
+  <p class="demo-actions">
+    <a class="demo-open-btn" href="/map-gesture-controls/demo/demo-controls-overview.html" target="_blank" rel="noopener noreferrer">Open full screen</a>
+  </p>
+<iframe
+  src="/map-gesture-controls/demo/demo-controls-overview.html"
+  style="width:100%;min-height:420px;border:1px solid var(--vp-c-divider);border-radius:8px;"
+  allow="camera; microphone"
+  allowfullscreen
+  loading="lazy"
+  title="Controls overview demo"
+></iframe>
+</div>
+
+```ts
+import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import TileLayer from 'ol/layer/Tile.js';
+import OSM from 'ol/source/OSM.js';
+import { fromLonLat } from 'ol/proj.js';
+import { GestureMapController } from '@map-gesture-controls/ol';
+import '@map-gesture-controls/ol/style.css';
+
+const map = new Map({
+  target: 'map',
+  layers: [new TileLayer({ source: new OSM() })],
+  view: new View({ center: fromLonLat([4.9, 52.37]), zoom: 6 }),
+});
+
+const controller = new GestureMapController({
+  map,
+  webcam: {
+    mode: 'corner',
+    position: 'bottom-right',
+    width: 240,
+    height: 180,
+    opacity: 0.8,
+  },
+});
+
+document.getElementById('btn-start')!.addEventListener('click', async () => {
+  await controller.start();
+});
+document.getElementById('btn-stop')!.addEventListener('click', () => {
+  controller.stop();
+});
+```
+
+HTML:
+
+```html
+<div class="map-wrap">
+  <div id="map" style="width: 100%; height: 100vh;"></div>
+  <div class="legend">
+    <h3>Gesture Controls</h3>
+    <div class="legend-row"><span class="dot" style="background:#00ccff"></span> Left fist or pinch, move hand → Pan</div>
+    <div class="legend-row"><span class="dot" style="background:#00ffcc"></span> Right fist or pinch, move up/down → Zoom</div>
+    <div class="legend-row"><span class="dot" style="background:#ff9900"></span> Both hands fist or pinch, tilt → Rotate</div>
+    <div class="legend-row"><span class="dot" style="background:#ffc800"></span> Hands together (pray), hold 1s → Reset</div>
+    <div class="legend-row"><span class="dot" style="background:#888"></span> No gesture → Idle</div>
+  </div>
+</div>
+<button id="btn-start">Enable Gestures</button>
+<button id="btn-stop" disabled>Disable</button>
+```
+
+---
+
+## 3. Toggle button with disabled state
 
 Start and stop gesture control from a single toggle button. Disable the button while the controller is loading.
 
@@ -144,7 +216,7 @@ HTML:
 
 ---
 
-## 3. Custom webcam overlay position
+## 4. Custom webcam overlay position
 
 Move the webcam overlay to the bottom-left corner, make it smaller, and reduce opacity.
 
@@ -194,7 +266,7 @@ document.getElementById('start-btn')!.addEventListener('click', () => {
 
 ---
 
-## 4. Adjusting gesture sensitivity
+## 5. Adjusting gesture sensitivity
 
 Lower the dwell time for faster gesture confirmation, and tighten the dead zones for more responsive pan and zoom.
 

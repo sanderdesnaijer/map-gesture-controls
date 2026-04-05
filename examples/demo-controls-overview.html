@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Full controls overview for map-gesture-controls: all gesture actions visible in a legend overlay — pan, zoom, rotate, and reset." />
+  <title>Controls overview - map-gesture-controls</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.2.1/ol.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0a0a0a; color: #e8e8e8; font-family: system-ui, sans-serif; font-size: 14px; }
+    .toolbar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px; height: 44px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: #888; margin-right: auto; }
+    #map { width: 100%; height: calc(100% - 44px); }
+    button {
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(68,136,255,0.2); color: #fff;
+      cursor: pointer; font-size: 13px;
+    }
+    button:hover:not(:disabled) { background: rgba(68,136,255,0.45); }
+    button:disabled { opacity: 0.4; cursor: default; }
+    button.btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+    }
+    button.btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.12); }
+    #status { font-size: 12px; color: #888; min-width: 110px; }
+
+    .legend {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      z-index: 1000;
+      background: rgba(0,0,0,0.7);
+      padding: 14px 18px;
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 13px;
+      line-height: 1.8;
+      pointer-events: none;
+    }
+    .legend h3 { margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #888; }
+    .legend-row { display: flex; gap: 10px; align-items: center; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    .map-wrap { position: relative; width: 100%; height: calc(100% - 44px); }
+    #map { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <span class="label">Controls overview</span>
+    <button id="btn-start">Enable Gestures</button>
+    <button id="btn-stop" disabled>Disable</button>
+    <button type="button" id="btn-fullscreen" class="btn-secondary">Fullscreen</button>
+    <span id="status">Gestures off</span>
+  </header>
+  <div class="map-wrap">
+    <main id="map"></main>
+    <div class="legend">
+      <h3>Gesture Controls</h3>
+      <div class="legend-row"><div class="legend-dot" style="background:#00ccff"></div> Left fist or pinch, move hand &rarr; Pan</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#00ffcc"></div> Right fist or pinch, move up/down &rarr; Zoom</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#ff9900"></div> Both hands fist or pinch, tilt &rarr; Rotate</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#ffc800"></div> Hands together (pray), hold 1s &rarr; Reset</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#888"></div> No gesture &rarr; Idle</div>
+    </div>
+  </div>
+  <script type="module" src="./demo-controls-overview.ts"></script>
+</body>
+</html>
