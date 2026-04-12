@@ -74,20 +74,31 @@ export class GestureMapController {
    */
   async start(): Promise<void> {
     if (this.started) return;
-    this.started = true;
+    try {
+      const videoEl = await this.gestureController.init();
+      this.overlay.attachVideo(videoEl);
 
-    const videoEl = await this.gestureController.init();
-    this.overlay.attachVideo(videoEl);
+      const mapDiv = this.config.map.getDiv() as HTMLElement;
+      this.overlay.mount(mapDiv ?? document.body);
 
-    const mapDiv = this.config.map.getDiv() as HTMLElement;
-    this.overlay.mount(mapDiv ?? document.body);
+      this.resetTransientState();
+      this.started = true;
+      this.paused = false;
+      this.interaction.syncFromMap();
+      this.gestureController.start();
+      this.renderLoop();
 
-    this.interaction.syncFromMap();
-    this.gestureController.start();
-    this.renderLoop();
-
-    // Pause when tab is hidden to save resources
-    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+      // Pause when tab is hidden to save resources
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    } catch (error) {
+      this.overlay.unmount();
+      this.gestureController.destroy();
+      this.resetTransientState();
+      this.started = false;
+      this.paused = false;
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+      throw error;
+    }
   }
 
   /** Stop detection and remove overlay. Safe to call start() again afterwards. */
@@ -95,6 +106,7 @@ export class GestureMapController {
     this.gestureController.destroy();
     this.overlay.unmount();
     this.stateMachine.reset();
+    this.resetTransientState();
     this.interaction.dispose();
     // Recreate the interaction so a subsequent start() has fresh listeners.
     this.interaction = new GoogleMapsGestureInteraction(this.config.map);
@@ -216,6 +228,13 @@ export class GestureMapController {
       this.resume();
     }
   };
+
+  private resetTransientState(): void {
+    this.lastFrame = null;
+    this.resetPoseStart = null;
+    this.resetPoseTriggered = false;
+    this.resetPoseGraceTimer = null;
+  }
 
   private logDebug(mode: string, frame: GestureFrame): void {
     const hands = frame.hands
