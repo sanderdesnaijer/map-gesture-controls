@@ -38,9 +38,13 @@ Each video frame flows through four layers before reaching the map:
 │  ┌───────────────────────────────────────────────┤              │
 │  │                                               │              │
 │  ▼                                               ▼              │
-│  OpenLayersGestureInteraction    WebcamOverlay                  │
-│  (packages/ol-gesture-controls)  (packages/map-gesture-core)    │
-│  └─ apply(output) → ol/Map       └─ render(frame, mode)        │
+│  Map Adapter                     WebcamOverlay                  │
+│  ├─ OpenLayersGestureInteraction (packages/ol-gesture-controls) │
+│  │  └─ apply(output) → ol/Map                                  │
+│  └─ GoogleMapsGestureInteraction (packages/google-maps-...)     │
+│     └─ apply(output) → google.maps.Map                         │
+│                                  (packages/map-gesture-core)    │
+│                                  └─ render(frame, mode)         │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -61,9 +65,13 @@ Priority rules evaluated each frame (fist and pinch are treated identically):
 - **Left hand active only** → `'panning'` (left wrist movement pans the map)
 - **Otherwise** → `'idle'`
 
-### OpenLayersGestureInteraction (`ol`)
+### Map Adapters (`ol`, `google-maps`)
 
-Consumes `StateMachineOutput` and calls OpenLayers view APIs. For panning it calls `view.setCenter()` with pixel-space deltas; for zooming it calls `view.animate()` with the computed zoom delta; for rotating it calls `view.setRotation()` with the radian delta. It contains no gesture logic, it only translates state machine output into OL API calls.
+Each adapter consumes `StateMachineOutput` and translates it into the target map library's API calls. They contain no gesture logic, they only translate state machine output into map API calls.
+
+**OpenLayersGestureInteraction** (`@map-gesture-controls/ol`): calls `view.setCenter()` for panning, `view.animate()` for zooming, and `view.setRotation()` for rotation.
+
+**GoogleMapsGestureInteraction** (`@map-gesture-controls/google-maps`): calls `map.moveCamera()` to apply panning, zooming, and heading updates without per-frame animation lag.
 
 ### WebcamOverlay (`core`)
 
@@ -75,6 +83,8 @@ The split follows the **adapter pattern**: `core` is a pure gesture-detection li
 
 This means:
 
-- The `core` package can be used independently to build gesture controls for any framework (Leaflet, MapLibre, Google Maps, or a completely custom canvas).
-- The `ol` package stays small and focused. It only contains OL-specific code.
-- Adding a new map adapter (e.g. `@map-gesture-controls/gmaps`) requires only implementing `apply(output: StateMachineOutput)` against the target map API, without touching gesture detection logic.
+- The `core` package can be used independently to build gesture controls for any framework (Leaflet, MapLibre, or a completely custom canvas).
+- Each adapter package stays small and focused. It only contains map-specific code.
+- Adding a new map adapter requires only implementing `apply(output: StateMachineOutput)` against the target map API, without touching gesture detection logic.
+
+Currently there are two adapters: `@map-gesture-controls/ol` (OpenLayers) and `@map-gesture-controls/google-maps` (Google Maps).

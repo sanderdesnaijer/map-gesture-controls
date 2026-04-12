@@ -2,12 +2,14 @@
   "name": "map-gesture-controls",
   "private": true,
   "type": "module",
-  "description": "Browser-native hand gesture controls for OpenLayers maps. Pan, zoom, and navigate maps using hand gestures powered by MediaPipe. No backend required.",
+  "description": "Browser-native hand gesture controls for OpenLayers and Google Maps. Pan, zoom, and navigate maps using hand gestures powered by MediaPipe. No backend required.",
   "keywords": [
     "map",
     "gesture",
     "hand-tracking",
     "openlayers",
+    "google-maps",
+    "googlemaps",
     "mediapipe",
     "webcam",
     "accessibility",
@@ -27,8 +29,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "npm run build --workspace=packages/map-gesture-core && npm run build --workspace=packages/ol-gesture-controls",
-    "build:libs": "npm run build:lib --workspace=packages/map-gesture-core && npm run build:lib --workspace=packages/ol-gesture-controls",
+    "build": "npm run build:lib --workspace=packages/map-gesture-core && npm run build:lib --workspace=packages/ol-gesture-controls && npm run build:lib --workspace=packages/google-maps-gesture-controls",
     "type-check": "npm run type-check --workspaces",
     "preview": "vite preview",
     "docs:dev": "vitepress dev docs",
@@ -39,6 +40,8 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "@types/google.maps": "^3.58.1",
     "ol": "^10.2.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",

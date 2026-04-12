@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig, type Plugin } from 'vite';
 
-const root = new URL('.', import.meta.url).pathname;
+const root = fileURLToPath(new URL('.', import.meta.url));
 
 /** @mediapipe/tasks-vision references vision_bundle_mjs.js.map but only ships vision_bundle.mjs.map */
 function mediapipeBrokenSourcemapWorkaround(): Plugin {
@@ -27,12 +28,14 @@ function mediapipeBrokenSourcemapWorkaround(): Plugin {
 
 export default defineConfig({
   root: 'examples',
+  envDir: root,
   base: '/map-gesture-controls/',
   plugins: [mediapipeBrokenSourcemapWorkaround()],
   resolve: {
     alias: {
       '@map-gesture-controls/core': resolve(root, 'packages/map-gesture-core/src/index.ts'),
       '@map-gesture-controls/ol': resolve(root, 'packages/ol-gesture-controls/src/index.ts'),
+      '@map-gesture-controls/google-maps': resolve(root, 'packages/google-maps-gesture-controls/src/index.ts'),
     },
   },
   server: {

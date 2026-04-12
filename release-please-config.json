@@ -11,6 +11,11 @@
       "release-type": "node",
       "package-name": "@map-gesture-controls/ol",
       "changelog-path": "CHANGELOG.md"
+    },
+    "packages/google-maps-gesture-controls": {
+      "release-type": "node",
+      "package-name": "@map-gesture-controls/google-maps",
+      "changelog-path": "CHANGELOG.md"
     }
   }
 }

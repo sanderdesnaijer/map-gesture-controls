@@ -1,4 +1,5 @@
 {
   "packages/map-gesture-core": "0.2.1",
-  "packages/ol-gesture-controls": "0.2.2"
+  "packages/ol-gesture-controls": "0.2.2",
+  "packages/google-maps-gesture-controls": "0.1.0"
 }

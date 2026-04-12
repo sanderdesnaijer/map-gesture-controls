@@ -15,11 +15,11 @@ head:
 
 # Configuration
 
-All configuration is passed to `GestureMapController` at construction time. Every key is optional; unspecified keys use the defaults shown below.
+All configuration is passed to `GestureMapController` at construction time. Every key is optional; unspecified keys use the defaults shown below. The configuration is shared across all adapters (OpenLayers, Google Maps).
 
 ```ts
 const controller = new GestureMapController({
-  map,          // required: your ol/Map instance
+  map,          // required: your map instance (ol/Map or google.maps.Map)
   webcam: { ... },   // optional: WebcamConfig
   tuning: { ... },   // optional: TuningConfig
   debug: false,      // optional: boolean
@@ -63,8 +63,6 @@ Controls gesture detection sensitivity, smoothing, and timing.
 
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
-| `panScale` | `number` | `2.0` | Multiplier applied to hand-movement delta before translating to map pixels. Higher values make panning faster. |
-| `zoomScale` | `number` | `15.0` | Multiplier applied to the right wrist vertical delta before adjusting zoom level. Higher values make zooming faster. |
 | `actionDwellMs` | `number` | `80` | Time in milliseconds a gesture must be held before it is confirmed as active. Prevents accidental triggers. |
 | `releaseGraceMs` | `number` | `150` | Time in milliseconds the state machine waits before returning to idle after a gesture ends. Prevents flickering. |
 | `panDeadzonePx` | `number` | `10` | Minimum hand movement in normalised-coordinate pixels required to register a pan. Filters out hand tremor. |
@@ -85,7 +83,6 @@ const controller = new GestureMapController({
     actionDwellMs: 40,      // confirm gestures faster
     releaseGraceMs: 80,     // return to idle faster
     panDeadzonePx: 5,       // react to smaller movements
-    panScale: 3.0,          // amplify pan speed
   },
 });
 ```

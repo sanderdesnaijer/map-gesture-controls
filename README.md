@@ -7,7 +7,9 @@
 
 **Control web maps with hand gestures. No mouse, no touch, no backend.**
 
-Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left hand, zoom with the right hand, and rotate with both hands. Each action can be triggered with either a **fist** or a **pinch** — whichever feels more natural. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
+Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left hand, zoom with the right hand, and rotate with both hands. Each action can be triggered with either a **fist** or a **pinch** -- whichever feels more natural. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
+
+Supports **OpenLayers** and **Google Maps**.
 
 **[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
@@ -27,25 +29,37 @@ Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM ru
 | --- | --- |
 | `@map-gesture-controls/core` | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
 | `@map-gesture-controls/ol` | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`. |
+| `@map-gesture-controls/google-maps` | Google Maps integration. Re-exports the full core API and adds `GestureMapController` and `GoogleMapsGestureInteraction`. |
 
-> Most users only need the `ol` package. It re-exports everything from core.
+> Most users only need the `ol` or `google-maps` package. Each re-exports everything from core.
 
 ## Requirements
 
 - A modern browser with WebGL and `getUserMedia` (webcam permission).
-- OpenLayers 10.x (see `package.json`).
+- OpenLayers 10.x **or** Google Maps JavaScript API.
 
 ## Install
+
+**OpenLayers:**
 
 ```bash
 npm install @map-gesture-controls/ol ol
 ```
 
-> **Publish flow (maintainers):** run `npm run build:libs` so the `dist/` folder exists before `npm publish` (this repo does not commit `dist/`).
+**Google Maps:**
+
+```bash
+npm install @map-gesture-controls/google-maps @googlemaps/js-api-loader
+npm install -D @types/google.maps
+```
+
+> **Publish flow (maintainers):** run `npm run build` so the `dist/` folder exists before `npm publish` (this repo does not commit `dist/`).
 
 ## Usage
 
-You need a container element in your HTML (e.g. `<div id="map"></div>`) and an [OpenLayers](https://openlayers.org/) `Map` instance. Then wire in the gesture controller:
+### OpenLayers
+
+You need a container element in your HTML (e.g. `<div id="map"></div>`) and an [OpenLayers](https://openlayers.org/) `Map` instance:
 
 ```ts
 import Map from 'ol/Map.js';
@@ -70,6 +84,38 @@ await controller.start();
 controller.stop(); // tear down webcam and overlay
 ```
 
+### Google Maps
+
+```ts
+import { Loader } from '@googlemaps/js-api-loader';
+import { GestureMapController } from '@map-gesture-controls/google-maps';
+import '@map-gesture-controls/google-maps/style.css';
+
+const loader = new Loader({ apiKey: 'YOUR_API_KEY', version: 'weekly' });
+const { Map } = await loader.importLibrary('maps');
+
+const map = new Map(document.getElementById('map')!, {
+  center: { lat: 0, lng: 0 },
+  zoom: 2,
+  mapId: 'YOUR_MAP_ID', // enables vector maps (required for rotation)
+});
+
+const controller = new GestureMapController({ map });
+
+await controller.start();
+
+controller.stop();
+```
+
+You need a Google Maps API key and a Map ID from the [Google Cloud Console](https://console.cloud.google.com/google/maps-apis). Create the Map ID with the **Vector** map type to enable rotation support. For local development, add both to a `.env` file:
+
+```
+VITE_GOOGLE_MAPS_API_KEY=your_api_key
+VITE_GOOGLE_MAPS_MAP_ID=your_map_id
+```
+
+See the [Google Maps Getting Started guide](https://sanderdesnaijer.github.io/map-gesture-controls/google-maps/getting-started) for full setup details.
+
 Optional config: `webcam`, `tuning`, and `debug`. See the [Configuration](#configuration) section below.
 
 ## Configuration
@@ -77,7 +123,7 @@ Optional config: `webcam`, `tuning`, and `debug`. See the [Configuration](#confi
 All options are optional. Pass only the keys you want to override; the rest use sensible defaults.
 
 ```ts
-// `map` is your `ol/Map` instance (see Usage above)
+// `map` is your ol/Map or google.maps.Map instance (see Usage above)
 const controller = new GestureMapController({
   map,
   webcam: {
@@ -88,8 +134,9 @@ const controller = new GestureMapController({
     opacity: 0.7,
   },
   tuning: {
-    panScale: 3.0,   // faster panning
-    zoomScale: 2.0,  // slower zooming
+    actionDwellMs: 40,      // faster gesture confirmation
+    releaseGraceMs: 80,     // shorter grace period
+    panDeadzonePx: 5,       // more sensitive panning
   },
   debug: true,       // log gesture mode to console
 });
@@ -111,8 +158,6 @@ const controller = new GestureMapController({
 
 | Key                      | Type     | Default | Description                                                          |
 | ------------------------ | -------- | ------- | -------------------------------------------------------------------- |
-| `panScale`               | `number` | `2.0`   | Multiplier on hand delta → map pixels. Higher = faster pan.          |
-| `zoomScale`              | `number` | `15.0`  | Multiplier on right wrist vertical delta → zoom level. Higher = faster. |
 | `actionDwellMs`          | `number` | `80`    | Hold time (ms) before a gesture is confirmed.                        |
 | `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.       |
 | `panDeadzonePx`          | `number` | `10`    | Minimum pixel movement to register a pan.                            |
@@ -132,7 +177,7 @@ npm run dev
 Runs the demo in `examples/` (Vite, port 5173 by default).
 
 ```bash
-npm run build:libs
+npm run build
 ```
 
 Produces the library in `dist/` (JS, declarations, bundled CSS).
@@ -170,7 +215,6 @@ Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam a
 ## Roadmap & Contributing
 
 **Planned features:**
-- `@map-gesture-controls/gmaps`: Google Maps adapter
 - Additional gesture types: tilt
 - Framework wrappers for React and Vue
 
