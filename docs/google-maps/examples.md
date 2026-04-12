@@ -67,8 +67,8 @@ const map = new Map(document.getElementById('map')!, {
 
 const controller = new GestureMapController({ map });
 
-document.getElementById('start-btn')!.addEventListener('click', () => {
-  controller.start();
+document.getElementById('start-btn')!.addEventListener('click', async () => {
+  await controller.start();
 });
 ```
 
@@ -178,8 +178,8 @@ const controller = new GestureMapController({
   },
 });
 
-document.getElementById('start-btn')!.addEventListener('click', () => {
-  controller.start();
+document.getElementById('start-btn')!.addEventListener('click', async () => {
+  await controller.start();
 });
 ```
 
@@ -227,7 +227,7 @@ const controller = new GestureMapController({
   },
 });
 
-document.getElementById('start-btn')!.addEventListener('click', () => {
-  controller.start();
+document.getElementById('start-btn')!.addEventListener('click', async () => {
+  await controller.start();
 });
 ```

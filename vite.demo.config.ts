@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig, type Plugin } from 'vite';
 
-const root = new URL('.', import.meta.url).pathname;
+const root = fileURLToPath(new URL('.', import.meta.url));
 
 /** @mediapipe/tasks-vision references vision_bundle_mjs.js.map but only ships vision_bundle.mjs.map */
 function mediapipeBrokenSourcemapWorkaround(): Plugin {
