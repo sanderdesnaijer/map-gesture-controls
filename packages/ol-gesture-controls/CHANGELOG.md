@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.2.2...ol-v0.3.0) (2026-04-12)
+
+
+### Features
+
+* added google maps support ([cca8b56](https://github.com/sanderdesnaijer/map-gesture-controls/commit/cca8b56539ccbd3597d18f1296a9474a5b57ed87))
+
+
+### Bug Fixes
+
+* comments of projection ([fffa0c5](https://github.com/sanderdesnaijer/map-gesture-controls/commit/fffa0c50ab1dc1448be0a4b7ddc0869b8b31a29e))
+
 ## [0.2.2](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.2.1...ol-v0.2.2) (2026-04-05)
 
 
