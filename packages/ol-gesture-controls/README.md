@@ -79,10 +79,10 @@ const controller = new GestureMapController({
     opacity: 0.7,
   },
   tuning: {
-    panScale: 3.0,          // higher = faster panning
-    zoomScale: 15.0,        // higher = faster zooming
-    actionDwellMs: 80,      // ms before confirming a gesture
-    releaseGraceMs: 150,    // ms grace period after gesture ends
+    actionDwellMs: 40,      // ms before confirming a gesture
+    releaseGraceMs: 80,     // ms grace period after gesture ends
+    panDeadzonePx: 5,       // react to smaller movements
+    smoothingAlpha: 0.4,    // smoother but still responsive
   },
   debug: true,              // log gesture state to console
 });

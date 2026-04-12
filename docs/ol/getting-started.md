@@ -94,7 +94,7 @@ const config: GestureMapControllerConfig = {
     width: 280,
   },
   tuning: {
-    panScale: 3.0,
+    smoothingAlpha: 0.3,
   },
 };
 

@@ -107,10 +107,10 @@ export class GoogleMapsGestureInteraction {
     // At zoom level z, each pixel covers 360 / (256 * 2^z) degrees of longitude.
     const degreesPerPixel = 360 / (256 * Math.pow(2, this.currentZoom));
     const dLng = pixelDx * degreesPerPixel;
-    // Latitude degrees per pixel varies by latitude (Mercator),
-    // but for small deltas the cosine correction is sufficient.
+    // Latitude degrees per pixel varies by latitude (Mercator).
+    // Multiply by cos(lat) to shrink the delta at higher latitudes.
     const latRad = (center.lat() * Math.PI) / 180;
-    const dLat = -pixelDy * degreesPerPixel / Math.cos(latRad);
+    const dLat = -pixelDy * degreesPerPixel * Math.cos(latRad);
 
     this.map.moveCamera({
       center: { lat: center.lat() + dLat, lng: center.lng() + dLng },
@@ -122,7 +122,7 @@ export class GoogleMapsGestureInteraction {
    * Google Maps uses heading in degrees (0-360).
    */
   private rotate(delta: number): void {
-    this.currentHeading += (delta * 180) / Math.PI;
+    this.currentHeading = ((this.currentHeading + (delta * 180) / Math.PI) % 360 + 360) % 360;
     this.applyingChange = true;
     this.map.moveCamera({
       heading: this.currentHeading,
