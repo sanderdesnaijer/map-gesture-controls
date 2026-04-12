@@ -71,7 +71,7 @@ Each adapter consumes `StateMachineOutput` and translates it into the target map
 
 **OpenLayersGestureInteraction** (`@map-gesture-controls/ol`): calls `view.setCenter()` for panning, `view.animate()` for zooming, and `view.setRotation()` for rotation.
 
-**GoogleMapsGestureInteraction** (`@map-gesture-controls/google-maps`): calls `map.panBy()` for panning (works directly in screen pixels), `map.setZoom()` for zooming, and `map.setHeading()` for rotation.
+**GoogleMapsGestureInteraction** (`@map-gesture-controls/google-maps`): calls `map.moveCamera()` to apply panning, zooming, and heading updates without per-frame animation lag.
 
 ### WebcamOverlay (`core`)
 

@@ -11,10 +11,11 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./style.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "style.css"
   ],
   "scripts": {
     "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts",
