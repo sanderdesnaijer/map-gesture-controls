@@ -1,0 +1,68 @@
+{
+  "name": "@map-gesture-controls/google-maps",
+  "version": "0.1.0",
+  "description": "Control Google Maps with hand gestures via MediaPipe",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@map-gesture-controls/core": "*"
+  },
+  "peerDependencies": {
+    "@types/google.maps": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@types/google.maps": "^3.58.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  },
+  "keywords": [
+    "google-maps",
+    "googlemaps",
+    "gmaps",
+    "mediapipe",
+    "hand-gestures",
+    "gesture-control",
+    "gesture-recognition",
+    "hand-tracking",
+    "map",
+    "maps",
+    "webcam",
+    "touchless",
+    "hands-free",
+    "accessibility",
+    "kiosk",
+    "computer-vision",
+    "wasm",
+    "interaction"
+  ],
+  "homepage": "https://sanderdesnaijer.github.io/map-gesture-controls/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls.git",
+    "directory": "packages/google-maps-gesture-controls"
+  },
+  "bugs": {
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls/issues"
+  },
+  "author": "Sander de Snaijer",
+  "overrides": {
+    "esbuild": "^0.25.0"
+  },
+  "license": "MIT"
+}

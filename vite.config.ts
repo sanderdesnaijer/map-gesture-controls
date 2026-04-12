@@ -27,12 +27,14 @@ function mediapipeBrokenSourcemapWorkaround(): Plugin {
 
 export default defineConfig({
   root: 'examples',
+  envDir: root,
   base: '/map-gesture-controls/',
   plugins: [mediapipeBrokenSourcemapWorkaround()],
   resolve: {
     alias: {
       '@map-gesture-controls/core': resolve(root, 'packages/map-gesture-core/src/index.ts'),
       '@map-gesture-controls/ol': resolve(root, 'packages/ol-gesture-controls/src/index.ts'),
+      '@map-gesture-controls/google-maps': resolve(root, 'packages/google-maps-gesture-controls/src/index.ts'),
     },
   },
   server: {

@@ -16,6 +16,8 @@ jobs:
       core--tag_name: ${{ steps.release.outputs['packages/map-gesture-core--tag_name'] }}
       ol--release_created: ${{ steps.release.outputs['packages/ol-gesture-controls--release_created'] }}
       ol--tag_name: ${{ steps.release.outputs['packages/ol-gesture-controls--tag_name'] }}
+      gmaps--release_created: ${{ steps.release.outputs['packages/google-maps-gesture-controls--release_created'] }}
+      gmaps--tag_name: ${{ steps.release.outputs['packages/google-maps-gesture-controls--tag_name'] }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -35,7 +37,7 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
       - run: npm ci
-      - run: npm run build:libs
+      - run: npm run build
       - run: npm publish --workspace packages/map-gesture-core --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -52,7 +54,24 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
       - run: npm ci
-      - run: npm run build:libs
+      - run: npm run build
       - run: npm publish --workspace packages/ol-gesture-controls --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-google-maps:
+    needs: release-please
+    if: needs.release-please.outputs.gmaps--release_created == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --workspace packages/google-maps-gesture-controls --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

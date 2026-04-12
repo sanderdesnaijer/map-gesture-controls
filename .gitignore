@@ -38,6 +38,12 @@ Thumbs.db
 *.swo
 *~
 
+# Vite transpilation artifacts (contain machine-specific absolute paths)
+*.timestamp-*.mjs
+
+# VitePress cache (generated dependency pre-bundles)
+docs/.vitepress/cache/
+
 # AI generated files
 .cursor/
 .claude/
