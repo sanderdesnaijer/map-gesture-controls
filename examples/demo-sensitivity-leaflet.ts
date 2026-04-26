@@ -1,6 +1,5 @@
 import "./fullscreen-toolbar";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { GestureMapController } from "@map-gesture-controls/leaflet";
 
 const map = L.map("map").setView([40.71, -74.0], 6);
@@ -26,7 +25,7 @@ btnStart.addEventListener("click", async () => {
       tuning: {
         actionDwellMs: 50,
         releaseGraceMs: 100,
-        panDeadzonePx: 5,
+        panDeadzonePx: 0,
         zoomDeadzoneRatio: 0.003,
       },
     });

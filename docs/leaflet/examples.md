@@ -210,7 +210,7 @@ const controller = new GestureMapController({
   tuning: {
     actionDwellMs: 50,        // confirm gestures faster (default 80 ms)
     releaseGraceMs: 100,      // shorter grace period (default 150 ms)
-    panDeadzonePx: 5,         // react to smaller hand movements (default 10)
+    panDeadzonePx: 0,         // react to slow hand movements directly
     zoomDeadzoneRatio: 0.003, // finer zoom control (default 0.005)
   },
 });

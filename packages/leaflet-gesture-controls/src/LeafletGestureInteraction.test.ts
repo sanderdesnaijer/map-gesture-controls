@@ -263,10 +263,11 @@ describe('LeafletGestureInteraction', () => {
 
   // -- idle output does nothing ----------------------------------------------------------
 
-  it('does not call panBy or _move for idle output', () => {
+  it('does not call panBy, _move, or setZoom for idle output', () => {
     interaction.apply(idle());
     expect(mocks.panBy).not.toHaveBeenCalled();
     expect(mocks._move).not.toHaveBeenCalled();
+    expect(mocks.setZoom).not.toHaveBeenCalled();
   });
 
   // -- pan -------------------------------------------------------------------------------
@@ -278,26 +279,26 @@ describe('LeafletGestureInteraction', () => {
 
   it('negates dx (webcam mirror) and applies panScale', () => {
     const dx = 0.1;
-    const panScale = 2.0;
+    const panScale = 3.5;
     const mapW = mocks.size.x;
 
     interaction.apply(panning(dx, 0));
 
     const [point, options] = mocks.panBy.mock.calls[0] as [number[], { animate: boolean }];
-    // pixelDx = -dx * mapW * panScale = -0.1 * 800 * 2 = -160
+    // pixelDx = -dx * mapW * panScale = -0.1 * 800 * 3.5 = -280
     expect(point[0]).toBeCloseTo(-dx * mapW * panScale);
     expect(options.animate).toBe(false);
   });
 
   it('applies positive dy downward (screen-space pan)', () => {
     const dy = 0.05;
-    const panScale = 2.0;
+    const panScale = 3.5;
     const mapH = mocks.size.y;
 
     interaction.apply(panning(0, dy));
 
     const [point] = mocks.panBy.mock.calls[0] as [number[]];
-    // pixelDy = dy * mapH * panScale = 0.05 * 600 * 2 = 60
+    // pixelDy = dy * mapH * panScale = 0.05 * 600 * 3.5 = 105
     expect(point[1]).toBeCloseTo(dy * mapH * panScale);
   });
 
@@ -313,17 +314,21 @@ describe('LeafletGestureInteraction', () => {
     expect(mocks._move).toHaveBeenCalledOnce();
   });
 
-  it('applies zoomScale to zoomDelta and passes round:false', () => {
+  it('applies zoomScale to zoomDelta and uses pinch-style zoom data', () => {
     const delta = 0.01;
     const zoomScale = 15.0;
     const currentZoom = 5;
 
     interaction.apply(zooming(delta));
 
-    const [_center, newZoom, options] = mocks._move.mock.calls[0] as [object, number, { pinch: boolean; round: boolean }];
+    const [_center, newZoom, options] = mocks._move.mock.calls[0] as [
+      object,
+      number,
+      { pinch: boolean; round: boolean },
+    ];
     expect(newZoom).toBeCloseTo(currentZoom + delta * zoomScale);
-    expect(options.round).toBe(false);
     expect(options.pinch).toBe(true);
+    expect(options.round).toBe(false);
   });
 
   it('zooms in (positive delta) increases zoom level', () => {
@@ -362,9 +367,23 @@ describe('LeafletGestureInteraction', () => {
     expect(newZoom).toBe(0);
   });
 
-  it('does not call _move when zoomDelta is null', () => {
+  it('does not call _move or setZoom when zoomDelta is null', () => {
     interaction.apply(idle());
     expect(mocks._move).not.toHaveBeenCalled();
+    expect(mocks.setZoom).not.toHaveBeenCalled();
+  });
+
+  it('falls back to setZoom when continuous zoom is unavailable', () => {
+    const { map, setZoom } = makeMapMock({ zoom: 5 });
+    delete (map as { _move?: unknown })._move;
+    // @ts-expect-error
+    const i = new LeafletGestureInteraction(map);
+
+    i.apply(zooming(0.01));
+
+    const [newZoom, options] = setZoom.mock.calls[0] as [number, { animate: boolean }];
+    expect(newZoom).toBeCloseTo(5 + 0.01 * 15);
+    expect(options.animate).toBe(false);
   });
 
   // -- rotate (rotate-pane wrapper) ------------------------------------------------------

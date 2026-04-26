@@ -78,10 +78,10 @@ Leaflet does not include a default tile source. The examples use OpenStreetMap t
 
 ## Rotation
 
-Leaflet core does not include a native rotation API, but this adapter implements rotation using CSS transforms on the `.leaflet-map-pane` element. When you rotate with both hands, the map visually rotates around its center. Pan direction is automatically adjusted to match the rotated view, and the reset gesture (pray/namaste pose) returns the rotation to 0 along with pan and zoom.
+Leaflet core does not include a native rotation API, but this adapter implements rotation by creating a dedicated `.leaflet-rotate-pane` inside Leaflet's `.leaflet-map-pane` and applying the CSS transform to that wrapper. The adapter moves Leaflet's `tilePane` and `overlayPane` into the rotate pane, so when you rotate with both hands, those layers visually rotate around the map center. Pan direction is automatically adjusted to match the rotated view, and the reset gesture (pray/namaste pose) returns the rotation to 0 along with pan and zoom.
 
 ::: warning Markers and popups
-Only the tile and overlay panes are wrapped in the rotation transform. Standard Leaflet layers rendered into `markerPane`, `shadowPane`, `tooltipPane`, and `popupPane` stay outside the rotate wrapper and will not rotate with the map. If your map uses markers or popups, they will remain axis-aligned regardless of the current bearing.
+Because only `tilePane` and `overlayPane` are moved into the rotate wrapper, standard Leaflet layers rendered into `markerPane`, `shadowPane`, `tooltipPane`, and `popupPane` stay outside it and do not rotate with the map. If your map uses markers or popups, they will remain axis-aligned regardless of the current bearing.
 :::
 
 ## User-gesture requirement

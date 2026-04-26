@@ -168,7 +168,7 @@ const controller = new GestureMapController({
   tuning: {
     actionDwellMs: 40,      // faster gesture confirmation
     releaseGraceMs: 80,     // shorter grace period
-    panDeadzonePx: 5,       // more sensitive panning
+    panDeadzonePx: 0,       // direct panning for slow movement
   },
   debug: true,       // log gesture mode to console
 });
@@ -192,9 +192,9 @@ const controller = new GestureMapController({
 | ------------------------ | -------- | ------- | -------------------------------------------------------------------- |
 | `actionDwellMs`          | `number` | `80`    | Hold time (ms) before a gesture is confirmed.                        |
 | `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.       |
-| `panDeadzonePx`          | `number` | `10`    | Minimum pixel movement to register a pan.                            |
+| `panDeadzonePx`          | `number` | `0`     | Minimum pixel movement to register a pan.                            |
 | `zoomDeadzoneRatio`      | `number` | `0.005` | Minimum distance-ratio change to register a zoom.                    |
-| `smoothingAlpha`         | `number` | `0.5`   | Exponential smoothing factor (0 = max smooth, 1 = raw).              |
+| `smoothingAlpha`         | `number` | `0.35`  | Exponential smoothing factor (0 = max smooth, 1 = raw).              |
 | `minDetectionConfidence` | `number` | `0.65`  | MediaPipe minimum detection confidence.                              |
 | `minTrackingConfidence`  | `number` | `0.65`  | MediaPipe minimum tracking confidence.                               |
 | `minPresenceConfidence`  | `number` | `0.60`  | MediaPipe minimum presence confidence.                               |

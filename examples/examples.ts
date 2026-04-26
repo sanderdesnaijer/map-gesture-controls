@@ -5,7 +5,6 @@ import OSM from "ol/source/OSM.js";
 import { fromLonLat } from "ol/proj.js";
 import { GestureMapController } from "@map-gesture-controls/ol";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { GestureMapController as LeafletGestureMapController } from "@map-gesture-controls/leaflet";
 
 function makeMap(
@@ -338,7 +337,7 @@ function makeLeafletMap(
         tuning: {
           actionDwellMs: 50,
           releaseGraceMs: 100,
-          panDeadzonePx: 5,
+          panDeadzonePx: 0,
           zoomDeadzoneRatio: 0.003,
         },
       });

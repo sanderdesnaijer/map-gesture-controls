@@ -12,9 +12,9 @@ export const DEFAULT_WEBCAM_CONFIG: WebcamConfig = {
 export const DEFAULT_TUNING_CONFIG: TuningConfig = {
   actionDwellMs: 80,
   releaseGraceMs: 150,
-  panDeadzonePx: 10,
+  panDeadzonePx: 0,
   zoomDeadzoneRatio: 0.005,
-  smoothingAlpha: 0.5,
+  smoothingAlpha: 0.35,
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
   minPresenceConfidence: 0.60,

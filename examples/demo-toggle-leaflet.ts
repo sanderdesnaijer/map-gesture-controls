@@ -1,6 +1,5 @@
 import "./fullscreen-toolbar";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { GestureMapController } from "@map-gesture-controls/leaflet";
 
 const map = L.map("map").setView([48.85, 2.35], 6);

@@ -59,7 +59,7 @@ document.getElementById("stop-btn")!.addEventListener("click", () => {
 
 1. **Webcam capture** - `GestureController` opens the camera and feeds each frame to MediaPipe Hand Landmarker, returning 21 3D landmarks per hand.
 2. **Gesture classification** - `GestureStateMachine` classifies frames in real time: left fist or pinch = pan, right fist or pinch = zoom (vertical movement), both hands active = rotate, anything else is idle. Dwell timers and grace periods prevent accidental triggers.
-3. **Map integration** - `LeafletGestureInteraction` translates hand movement deltas into Leaflet `panBy()` calls for pan, internal `_move()` for smooth fractional zoom, and a CSS transform on a dedicated rotate pane for rotation. Pan direction is counter-rotated by the current bearing so gesture direction always matches what you see on screen.
+3. **Map integration** - `LeafletGestureInteraction` translates hand movement deltas into Leaflet `panBy()` calls for pan, Leaflet's continuous zoom update path for zoom, and a CSS transform on a dedicated rotate pane for rotation. During gesture zoom, the current tile level stays stretched while the next tiles load. Pan direction is counter-rotated by the current bearing so gesture direction always matches what you see on screen.
 
 ## Gestures
 
@@ -91,8 +91,8 @@ const controller = new GestureMapController({
   tuning: {
     actionDwellMs: 40,
     releaseGraceMs: 80,
-    panDeadzonePx: 5,
-    smoothingAlpha: 0.4,
+    panDeadzonePx: 0,
+    smoothingAlpha: 0.35,
   },
   debug: true,
 });

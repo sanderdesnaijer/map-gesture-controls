@@ -64,7 +64,7 @@ Any hand configuration that does not match a fist or pinch (e.g. open palm, poin
 
 ### Reset (pray pose)
 
-The reset gesture is detected purely from landmark geometry, outside the classifier. When both hands are tracked and neither is making a fist or pinch, the system checks whether the two wrists are within 30% of normalised screen space of each other — the natural result of bringing your hands together. If that pose is held continuously for **1 second**, the map view snaps back to its initial centre, zoom level, and rotation. A progress bar in the webcam overlay fills while the pose is held, giving clear visual feedback.
+The reset gesture is detected purely from landmark geometry, outside the classifier. When both hands are tracked and neither is making a fist or pinch, the system checks whether the two wrists are within 30% of normalised screen space of each other, the natural result of bringing your hands together. If that pose is held continuously for **1 second**, the map view snaps back to its initial centre, zoom level, and rotation. A progress bar in the webcam overlay fills while the pose is held, giving clear visual feedback.
 
 ---
 
@@ -104,9 +104,9 @@ If the same gesture resumes during the grace period, the state machine returns t
 | --- | --- | --- |
 | `actionDwellMs` | `80` | Lower = gestures activate faster; higher = more stable but slower |
 | `releaseGraceMs` | `150` | Lower = returns to idle faster; higher = more forgiving when hand tracking briefly drops |
-| `panDeadzonePx` | `10` | Lower = reacts to smaller hand movements; higher = filters more tremor |
+| `panDeadzonePx` | `0` | Lower = reacts to smaller hand movements; higher = filters more tremor |
 | `zoomDeadzoneRatio` | `0.005` | Lower = reacts to smaller wrist movements; higher = requires more deliberate zoom gesture |
-| `smoothingAlpha` | `0.5` | Lower = smoother but more latency; higher = snappier but more jitter |
+| `smoothingAlpha` | `0.35` | Lower = smoother but more latency; higher = snappier but more jitter |
 | `minDetectionConfidence` | `0.65` | Lower = detects more hands in difficult conditions; higher = fewer false detections |
 | `minTrackingConfidence` | `0.65` | Lower = maintains tracking in poor conditions; higher = drops tracking sooner |
 | `minPresenceConfidence` | `0.60` | Lower = keeps hands in frame longer; higher = drops sooner when partially occluded |

@@ -8,8 +8,10 @@ type PositionedPane = HTMLElement & {
   };
 };
 
-type InternalLeafletMap = LeafletMap & {
-  _move: (center: LatLng, zoom: number, data: Record<string, unknown>) => void;
+type ContinuousZoomLeafletMap = LeafletMap & {
+  _move?: (center: LatLng, zoom: number, data?: { pinch: boolean; round: boolean }) => void;
+  _moveStart?: (zoomChanged: boolean, noMoveStart: boolean) => void;
+  _moveEnd?: (zoomChanged: boolean) => void;
 };
 
 type RotatableGridLayer = {
@@ -31,8 +33,8 @@ type RotatableGridLayer = {
  * Pan:    left fist wrist delta -> screen-space pixel offset via map.panBy().
  *         Webcam is mirrored so dx is negated.
  * Zoom:   right fist wrist vertical delta -> zoom level change (up = in, down = out).
- *         Respects map min/max zoom. Uses setZoom() with { animate: false } to avoid
- *         competing animations when called every frame.
+ *         Respects map min/max zoom. Uses Leaflet's continuous zoom path when
+ *         available so the previous tile level stays stretched while loading.
  * Rotate: CSS transform on a dedicated rotate-pane inside .leaflet-map-pane.
  *         We cannot rotate .leaflet-map-pane directly because Leaflet's panBy
  *         overwrites its transform with translate3d on every update. Tile
@@ -44,7 +46,7 @@ export class LeafletGestureInteraction {
   private static readonly tileRefreshBearingStep = 5;
 
   private map: LeafletMap;
-  private panScale = 2.0;
+  private panScale = 3.5;
   // Wrist vertical delta is ~0.005-0.02 per frame at natural speed (same as pan).
   // zoomScale=15 ~ 1 zoom level/sec at 30fps with moderate hand movement.
   private zoomScale = 15.0;
@@ -52,6 +54,12 @@ export class LeafletGestureInteraction {
   // Track zoom internally so fractional per-frame deltas accumulate
   // instead of being lost to Leaflet's integer-snap on getZoom().
   private currentZoom: number;
+
+  // Zoom gesture lifecycle: _moveStart sets _animatingZoom=true so GridLayer
+  // skips _onMoveEnd tile reloads during continuous zoom. settleZoom fires
+  // _animateZoom when the gesture pauses, mirroring leaflet-rotate _onTouchEnd.
+  private isZooming = false;
+  private zoomSettleTimer: ReturnType<typeof setTimeout> | null = null;
 
   // Track bearing (degrees, clockwise from north) for CSS rotation.
   private currentBearing = 0;
@@ -284,8 +292,15 @@ export class LeafletGestureInteraction {
   /**
    * Zoom map. delta > 0 = zoom in, delta < 0 = zoom out.
    * Clamps to map's min/max zoom levels.
-   * Uses _move with { round: false } so Leaflet CSS-scales existing tiles
-   * (blurry but visible) while new tiles load, matching pinch-zoom feel.
+   *
+   * Mirrors the leaflet-rotate pinch-zoom lifecycle:
+   *   1. _moveStart(true, false) once -- sets _animatingZoom=true so GridLayer's
+   *      _onMoveEnd exits early and doesn't reload tiles on every frame.
+   *   2. _move(..., { pinch, round:false }) each frame -- CSS-scales existing tiles.
+   *   3. _animateZoom / _resetView after a short idle -- loads new-zoom tiles with
+   *      parent/child retention so grey boxes never appear.
+   *
+   * Falls back to the public setZoom() API if Leaflet removes these internal hooks.
    */
   private zoom(delta: number): void {
     this.currentZoom += delta * this.zoomScale;
@@ -294,7 +309,42 @@ export class LeafletGestureInteraction {
     const maxZoom = this.map.getMaxZoom();
     this.currentZoom = Math.max(minZoom, Math.min(maxZoom, this.currentZoom));
 
-    (this.map as InternalLeafletMap)._move(this.map.getCenter(), this.currentZoom, { pinch: true, round: false });
+    const continuousZoomMap = this.map as ContinuousZoomLeafletMap;
+    if (typeof continuousZoomMap._move === 'function') {
+      if (!this.isZooming) {
+        continuousZoomMap._moveStart?.(true, false);
+        this.isZooming = true;
+      }
+
+      continuousZoomMap._move(this.map.getCenter(), this.currentZoom, { pinch: true, round: false });
+
+      if (this.zoomSettleTimer !== null) clearTimeout(this.zoomSettleTimer);
+      this.zoomSettleTimer = setTimeout(() => {
+        this.zoomSettleTimer = null;
+        this.isZooming = false;
+        this.settleZoom(continuousZoomMap);
+      }, 150);
+      return;
+    }
+
+    this.map.setZoom(this.currentZoom, { animate: false });
+  }
+
+  private settleZoom(continuousZoomMap: ContinuousZoomLeafletMap): void {
+    const center = this.map.getCenter();
+    const intZoom = Math.round(this.currentZoom);
+
+    if (continuousZoomMap._move && continuousZoomMap._moveEnd) {
+      // Snap to integer zoom via _move, which fires 'zoom' → GridLayer event handler
+      // _resetView → _setView with noPrune=false so _retainParent keeps parent-zoom
+      // tiles visible while new ones load. Crucially this does NOT fire 'viewprereset'
+      // (only map._resetView does that), so _invalidateAll is never called and no
+      // grey boxes appear. Then _moveEnd fires 'zoomend'/'moveend' to close the gesture.
+      continuousZoomMap._move(center, intZoom);
+      continuousZoomMap._moveEnd(true);
+    } else {
+      this.map.setZoom(intZoom);
+    }
   }
 
   /**
@@ -320,6 +370,11 @@ export class LeafletGestureInteraction {
    * so subsequent gesture deltas start from the correct baseline.
    */
   syncFromMap(): void {
+    if (this.zoomSettleTimer !== null) {
+      clearTimeout(this.zoomSettleTimer);
+      this.zoomSettleTimer = null;
+      this.isZooming = false;
+    }
     this.currentZoom = this.map.getZoom();
   }
 
@@ -333,6 +388,11 @@ export class LeafletGestureInteraction {
     if (this.refreshPivotRaf !== null) {
       cancelAnimationFrame(this.refreshPivotRaf);
       this.refreshPivotRaf = null;
+    }
+    if (this.zoomSettleTimer !== null) {
+      clearTimeout(this.zoomSettleTimer);
+      this.zoomSettleTimer = null;
+      this.isZooming = false;
     }
     if (!this.rotatePaneEl) return;
 

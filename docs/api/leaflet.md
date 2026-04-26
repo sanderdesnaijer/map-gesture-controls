@@ -74,7 +74,7 @@ Creates a gesture interaction bound to the given Leaflet `Map` instance. Does no
 
 | Method | Returns | Description |
 | --- | --- | --- |
-| `apply(output: StateMachineOutput)` | `void` | Applies a single `StateMachineOutput` frame to the map. Call this each time the state machine produces output (typically once per video frame). Internally applies pan and zoom deltas using the Leaflet API. Rotation is applied via CSS transforms on the map pane. |
+| `apply(output: StateMachineOutput)` | `void` | Applies a single `StateMachineOutput` frame to the map. Call this each time the state machine produces output (typically once per video frame). Internally applies pan and zoom deltas using the Leaflet API. Rotation is applied via CSS transforms on a dedicated rotate pane. |
 | `syncFromMap()` | `void` | Syncs the internal zoom state with the map's current value. Call after external changes (reset pose, user scroll) so subsequent deltas start from the correct baseline. |
 | `getBearing()` | `number` | Returns the current bearing in degrees (0-360). |
 | `setBearing(degrees)` | `void` | Sets the bearing directly and applies the CSS transform. Use for programmatic control or reset. |
@@ -83,7 +83,7 @@ This class is useful when you want to wire up your own `GestureController` and `
 
 ### Rotation
 
-Leaflet core does not include a native rotation API. This adapter implements rotation by applying a CSS `transform: rotate()` to Leaflet's `.leaflet-map-pane` element, with the transform origin set to the viewport center. Pan deltas are counter-rotated by the current bearing so that panning direction always matches what the user sees on screen. The `setBearing(degrees)` and `getBearing()` methods allow programmatic control of the rotation angle.
+Leaflet core does not include a native rotation API. This adapter implements rotation by creating a dedicated `.leaflet-rotate-pane` inside Leaflet's `.leaflet-map-pane` and applying a CSS `transform: rotate()` to that wrapper. Leaflet's `tilePane` and `overlayPane` are moved into the rotate pane, while `markerPane`, `shadowPane`, `tooltipPane`, and `popupPane` stay outside it and remain axis-aligned. Pan deltas are counter-rotated by the current bearing so that panning direction always matches what the user sees on screen. The `setBearing(degrees)` and `getBearing()` methods allow programmatic control of the rotation angle.
 
 ---
 

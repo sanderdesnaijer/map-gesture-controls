@@ -65,9 +65,9 @@ Controls gesture detection sensitivity, smoothing, and timing.
 | --- | --- | --- | --- |
 | `actionDwellMs` | `number` | `80` | Time in milliseconds a gesture must be held before it is confirmed as active. Prevents accidental triggers. |
 | `releaseGraceMs` | `number` | `150` | Time in milliseconds the state machine waits before returning to idle after a gesture ends. Prevents flickering. |
-| `panDeadzonePx` | `number` | `10` | Minimum hand movement in normalised-coordinate pixels required to register a pan. Filters out hand tremor. |
+| `panDeadzonePx` | `number` | `0` | Minimum hand movement in normalised-coordinate pixels required to register a pan. Increase this to filter hand tremor. |
 | `zoomDeadzoneRatio` | `number` | `0.005` | Minimum fractional change in right wrist vertical position required to register a zoom step. |
-| `smoothingAlpha` | `number` | `0.5` | Exponential moving average factor for landmark positions. `0` = maximum smoothing (very slow response), `1` = raw unsmoothed input. |
+| `smoothingAlpha` | `number` | `0.35` | Exponential moving average factor for landmark positions. `0` = maximum smoothing (very slow response), `1` = raw unsmoothed input. |
 | `minDetectionConfidence` | `number` | `0.65` | MediaPipe hand detection confidence threshold (0 to 1). Lower values detect more hands but with more false positives. |
 | `minTrackingConfidence` | `number` | `0.65` | MediaPipe hand tracking confidence threshold (0 to 1). |
 | `minPresenceConfidence` | `number` | `0.60` | MediaPipe hand presence confidence threshold (0 to 1). |
@@ -82,7 +82,7 @@ const controller = new GestureMapController({
   tuning: {
     actionDwellMs: 40,      // confirm gestures faster
     releaseGraceMs: 80,     // return to idle faster
-    panDeadzonePx: 5,       // react to smaller movements
+    panDeadzonePx: 0,       // direct panning for slow movement
   },
 });
 ```
