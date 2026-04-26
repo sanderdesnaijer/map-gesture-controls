@@ -31,12 +31,12 @@
   color: var(--vp-c-brand-2);
 }
 
-/* ── Map Libraries Section ── */
+/* Map Libraries Section */
 
 .map-libraries-section {
   max-width: 1152px;
-  margin: 0 auto;
-  padding: 2rem 24px 4rem;
+  margin: 4rem auto 0;
+  padding: 3rem 24px 5rem;
 }
 
 .map-libraries-heading {
@@ -44,6 +44,10 @@
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+}
+
+.map-libraries-heading .header-anchor {
+  display: none;
 }
 
 .map-libraries-section > p {
@@ -56,40 +60,53 @@
 
 .map-library-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .map-library-card {
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--vp-c-bg-soft);
   border-radius: 12px;
-  padding: 1.75rem;
+  padding: 24px;
   background: var(--vp-c-bg-soft);
-  transition: border-color 0.25s, box-shadow 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
   display: flex;
   flex-direction: column;
 }
 
 .map-library-card:hover {
   border-color: var(--vp-c-brand-1);
-  box-shadow: 0 2px 12px rgba(100, 108, 255, 0.08);
 }
 
 .map-library-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  background: var(--vp-c-default-soft);
+  font-size: 24px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  transition: background-color 0.25s;
 }
 
 .map-library-card h3 {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.5rem;
+  line-height: 24px;
+  margin: 0 0 8px;
 }
 
 .map-library-card p {
   color: var(--vp-c-text-2);
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 24px;
   margin: 0 0 1rem;
   flex-grow: 1;
 }
@@ -143,11 +160,15 @@
 }
 
 @media (max-width: 768px) {
-  .map-library-cards {
-    grid-template-columns: 1fr;
+  .map-libraries-section {
+    padding: 3rem 16px 3.5rem;
   }
 
   .map-libraries-heading {
     font-size: 1.4rem;
+  }
+
+  .map-library-cards {
+    max-width: 520px;
   }
 }

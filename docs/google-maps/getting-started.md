@@ -15,6 +15,10 @@ head:
 
 # Getting Started with Google Maps
 
+<p align="center">
+  <img src="/google-maps-gesture-controls-mediapipe.gif" alt="Google Maps controlled with hand gestures via webcam: panning, zooming, and rotating using fist and pinch gestures." width="720" />
+</p>
+
 ## Installation
 
 ```bash

@@ -15,6 +15,10 @@ head:
 
 # Getting Started with OpenLayers
 
+<p align="center">
+  <img src="/openlayers-gesture-control-demo-v2.gif" alt="OpenLayers map controlled with hand gestures via webcam: panning, zooming, and rotating using fist and pinch gestures." width="720" />
+</p>
+
 ## Installation
 
 ```bash

@@ -30,18 +30,26 @@
   "keywords": [
     "mediapipe",
     "hand-gestures",
+    "hand-gesture",
     "gesture-detection",
     "gesture-recognition",
+    "gesture-control",
+    "gesture-navigation",
     "hand-tracking",
     "webcam",
     "touchless",
+    "touchless-navigation",
+    "no-touch",
     "hands-free",
     "accessibility",
+    "a11y",
     "computer-vision",
     "wasm",
     "kiosk",
     "map",
-    "interaction"
+    "map-controls",
+    "interaction",
+    "browser"
   ],
   "homepage": "https://sanderdesnaijer.github.io/map-gesture-controls/",
   "repository": {

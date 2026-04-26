@@ -75,7 +75,58 @@ HTML:
 
 ---
 
-## 2. Toggle button with disabled state
+## 2. Controls overview
+
+A map with a built-in gesture legend so users can see all available gestures at a glance. Useful as a starting point for any real-world integration.
+
+<div class="demo-embed">
+  <p class="demo-actions">
+    <a class="demo-open-btn" href="/map-gesture-controls/demo/demo-controls-overview-leaflet.html" target="_blank" rel="noopener noreferrer">Open full screen</a>
+  </p>
+<iframe
+  src="/map-gesture-controls/demo/demo-controls-overview-leaflet.html"
+  style="width:100%;min-height:420px;border:1px solid var(--vp-c-divider);border-radius:8px;"
+  allow="camera; microphone"
+  allowfullscreen
+  loading="lazy"
+  title="Controls overview demo (Leaflet)"
+></iframe>
+</div>
+
+```ts
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { GestureMapController } from '@map-gesture-controls/leaflet';
+import '@map-gesture-controls/leaflet/style.css';
+
+const map = L.map('map').setView([52.37, 4.9], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+const controller = new GestureMapController({
+  map,
+  webcam: {
+    mode: 'corner',
+    position: 'bottom-right',
+    width: 240,
+    height: 180,
+    opacity: 0.8,
+  },
+});
+
+document.getElementById('btn-start')!.addEventListener('click', async () => {
+  await controller.start();
+});
+document.getElementById('btn-stop')!.addEventListener('click', () => {
+  controller.stop();
+});
+```
+
+---
+
+## 3. Toggle button with disabled state
 
 Start and stop gesture control from a single toggle button.
 
@@ -128,7 +179,7 @@ btn.addEventListener('click', async () => {
 
 ---
 
-## 3. Custom webcam overlay position
+## 4. Custom webcam overlay position
 
 Move the webcam overlay to the bottom-left corner, make it smaller, and reduce opacity.
 
@@ -175,7 +226,7 @@ document.getElementById('start-btn')!.addEventListener('click', async () => {
 
 ---
 
-## 4. Adjusting gesture sensitivity
+## 5. Adjusting gesture sensitivity
 
 Lower the dwell time for faster gesture confirmation, and tighten the dead zones for more responsive pan and zoom.
 

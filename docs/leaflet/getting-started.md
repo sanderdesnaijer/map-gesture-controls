@@ -15,6 +15,10 @@ head:
 
 # Getting Started with Leaflet
 
+<p align="center">
+  <img src="/leaflet-map-gesture-controls-demo.gif" alt="Leaflet map controlled with hand gestures via webcam: panning, zooming, and rotating using fist and pinch gestures." width="720" />
+</p>
+
 ## Installation
 
 ```bash

@@ -98,6 +98,14 @@ Gestures are confirmed after a configurable dwell period (default 80 ms) and hel
 
 Requires **WebGL**, **`getUserMedia`** (webcam), and **WASM** support. Works in Chrome 111+, Edge 111+, Firefox 115+, and Safari 17+.
 
+## Related packages
+
+| Package | Description |
+| --- | --- |
+| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) | OpenLayers integration |
+| [`@map-gesture-controls/google-maps`](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | Google Maps integration |
+| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration |
+
 ## Documentation
 
 Full docs, live demos, and configuration reference at **[sanderdesnaijer.github.io/map-gesture-controls](https://sanderdesnaijer.github.io/map-gesture-controls/)**

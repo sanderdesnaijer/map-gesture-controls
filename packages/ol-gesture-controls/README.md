@@ -7,6 +7,8 @@
 
 **Control OpenLayers maps with hand gestures.** No mouse, no touch, no backend. Point your webcam and use a fist or pinch to pan, zoom, and rotate. Powered by [MediaPipe](https://developers.google.com/mediapipe) hand-tracking running entirely in the browser. Your camera feed never leaves the device.
 
+Part of the [map-gesture-controls](https://github.com/sanderdesnaijer/map-gesture-controls) monorepo.
+
 ## Demo
 
 Try it live at **[sanderdesnaijer.github.io/map-gesture-controls](https://sanderdesnaijer.github.io/map-gesture-controls/)**
@@ -118,6 +120,8 @@ This package re-exports the entire [`@map-gesture-controls/core`](https://www.np
 | Package | Description |
 | --- | --- |
 | [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core) | Map-agnostic gesture detection engine (included in this package) |
+| [`@map-gesture-controls/google-maps`](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | Google Maps integration |
+| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration |
 
 ## Documentation
 

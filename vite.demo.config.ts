@@ -51,6 +51,8 @@ export default defineConfig({
         'demo-toggle':             resolve(root, 'examples/demo-toggle.html'),
         'demo-custom-overlay':     resolve(root, 'examples/demo-custom-overlay.html'),
         'demo-sensitivity':        resolve(root, 'examples/demo-sensitivity.html'),
+        'demo-controls-overview-gmaps': resolve(root, 'examples/demo-controls-overview-gmaps.html'),
+        'demo-controls-overview-leaflet': resolve(root, 'examples/demo-controls-overview-leaflet.html'),
         'demo-basic-gmaps':        resolve(root, 'examples/demo-basic-gmaps.html'),
         'demo-toggle-gmaps':       resolve(root, 'examples/demo-toggle-gmaps.html'),
         'demo-custom-overlay-gmaps': resolve(root, 'examples/demo-custom-overlay-gmaps.html'),
