@@ -284,6 +284,32 @@ describe('GestureStateMachine', () => {
     expect(out.rotateDelta).not.toBeNull();
   });
 
+  it('keeps rotateDelta continuous across the atan2 wrap boundary', () => {
+    const wrappedFsm = new GestureStateMachine({ ...FAST_TUNING, smoothingAlpha: 0.5 });
+    const radius = 0.2;
+    const leftLandmarks = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5, z: 0 } });
+    const makeRightLandmarks = (angle: number) =>
+      makeLandmarks({
+        [LANDMARKS.WRIST]: {
+          x: 0.5 + Math.cos(angle) * radius,
+          y: 0.5 + Math.sin(angle) * radius,
+          z: 0,
+        },
+      });
+    const beforeWrap = (179 * Math.PI) / 180;
+    const afterWrap = (-179 * Math.PI) / 180;
+
+    for (let i = 0; i < 5; i++) {
+      wrappedFsm.update(makeFrame(0, makeHand('fist', leftLandmarks), makeHand('fist', makeRightLandmarks(beforeWrap))));
+    }
+    wrappedFsm.update(makeFrame(1, makeHand('fist', leftLandmarks), makeHand('fist', makeRightLandmarks(beforeWrap))));
+    const out = wrappedFsm.update(makeFrame(2, makeHand('fist', leftLandmarks), makeHand('fist', makeRightLandmarks(afterWrap))));
+
+    expect(out.rotateDelta).not.toBeNull();
+    expect(out.rotateDelta!).toBeGreaterThan(0);
+    expect(out.rotateDelta!).toBeLessThan(0.1);
+  });
+
   // ── reset ──────────────────────────────────────────────────────────────────
 
   it('reset() returns the FSM to idle', () => {

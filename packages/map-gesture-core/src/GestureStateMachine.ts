@@ -261,7 +261,11 @@ export class GestureStateMachine {
       // Angle of the line from left wrist to right wrist (in radians)
       const lw = leftHand.landmarks[0];
       const rw = rightHand.landmarks[0];
-      const rawAngle = Math.atan2(rw.y - lw.y, rw.x - lw.x);
+      let rawAngle = Math.atan2(rw.y - lw.y, rw.x - lw.x);
+      if (this.prevRotateAngle !== null) {
+        while (rawAngle - this.prevRotateAngle > Math.PI) rawAngle -= 2 * Math.PI;
+        while (rawAngle - this.prevRotateAngle < -Math.PI) rawAngle += 2 * Math.PI;
+      }
       const smoothAngle = this.rotateSmoother.update(rawAngle);
 
       let rotateDelta: number | null = null;
