@@ -1,6 +1,6 @@
 ---
 title: Getting Started - Map Gesture Controls
-description: Choose your mapping library and set up hand gesture controls in minutes. Supports OpenLayers and Google Maps.
+description: Choose your mapping library and set up hand gesture controls in minutes. Supports OpenLayers, Google Maps, and Leaflet.
 head:
   - - meta
     - property: og:title
@@ -19,6 +19,7 @@ Map Gesture Controls works with multiple mapping libraries. Pick yours to get st
 
 - [OpenLayers](./ol/getting-started) -- the original adapter, using OpenStreetMap tiles
 - [Google Maps](./google-maps/getting-started) -- the Google Maps JavaScript API adapter
+- [Leaflet](./leaflet/getting-started) -- the Leaflet adapter, using OpenStreetMap tiles, no API key needed
 
 All configuration (webcam overlay, gesture tuning) is shared across adapters. See [Configuration](./configuration) after setup.
 
@@ -33,4 +34,4 @@ Camera data never leaves the device. Everything runs in the browser via MediaPip
 ## Requirements
 
 - A modern browser with WebGL and `getUserMedia` (webcam permission)
-- One of the supported mapping libraries (OpenLayers 10.x or Google Maps JavaScript API)
+- One of the supported mapping libraries (OpenLayers 10.x, Google Maps JavaScript API, or Leaflet 1.9.x)

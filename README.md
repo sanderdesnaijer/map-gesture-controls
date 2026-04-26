@@ -9,7 +9,7 @@
 
 Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left hand, zoom with the right hand, and rotate with both hands. Each action can be triggered with either a **fist** or a **pinch** -- whichever feels more natural. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
 
-Supports **OpenLayers** and **Google Maps**.
+Supports **OpenLayers**, **Google Maps**, and **Leaflet**.
 
 **[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
@@ -30,13 +30,14 @@ Supports **OpenLayers** and **Google Maps**.
 | `@map-gesture-controls/core` | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
 | `@map-gesture-controls/ol` | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`. |
 | `@map-gesture-controls/google-maps` | Google Maps integration. Re-exports the full core API and adds `GestureMapController` and `GoogleMapsGestureInteraction`. |
+| `@map-gesture-controls/leaflet` | Leaflet integration. Re-exports the full core API and adds `GestureMapController` and `LeafletGestureInteraction`. |
 
-> Most users only need the `ol` or `google-maps` package. Each re-exports everything from core.
+> Most users only need the `ol`, `google-maps`, or `leaflet` package. Each re-exports everything from core.
 
 ## Requirements
 
 - A modern browser with WebGL and `getUserMedia` (webcam permission).
-- OpenLayers 10.x **or** Google Maps JavaScript API.
+- OpenLayers 10.x, Google Maps JavaScript API, **or** Leaflet 1.9.x.
 
 ## Install
 
@@ -51,6 +52,13 @@ npm install @map-gesture-controls/ol ol
 ```bash
 npm install @map-gesture-controls/google-maps @googlemaps/js-api-loader
 npm install -D @types/google.maps
+```
+
+**Leaflet:**
+
+```bash
+npm install @map-gesture-controls/leaflet leaflet
+npm install -D @types/leaflet
 ```
 
 > **Publish flow (maintainers):** run `npm run build` so the `dist/` folder exists before `npm publish` (this repo does not commit `dist/`).
@@ -115,6 +123,30 @@ VITE_GOOGLE_MAPS_MAP_ID=your_map_id
 ```
 
 See the [Google Maps Getting Started guide](https://sanderdesnaijer.github.io/map-gesture-controls/google-maps/getting-started) for full setup details.
+
+### Leaflet
+
+```ts
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { GestureMapController } from '@map-gesture-controls/leaflet';
+import '@map-gesture-controls/leaflet/style.css';
+
+const map = L.map('map').setView([52.37, 4.9], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+const controller = new GestureMapController({ map });
+
+await controller.start();
+
+controller.stop();
+```
+
+No API key needed. Leaflet uses OpenStreetMap tiles by default. Rotation is supported via CSS transforms on the map pane.
+
+See the [Leaflet Getting Started guide](https://sanderdesnaijer.github.io/map-gesture-controls/leaflet/getting-started) for full setup details.
 
 Optional config: `webcam`, `tuning`, and `debug`. See the [Configuration](#configuration) section below.
 

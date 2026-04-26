@@ -4,7 +4,7 @@ const siteUrl = 'https://sanderdesnaijer.github.io/map-gesture-controls'
 const authorSite = 'https://www.sanderdesnaijer.com'
 const siteTitle = 'Map Gesture Controls'
 const siteDescription =
-  'Browser-native hand gesture controls for OpenLayers and Google Maps. Pan, zoom, and navigate maps using hand gestures powered by MediaPipe. No backend required.'
+  'Browser-native hand gesture controls for OpenLayers, Google Maps, and Leaflet. Pan, zoom, and navigate maps using hand gestures powered by MediaPipe. No backend required.'
 
 export default defineConfig({
   title: siteTitle,
@@ -29,7 +29,7 @@ export default defineConfig({
       {
         name: 'keywords',
         content:
-          'map gesture controls, hand gesture map, OpenLayers gestures, Google Maps gestures, MediaPipe map, webcam map control, gesture navigation, touchless map, hand tracking map, browser gesture control, accessibility map, google maps hand tracking',
+          'map gesture controls, hand gesture map, OpenLayers gestures, Google Maps gestures, Leaflet gestures, Leaflet hand tracking, MediaPipe map, webcam map control, gesture navigation, touchless map, hand tracking map, browser gesture control, accessibility map, google maps hand tracking, leaflet map control',
       },
     ],
     ['meta', { name: 'robots', content: 'index, follow' }],
@@ -122,6 +122,13 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Leaflet',
+        items: [
+          { text: 'Getting Started', link: '/leaflet/getting-started' },
+          { text: 'Examples', link: '/leaflet/examples' },
+        ]
+      },
+      {
         text: 'Shared',
         items: [
           { text: 'Configuration', link: '/configuration' },
@@ -133,6 +140,7 @@ export default defineConfig({
         items: [
           { text: '@map-gesture-controls/ol', link: '/api/ol' },
           { text: '@map-gesture-controls/google-maps', link: '/api/google-maps' },
+          { text: '@map-gesture-controls/leaflet', link: '/api/leaflet' },
           { text: '@map-gesture-controls/core', link: '/api/core' },
         ]
       },

@@ -36,6 +36,7 @@ export default defineConfig({
       '@map-gesture-controls/core': resolve(root, 'packages/map-gesture-core/src/index.ts'),
       '@map-gesture-controls/ol': resolve(root, 'packages/ol-gesture-controls/src/index.ts'),
       '@map-gesture-controls/google-maps': resolve(root, 'packages/google-maps-gesture-controls/src/index.ts'),
+      '@map-gesture-controls/leaflet': resolve(root, 'packages/leaflet-gesture-controls/src/index.ts'),
     },
   },
   server: {

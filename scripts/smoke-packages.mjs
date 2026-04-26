@@ -85,6 +85,27 @@ const packages = [
     ],
     allowedPaths: ['dist/'],
   },
+  {
+    name: '@map-gesture-controls/leaflet',
+    dir: 'packages/leaflet-gesture-controls',
+    expectedExports: [
+      'GestureMapController',
+      'LeafletGestureInteraction',
+      // Re-exports from core
+      'GestureController',
+      'GestureStateMachine',
+      'WebcamOverlay',
+      'classifyGesture',
+      'createHandClassifier',
+      'getHandSize',
+      'getTwoHandDistance',
+      'DEFAULT_WEBCAM_CONFIG',
+      'DEFAULT_TUNING_CONFIG',
+      'LANDMARKS',
+      'COLORS',
+    ],
+    allowedPaths: ['dist/'],
+  },
 ];
 
 // ---------------------------------------------------------------------------

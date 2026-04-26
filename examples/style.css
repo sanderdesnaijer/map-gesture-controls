@@ -1,3 +1,8 @@
+/* ── Leaflet tile fade-in (reduces white flash during zoom) ────────────────── */
+.leaflet-tile {
+  transition: opacity 0.15s ease-in;
+}
+
 /* ── Gesture overlay container ─────────────────────────────────────────────── */
 .ol-gesture-overlay {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);

@@ -16,6 +16,11 @@
       "release-type": "node",
       "package-name": "@map-gesture-controls/google-maps",
       "changelog-path": "CHANGELOG.md"
+    },
+    "packages/leaflet-gesture-controls": {
+      "release-type": "node",
+      "package-name": "@map-gesture-controls/leaflet",
+      "changelog-path": "CHANGELOG.md"
     }
   }
 }

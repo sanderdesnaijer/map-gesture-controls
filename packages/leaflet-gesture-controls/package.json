@@ -1,0 +1,70 @@
+{
+  "name": "@map-gesture-controls/leaflet",
+  "version": "0.1.0",
+  "description": "Control Leaflet maps with hand gestures via MediaPipe",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts && cp ../map-gesture-core/dist/style.css dist/style.css",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@map-gesture-controls/core": "*"
+  },
+  "peerDependencies": {
+    "leaflet": "^1.9.0"
+  },
+  "devDependencies": {
+    "leaflet": "^1.9.4",
+    "@types/leaflet": "^1.9.8",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  },
+  "keywords": [
+    "leaflet",
+    "leafletjs",
+    "leaflet-map",
+    "mediapipe",
+    "hand-gestures",
+    "gesture-control",
+    "gesture-recognition",
+    "hand-tracking",
+    "map",
+    "maps",
+    "gis",
+    "webcam",
+    "touchless",
+    "hands-free",
+    "accessibility",
+    "kiosk",
+    "computer-vision",
+    "wasm",
+    "interaction"
+  ],
+  "homepage": "https://sanderdesnaijer.github.io/map-gesture-controls/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls.git",
+    "directory": "packages/leaflet-gesture-controls"
+  },
+  "bugs": {
+    "url": "https://github.com/sanderdesnaijer/map-gesture-controls/issues"
+  },
+  "author": "Sander de Snaijer",
+  "overrides": {
+    "esbuild": "^0.25.0"
+  },
+  "license": "MIT"
+}
