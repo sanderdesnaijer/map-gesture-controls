@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts",
+    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts && cp src/style.css dist/style.css",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

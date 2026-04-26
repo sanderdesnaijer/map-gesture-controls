@@ -37,7 +37,9 @@
     "docs:build": "npm run docs:build-demos && vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "smoke": "node scripts/smoke-packages.mjs",
+    "check": "npm run type-check && npm test && npm run build && npm run smoke"
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",

@@ -11,14 +11,13 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./style.css": "./style.css"
+    "./style.css": "./dist/style.css"
   },
   "files": [
-    "dist",
-    "style.css"
+    "dist"
   ],
   "scripts": {
-    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts",
+    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.lib.config.ts && cp ../map-gesture-core/dist/style.css dist/style.css",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
