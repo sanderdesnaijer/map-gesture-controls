@@ -64,7 +64,7 @@ Any hand configuration that does not match a fist or pinch (e.g. open palm, poin
 
 ### Reset (pray pose)
 
-The reset gesture is detected purely from landmark geometry, outside the classifier. When both hands are tracked and neither is making a fist or pinch, the system checks whether the two wrists are within 30% of normalised screen space of each other, the natural result of bringing your hands together. If that pose is held continuously for **1 second**, the map view snaps back to its initial centre, zoom level, and rotation. A progress bar in the webcam overlay fills while the pose is held, giving clear visual feedback.
+The reset gesture is detected purely from landmark geometry, outside the classifier. When both hands are tracked and neither is making a fist or pinch, the system checks whether the two wrists are within a Euclidean distance of **0.45** in normalised screen space, the natural result of bringing your hands together. If that pose is held continuously for **1 second**, the map view snaps back to its initial centre, zoom level, and rotation. A progress bar in the webcam overlay fills while the pose is held, giving clear visual feedback.
 
 ---
 

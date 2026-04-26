@@ -240,8 +240,8 @@ export class LeafletGestureInteraction {
 
   /**
    * Apply the current bearing as a CSS transform on the rotate-pane wrapper.
-   * Transform-origin is 50% 50% (set on wrapper creation) so rotation always
-   * pivots around the visible viewport center regardless of pan position.
+   * The pivot is recomputed each frame via updateRotatePanePivot() to account
+   * for Leaflet's map-pane offset, keeping rotation centred on the viewport.
    */
   private applyRotationTransform(): void {
     const pane = this.getOrCreateRotatePane();
@@ -343,7 +343,7 @@ export class LeafletGestureInteraction {
       continuousZoomMap._move(center, intZoom);
       continuousZoomMap._moveEnd(true);
     } else {
-      this.map.setZoom(intZoom);
+      this.map.setZoom(intZoom, { animate: false });
     }
   }
 

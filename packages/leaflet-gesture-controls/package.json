@@ -24,7 +24,13 @@
     "@map-gesture-controls/core": "*"
   },
   "peerDependencies": {
-    "leaflet": "^1.9.0"
+    "leaflet": "^1.9.0",
+    "@types/leaflet": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/leaflet": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "leaflet": "^1.9.4",
