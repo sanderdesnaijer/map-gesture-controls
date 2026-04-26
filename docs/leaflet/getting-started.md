@@ -80,13 +80,17 @@ Leaflet does not include a default tile source. The examples use OpenStreetMap t
 
 Leaflet core does not include a native rotation API, but this adapter implements rotation using CSS transforms on the `.leaflet-map-pane` element. When you rotate with both hands, the map visually rotates around its center. Pan direction is automatically adjusted to match the rotated view, and the reset gesture (pray/namaste pose) returns the rotation to 0 along with pan and zoom.
 
+::: warning Markers and popups
+Only the tile and overlay panes are wrapped in the rotation transform. Standard Leaflet layers rendered into `markerPane`, `shadowPane`, `tooltipPane`, and `popupPane` stay outside the rotate wrapper and will not rotate with the map. If your map uses markers or popups, they will remain axis-aligned regardless of the current bearing.
+:::
+
 ## User-gesture requirement
 
 Browsers enforce a policy that `getUserMedia()` (webcam access) can only be called in response to a user interaction such as a button click. Calling `controller.start()` directly on page load will throw a `NotAllowedError`. Always wire `start()` to a click handler.
 
 ## Model loading
 
-`start()` triggers a one-time download of the MediaPipe hand landmarker WASM module and model weights (~10 MB combined). Subsequent calls to `start()` after `stop()` reuse the already-loaded model and are nearly instant.
+`start()` triggers a one-time download of the MediaPipe hand landmarker WASM module and model weights (~10 MB combined). Calling `stop()` fully tears down the landmarker, so a subsequent `start()` will download the model again.
 
 ## Differences from OpenLayers and Google Maps
 

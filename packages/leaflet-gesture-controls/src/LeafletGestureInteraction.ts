@@ -78,10 +78,15 @@ export class LeafletGestureInteraction {
     });
   };
 
+  private readonly onZoomEnd = (): void => {
+    this.currentZoom = this.map.getZoom();
+  };
+
   constructor(map: LeafletMap) {
     this.map = map;
     this.currentZoom = map.getZoom();
     map.on('move', this.onMapMove);
+    map.on('zoomend', this.onZoomEnd);
   }
 
   /**
@@ -304,7 +309,9 @@ export class LeafletGestureInteraction {
    */
   setBearing(degrees: number): void {
     this.currentBearing = ((degrees % 360) + 360) % 360;
+    this.prepareGridLayersForRotation();
     this.applyRotationTransform();
+    this.refreshGridLayersForRotation();
   }
 
   /**
@@ -322,6 +329,7 @@ export class LeafletGestureInteraction {
    */
   destroy(): void {
     this.map.off('move', this.onMapMove);
+    this.map.off('zoomend', this.onZoomEnd);
     if (this.refreshPivotRaf !== null) {
       cancelAnimationFrame(this.refreshPivotRaf);
       this.refreshPivotRaf = null;
