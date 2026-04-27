@@ -4,6 +4,7 @@ import type {
   TuningConfig,
   SmoothedPoint,
 } from './types.js';
+import { DEFAULT_TUNING_CONFIG } from './constants.js';
 
 export interface StateMachineOutput {
   mode: GestureMode;
@@ -123,14 +124,14 @@ export class GestureStateMachine {
     // Track consecutive active frames per hand. Used to guard against a single
     // noisy frame from the secondary hand escalating (or interrupting) an
     // ongoing single-hand gesture. Counts reset to 0 the moment a hand drops.
-    this.leftActiveFrames  = leftActive  ? this.leftActiveFrames  + 1 : 0;
+    this.leftActiveFrames = leftActive ? this.leftActiveFrames + 1 : 0;
     this.rightActiveFrames = rightActive ? this.rightActiveFrames + 1 : 0;
 
     // Escalation to 'rotating' requires both hands to have been active for at
     // least ESCALATION_FRAMES consecutive frames. This prevents one brief noisy
     // frame on the secondary hand from interrupting an ongoing pan or zoom.
     const bothStable =
-      this.leftActiveFrames  >= GestureStateMachine.ESCALATION_FRAMES &&
+      this.leftActiveFrames >= GestureStateMachine.ESCALATION_FRAMES &&
       this.rightActiveFrames >= GestureStateMachine.ESCALATION_FRAMES;
 
     // Both stable → rotate; right only → zoom; left only → pan.
@@ -138,12 +139,12 @@ export class GestureStateMachine {
     // single-hand mode (panning/zooming) so the secondary hand must be held
     // for ESCALATION_FRAMES before rotating kicks in. This prevents a single
     // noisy frame from the secondary hand from interrupting an ongoing gesture.
-    const bothActiveButUnstable =
-      leftActive && rightActive && !bothStable;
+    const bothActiveButUnstable = leftActive && rightActive && !bothStable;
     const desired: GestureMode = bothStable
       ? 'rotating'
-      : bothActiveButUnstable && (this.mode === 'panning' || this.mode === 'zooming')
-        ? this.mode   // hold current mode until secondary hand is confirmed stable
+      : bothActiveButUnstable &&
+          (this.mode === 'panning' || this.mode === 'zooming')
+        ? this.mode // hold current mode until secondary hand is confirmed stable
         : rightActive
           ? 'zooming'
           : leftActive
@@ -263,8 +264,10 @@ export class GestureStateMachine {
       const rw = rightHand.landmarks[0];
       let rawAngle = Math.atan2(rw.y - lw.y, rw.x - lw.x);
       if (this.prevRotateAngle !== null) {
-        while (rawAngle - this.prevRotateAngle > Math.PI) rawAngle -= 2 * Math.PI;
-        while (rawAngle - this.prevRotateAngle < -Math.PI) rawAngle += 2 * Math.PI;
+        while (rawAngle - this.prevRotateAngle > Math.PI)
+          rawAngle -= 2 * Math.PI;
+        while (rawAngle - this.prevRotateAngle < -Math.PI)
+          rawAngle += 2 * Math.PI;
       }
       const smoothAngle = this.rotateSmoother.update(rawAngle);
 
@@ -274,7 +277,13 @@ export class GestureStateMachine {
         let delta = smoothAngle - this.prevRotateAngle;
         if (delta > Math.PI) delta -= 2 * Math.PI;
         if (delta < -Math.PI) delta += 2 * Math.PI;
-        if (Math.abs(delta) > 0.005) {
+        // ?? fallback guards JS consumers passing a tuning object that predates
+        // rotateDeadzoneRad; without it, `> undefined` becomes `> NaN` and
+        // suppresses every rotate delta.
+        const deadzone =
+          this.tuning.rotateDeadzoneRad ??
+          DEFAULT_TUNING_CONFIG.rotateDeadzoneRad;
+        if (Math.abs(delta) > deadzone) {
           rotateDelta = delta;
         }
       }

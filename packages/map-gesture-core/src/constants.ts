@@ -14,10 +14,11 @@ export const DEFAULT_TUNING_CONFIG: TuningConfig = {
   releaseGraceMs: 150,
   panDeadzonePx: 0,
   zoomDeadzoneRatio: 0.005,
+  rotateDeadzoneRad: 0.005,
   smoothingAlpha: 0.35,
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
-  minPresenceConfidence: 0.60,
+  minPresenceConfidence: 0.6,
 };
 
 // MediaPipe landmark indices

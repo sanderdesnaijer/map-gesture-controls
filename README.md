@@ -194,6 +194,7 @@ const controller = new GestureMapController({
 | `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.       |
 | `panDeadzonePx`          | `number` | `0`     | Minimum pixel movement to register a pan.                            |
 | `zoomDeadzoneRatio`      | `number` | `0.005` | Minimum distance-ratio change to register a zoom.                    |
+| `rotateDeadzoneRad`      | `number` | `0.005` | Minimum wrist-to-wrist angle change (radians) to emit a rotate delta. Lower values respond to smaller wrist tilts; higher values filter micro jitter. |
 | `smoothingAlpha`         | `number` | `0.35`  | Exponential smoothing factor (0 = max smooth, 1 = raw).              |
 | `minDetectionConfidence` | `number` | `0.65`  | MediaPipe minimum detection confidence.                              |
 | `minTrackingConfidence`  | `number` | `0.65`  | MediaPipe minimum tracking confidence.                               |

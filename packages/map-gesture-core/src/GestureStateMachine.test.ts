@@ -1,30 +1,45 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { GestureStateMachine } from './GestureStateMachine.js';
-import type { GestureFrame, DetectedHand, HandLandmark, TuningConfig } from './types.js';
+import type {
+  GestureFrame,
+  DetectedHand,
+  HandLandmark,
+  TuningConfig,
+} from './types.js';
 import { LANDMARKS } from './constants.js';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const FAST_TUNING: TuningConfig = {
-  actionDwellMs: 0,       // dwell=0: transition fires on the SECOND frame (first sets timer)
-  releaseGraceMs: 0,      // grace=0: idle on the SECOND frame after release
+  actionDwellMs: 0, // dwell=0: transition fires on the SECOND frame (first sets timer)
+  releaseGraceMs: 0, // grace=0: idle on the SECOND frame after release
   panDeadzonePx: 0,
   zoomDeadzoneRatio: 0,
-  smoothingAlpha: 1,      // no smoothing, raw values pass through
+  rotateDeadzoneRad: 0,
+  smoothingAlpha: 1, // no smoothing, raw values pass through
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
-  minPresenceConfidence: 0.60,
+  minPresenceConfidence: 0.6,
 };
 
-function makeLandmarks(overrides: Record<number, Partial<HandLandmark>> = {}): HandLandmark[] {
-  const lm: HandLandmark[] = Array.from({ length: 21 }, () => ({ x: 0.5, y: 0.5, z: 0 }));
+function makeLandmarks(
+  overrides: Record<number, Partial<HandLandmark>> = {},
+): HandLandmark[] {
+  const lm: HandLandmark[] = Array.from({ length: 21 }, () => ({
+    x: 0.5,
+    y: 0.5,
+    z: 0,
+  }));
   for (const [idx, vals] of Object.entries(overrides)) {
     lm[Number(idx)] = { ...lm[Number(idx)], ...vals };
   }
   return lm;
 }
 
-function makeHand(gesture: DetectedHand['gesture'], landmarks = makeLandmarks()): DetectedHand {
+function makeHand(
+  gesture: DetectedHand['gesture'],
+  landmarks = makeLandmarks(),
+): DetectedHand {
   return { handedness: 'Right', score: 1, landmarks, gesture };
 }
 
@@ -50,7 +65,10 @@ function enterPanning(fsm: GestureStateMachine, hand = makeHand('fist')): void {
  * Drive the FSM into 'zooming' with dwell=0 (requires two identical frames).
  * Zoom = right fist only.
  */
-function enterZooming(fsm: GestureStateMachine, right = makeHand('fist')): void {
+function enterZooming(
+  fsm: GestureStateMachine,
+  right = makeHand('fist'),
+): void {
   fsm.update(makeFrame(0, null, right));
   fsm.update(makeFrame(0, null, right));
 }
@@ -114,7 +132,7 @@ describe('GestureStateMachine', () => {
   // ── idle → rotating ────────────────────────────────────────────────────────
 
   it('transitions to rotating when both fists are held stably (5 frames: dwell + 3 escalation)', () => {
-    const left  = makeHand('fist');
+    const left = makeHand('fist');
     const right = makeHand('fist');
     fsm.update(makeFrame(0, left, right));
     fsm.update(makeFrame(0, left, right));
@@ -125,7 +143,7 @@ describe('GestureStateMachine', () => {
   });
 
   it('prefers rotating over zooming once both fists are held stably', () => {
-    const left  = makeHand('fist');
+    const left = makeHand('fist');
     const right = makeHand('fist');
     fsm.update(makeFrame(0, left, right));
     fsm.update(makeFrame(0, left, right));
@@ -137,11 +155,11 @@ describe('GestureStateMachine', () => {
   });
 
   it('does NOT transition to rotating if second hand only appears for 1-2 frames (noise guard)', () => {
-    const left  = makeHand('fist');
+    const left = makeHand('fist');
     const right = makeHand('fist');
     // Only 2 frames with both hands, below ESCALATION_FRAMES threshold
-    fsm.update(makeFrame(0, left, null));  // establish left pan
-    fsm.update(makeFrame(0, left, null));  // → panning
+    fsm.update(makeFrame(0, left, null)); // establish left pan
+    fsm.update(makeFrame(0, left, null)); // → panning
     fsm.update(makeFrame(1, left, right)); // right appears, 1 frame, not stable yet
     const out = fsm.update(makeFrame(1, left, right)); // 2 frames, still below threshold
     expect(out.mode).toBe('panning');
@@ -278,16 +296,23 @@ describe('GestureStateMachine', () => {
     // First frame inside rotating: sets prevRotateAngle, no delta
     fsm.update(makeFrame(1, makeHand('fist', lmL1), makeHand('fist', lmR1)));
     // Second frame: emits delta
-    const out = fsm.update(makeFrame(2, makeHand('fist', lmL2), makeHand('fist', lmR2)));
+    const out = fsm.update(
+      makeFrame(2, makeHand('fist', lmL2), makeHand('fist', lmR2)),
+    );
 
     expect(out.mode).toBe('rotating');
     expect(out.rotateDelta).not.toBeNull();
   });
 
   it('keeps rotateDelta continuous across the atan2 wrap boundary', () => {
-    const wrappedFsm = new GestureStateMachine({ ...FAST_TUNING, smoothingAlpha: 0.5 });
+    const wrappedFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      smoothingAlpha: 0.5,
+    });
     const radius = 0.2;
-    const leftLandmarks = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5, z: 0 } });
+    const leftLandmarks = makeLandmarks({
+      [LANDMARKS.WRIST]: { x: 0.5, y: 0.5, z: 0 },
+    });
     const makeRightLandmarks = (angle: number) =>
       makeLandmarks({
         [LANDMARKS.WRIST]: {
@@ -300,14 +325,113 @@ describe('GestureStateMachine', () => {
     const afterWrap = (-179 * Math.PI) / 180;
 
     for (let i = 0; i < 5; i++) {
-      wrappedFsm.update(makeFrame(0, makeHand('fist', leftLandmarks), makeHand('fist', makeRightLandmarks(beforeWrap))));
+      wrappedFsm.update(
+        makeFrame(
+          0,
+          makeHand('fist', leftLandmarks),
+          makeHand('fist', makeRightLandmarks(beforeWrap)),
+        ),
+      );
     }
-    wrappedFsm.update(makeFrame(1, makeHand('fist', leftLandmarks), makeHand('fist', makeRightLandmarks(beforeWrap))));
-    const out = wrappedFsm.update(makeFrame(2, makeHand('fist', leftLandmarks), makeHand('fist', makeRightLandmarks(afterWrap))));
+    wrappedFsm.update(
+      makeFrame(
+        1,
+        makeHand('fist', leftLandmarks),
+        makeHand('fist', makeRightLandmarks(beforeWrap)),
+      ),
+    );
+    const out = wrappedFsm.update(
+      makeFrame(
+        2,
+        makeHand('fist', leftLandmarks),
+        makeHand('fist', makeRightLandmarks(afterWrap)),
+      ),
+    );
 
     expect(out.rotateDelta).not.toBeNull();
     expect(out.rotateDelta!).toBeGreaterThan(0);
     expect(out.rotateDelta!).toBeLessThan(0.1);
+  });
+
+  // ── rotateDeadzoneRad threshold ────────────────────────────────────────────
+
+  it('suppresses rotateDelta below the rotateDeadzoneRad threshold', () => {
+    const deadzoneFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      rotateDeadzoneRad: 0.05,
+    });
+    const lmL = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5, z: 0 } });
+    // angle ≈ 0 rad (horizontal baseline)
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
+    // tiny tilt: atan2(0.01, 0.6) ≈ 0.017 rad — below 0.05 deadzone
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.51, z: 0 } });
+
+    for (let i = 0; i < 5; i++) {
+      deadzoneFsm.update(
+        makeFrame(0, makeHand('fist', lmL), makeHand('fist', lmR1)),
+      );
+    }
+    deadzoneFsm.update(
+      makeFrame(1, makeHand('fist', lmL), makeHand('fist', lmR1)),
+    );
+    const out = deadzoneFsm.update(
+      makeFrame(2, makeHand('fist', lmL), makeHand('fist', lmR2)),
+    );
+
+    expect(out.rotateDelta).toBeNull();
+  });
+
+  it('falls back to the default rotate deadzone when rotateDeadzoneRad is missing', () => {
+    // Simulate a JS consumer (or older persisted config) that omits the field.
+    // Without the runtime fallback, `Math.abs(delta) > undefined` is `> NaN`
+    // and every rotate delta is silently suppressed.
+    const { rotateDeadzoneRad: _omit, ...partial } = FAST_TUNING;
+    void _omit;
+    const fallbackFsm = new GestureStateMachine(partial as TuningConfig);
+    const lmL = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5, z: 0 } });
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
+    // tilt of ~0.165 rad — well above the default 0.005 fallback
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.6, z: 0 } });
+
+    for (let i = 0; i < 5; i++) {
+      fallbackFsm.update(
+        makeFrame(0, makeHand('fist', lmL), makeHand('fist', lmR1)),
+      );
+    }
+    fallbackFsm.update(
+      makeFrame(1, makeHand('fist', lmL), makeHand('fist', lmR1)),
+    );
+    const out = fallbackFsm.update(
+      makeFrame(2, makeHand('fist', lmL), makeHand('fist', lmR2)),
+    );
+
+    expect(out.rotateDelta).not.toBeNull();
+  });
+
+  it('emits rotateDelta above the rotateDeadzoneRad threshold', () => {
+    const deadzoneFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      rotateDeadzoneRad: 0.05,
+    });
+    const lmL = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5, z: 0 } });
+    // angle ≈ 0 rad (horizontal baseline)
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
+    // large tilt: atan2(0.10, 0.6) ≈ 0.165 rad — above 0.05 deadzone
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.6, z: 0 } });
+
+    for (let i = 0; i < 5; i++) {
+      deadzoneFsm.update(
+        makeFrame(0, makeHand('fist', lmL), makeHand('fist', lmR1)),
+      );
+    }
+    deadzoneFsm.update(
+      makeFrame(1, makeHand('fist', lmL), makeHand('fist', lmR1)),
+    );
+    const out = deadzoneFsm.update(
+      makeFrame(2, makeHand('fist', lmL), makeHand('fist', lmR2)),
+    );
+
+    expect(out.rotateDelta).not.toBeNull();
   });
 
   // ── reset ──────────────────────────────────────────────────────────────────
@@ -331,7 +455,10 @@ describe('GestureStateMachine', () => {
   // ── dwell timer ────────────────────────────────────────────────────────────
 
   it('does NOT transition before actionDwellMs elapses', () => {
-    const slowFsm = new GestureStateMachine({ ...FAST_TUNING, actionDwellMs: 200 });
+    const slowFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      actionDwellMs: 200,
+    });
     const fistHand = makeHand('fist');
 
     const out1 = slowFsm.update(makeFrame(0, fistHand, null));
@@ -347,7 +474,10 @@ describe('GestureStateMachine', () => {
   // ── release grace period ───────────────────────────────────────────────────
 
   it('stays in panning during release grace period', () => {
-    const graceFsm = new GestureStateMachine({ ...FAST_TUNING, releaseGraceMs: 100 });
+    const graceFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      releaseGraceMs: 100,
+    });
     enterPanning(graceFsm);
     expect(graceFsm.getMode()).toBe('panning');
 

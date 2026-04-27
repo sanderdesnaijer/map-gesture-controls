@@ -44,6 +44,7 @@ export interface TuningConfig {
   releaseGraceMs: number;
   panDeadzonePx: number;
   zoomDeadzoneRatio: number;
+  rotateDeadzoneRad: number;
   smoothingAlpha: number;
   minDetectionConfidence: number;
   minTrackingConfidence: number;
