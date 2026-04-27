@@ -3,8 +3,8 @@ import type {
   GestureFrame,
   TuningConfig,
   SmoothedPoint,
-} from './types.js';
-import { DEFAULT_TUNING_CONFIG } from './constants.js';
+} from "./types.js";
+import { DEFAULT_TUNING_CONFIG } from "./constants.js";
 
 export interface StateMachineOutput {
   mode: GestureMode;
@@ -81,7 +81,7 @@ class EMAScalar {
  *                       then idle (next frame starts new dwell if needed)
  */
 export class GestureStateMachine {
-  private mode: GestureMode = 'idle';
+  private mode: GestureMode = "idle";
   private actionDwell: DwellTimer | null = null;
   private releaseTimer: number | null = null;
   private panSmoother: EMAPoint;
@@ -116,7 +116,7 @@ export class GestureStateMachine {
     // ── Determine desired mode for this frame ─────────────────────────────────
     // Both fist and pinch trigger the same modes, users can choose either.
     const isActive = (hand: typeof leftHand) =>
-      hand !== null && (hand.gesture === 'fist' || hand.gesture === 'pinch');
+      hand !== null && (hand.gesture === "fist" || hand.gesture === "pinch");
 
     const rightActive = isActive(rightHand);
     const leftActive = isActive(leftHand);
@@ -124,14 +124,14 @@ export class GestureStateMachine {
     // Track consecutive active frames per hand. Used to guard against a single
     // noisy frame from the secondary hand escalating (or interrupting) an
     // ongoing single-hand gesture. Counts reset to 0 the moment a hand drops.
-    this.leftActiveFrames  = leftActive  ? this.leftActiveFrames  + 1 : 0;
+    this.leftActiveFrames = leftActive ? this.leftActiveFrames + 1 : 0;
     this.rightActiveFrames = rightActive ? this.rightActiveFrames + 1 : 0;
 
     // Escalation to 'rotating' requires both hands to have been active for at
     // least ESCALATION_FRAMES consecutive frames. This prevents one brief noisy
     // frame on the secondary hand from interrupting an ongoing pan or zoom.
     const bothStable =
-      this.leftActiveFrames  >= GestureStateMachine.ESCALATION_FRAMES &&
+      this.leftActiveFrames >= GestureStateMachine.ESCALATION_FRAMES &&
       this.rightActiveFrames >= GestureStateMachine.ESCALATION_FRAMES;
 
     // Both stable → rotate; right only → zoom; left only → pan.
@@ -139,21 +139,21 @@ export class GestureStateMachine {
     // single-hand mode (panning/zooming) so the secondary hand must be held
     // for ESCALATION_FRAMES before rotating kicks in. This prevents a single
     // noisy frame from the secondary hand from interrupting an ongoing gesture.
-    const bothActiveButUnstable =
-      leftActive && rightActive && !bothStable;
+    const bothActiveButUnstable = leftActive && rightActive && !bothStable;
     const desired: GestureMode = bothStable
-      ? 'rotating'
-      : bothActiveButUnstable && (this.mode === 'panning' || this.mode === 'zooming')
-        ? this.mode   // hold current mode until secondary hand is confirmed stable
+      ? "rotating"
+      : bothActiveButUnstable &&
+          (this.mode === "panning" || this.mode === "zooming")
+        ? this.mode // hold current mode until secondary hand is confirmed stable
         : rightActive
-          ? 'zooming'
+          ? "zooming"
           : leftActive
-            ? 'panning'
-            : 'idle';
+            ? "panning"
+            : "idle";
 
     // ── idle ──────────────────────────────────────────────────────────────────
-    if (this.mode === 'idle') {
-      if (desired !== 'idle') {
+    if (this.mode === "idle") {
+      if (desired !== "idle") {
         if (this.actionDwell === null || this.actionDwell.gesture !== desired) {
           this.actionDwell = { gesture: desired, startMs: now };
         } else if (now - this.actionDwell.startMs >= actionDwellMs) {
@@ -166,17 +166,17 @@ export class GestureStateMachine {
     }
 
     // ── panning ───────────────────────────────────────────────────────────────
-    if (this.mode === 'panning') {
+    if (this.mode === "panning") {
       // Escalate to rotating once the right hand becomes stably active too.
       if (bothStable) {
-        this.transitionTo('rotating');
+        this.transitionTo("rotating");
         return this.buildOutput(null, null, null);
       }
-      if (desired !== 'panning') {
+      if (desired !== "panning") {
         if (this.releaseTimer === null) {
           this.releaseTimer = now;
         } else if (now - this.releaseTimer >= releaseGraceMs) {
-          this.transitionTo('idle');
+          this.transitionTo("idle");
         }
         return this.buildOutput(null, null, null);
       }
@@ -184,7 +184,7 @@ export class GestureStateMachine {
 
       const fistHand = isActive(leftHand) ? leftHand : null;
       if (!fistHand) {
-        this.transitionTo('idle');
+        this.transitionTo("idle");
         return this.buildOutput(null, null, null);
       }
 
@@ -205,24 +205,24 @@ export class GestureStateMachine {
     }
 
     // ── zooming ───────────────────────────────────────────────────────────────
-    if (this.mode === 'zooming') {
+    if (this.mode === "zooming") {
       // Escalate to rotating once the left hand becomes stably active too.
       if (bothStable) {
-        this.transitionTo('rotating');
+        this.transitionTo("rotating");
         return this.buildOutput(null, null, null);
       }
-      if (desired !== 'zooming') {
+      if (desired !== "zooming") {
         if (this.releaseTimer === null) {
           this.releaseTimer = now;
         } else if (now - this.releaseTimer >= releaseGraceMs) {
-          this.transitionTo('idle');
+          this.transitionTo("idle");
         }
         return this.buildOutput(null, null, null);
       }
       this.releaseTimer = null;
 
       if (!rightHand) {
-        this.transitionTo('idle');
+        this.transitionTo("idle");
         return this.buildOutput(null, null, null);
       }
 
@@ -243,19 +243,19 @@ export class GestureStateMachine {
     }
 
     // ── rotating ─────────────────────────────────────────────────────────────
-    if (this.mode === 'rotating') {
-      if (desired !== 'rotating') {
+    if (this.mode === "rotating") {
+      if (desired !== "rotating") {
         if (this.releaseTimer === null) {
           this.releaseTimer = now;
         } else if (now - this.releaseTimer >= releaseGraceMs) {
-          this.transitionTo('idle');
+          this.transitionTo("idle");
         }
         return this.buildOutput(null, null, null);
       }
       this.releaseTimer = null;
 
       if (!leftHand || !rightHand) {
-        this.transitionTo('idle');
+        this.transitionTo("idle");
         return this.buildOutput(null, null, null);
       }
 
@@ -264,8 +264,10 @@ export class GestureStateMachine {
       const rw = rightHand.landmarks[0];
       let rawAngle = Math.atan2(rw.y - lw.y, rw.x - lw.x);
       if (this.prevRotateAngle !== null) {
-        while (rawAngle - this.prevRotateAngle > Math.PI) rawAngle -= 2 * Math.PI;
-        while (rawAngle - this.prevRotateAngle < -Math.PI) rawAngle += 2 * Math.PI;
+        while (rawAngle - this.prevRotateAngle > Math.PI)
+          rawAngle -= 2 * Math.PI;
+        while (rawAngle - this.prevRotateAngle < -Math.PI)
+          rawAngle += 2 * Math.PI;
       }
       const smoothAngle = this.rotateSmoother.update(rawAngle);
 
@@ -275,7 +277,13 @@ export class GestureStateMachine {
         let delta = smoothAngle - this.prevRotateAngle;
         if (delta > Math.PI) delta -= 2 * Math.PI;
         if (delta < -Math.PI) delta += 2 * Math.PI;
-        if (Math.abs(delta) > (this.tuning.rotateDeadzoneRad ?? DEFAULT_TUNING_CONFIG.rotateDeadzoneRad!)) {
+        // ?? fallback guards JS consumers passing a tuning object that predates
+        // rotateDeadzoneRad; without it, `> undefined` becomes `> NaN` and
+        // suppresses every rotate delta.
+        const deadzone =
+          this.tuning.rotateDeadzoneRad ??
+          DEFAULT_TUNING_CONFIG.rotateDeadzoneRad;
+        if (Math.abs(delta) > deadzone) {
           rotateDelta = delta;
         }
       }
@@ -293,18 +301,18 @@ export class GestureStateMachine {
     // Reset both counters so escalation requires a fresh stable run in the new mode.
     // Exception: keep the dominant hand's counter when entering a single-hand mode so
     // it does not need to re-accumulate from zero if the hand was already stable.
-    if (next !== 'panning' && next !== 'rotating') this.leftActiveFrames = 0;
-    if (next !== 'zooming' && next !== 'rotating') this.rightActiveFrames = 0;
+    if (next !== "panning" && next !== "rotating") this.leftActiveFrames = 0;
+    if (next !== "zooming" && next !== "rotating") this.rightActiveFrames = 0;
 
-    if (next !== 'panning') {
+    if (next !== "panning") {
       this.panSmoother.reset();
       this.prevPanPos = null;
     }
-    if (next !== 'zooming') {
+    if (next !== "zooming") {
       this.zoomSmoother.reset();
       this.prevZoomDist = null;
     }
-    if (next !== 'rotating') {
+    if (next !== "rotating") {
       this.rotateSmoother.reset();
       this.prevRotateAngle = null;
     }
@@ -319,6 +327,6 @@ export class GestureStateMachine {
   }
 
   reset(): void {
-    this.transitionTo('idle');
+    this.transitionTo("idle");
   }
 }
