@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.1](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.4.0...ol-v0.4.1) (2026-04-27)
+
+
+### Bug Fixes
+
+* added fallbacks ([9e91a9d](https://github.com/sanderdesnaijer/map-gesture-controls/commit/9e91a9d8cfda97beec5d8e9e1ed02c7d46e147fe))
+* **openlayers:** snappy rotation ([ff14040](https://github.com/sanderdesnaijer/map-gesture-controls/commit/ff14040d1d09937a660faeb34c67e2694cfa9ff3))
+* **openlayers:** snappy rotation ([c6bc9c2](https://github.com/sanderdesnaijer/map-gesture-controls/commit/c6bc9c20127781886236e60cf0c8bd34d432060f))
+
 ## [0.4.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.3.0...ol-v0.4.0) (2026-04-26)
 
 
