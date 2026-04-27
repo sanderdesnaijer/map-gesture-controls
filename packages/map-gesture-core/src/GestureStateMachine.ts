@@ -3,8 +3,7 @@ import type {
   GestureFrame,
   TuningConfig,
   SmoothedPoint,
-} from "./types.js";
-import { DEFAULT_TUNING_CONFIG } from "./constants.js";
+} from './types.js';
 
 export interface StateMachineOutput {
   mode: GestureMode;
@@ -277,11 +276,7 @@ export class GestureStateMachine {
         let delta = smoothAngle - this.prevRotateAngle;
         if (delta > Math.PI) delta -= 2 * Math.PI;
         if (delta < -Math.PI) delta += 2 * Math.PI;
-        if (
-          Math.abs(delta) >
-          (this.tuning.rotateDeadzoneRad ??
-            DEFAULT_TUNING_CONFIG.rotateDeadzoneRad!)
-        ) {
+        if (Math.abs(delta) > this.tuning.rotateDeadzoneRad) {
           rotateDelta = delta;
         }
       }

@@ -1,10 +1,10 @@
-import type { WebcamConfig, TuningConfig } from "./types.js";
+import type { WebcamConfig, TuningConfig } from './types.js';
 
 export const DEFAULT_WEBCAM_CONFIG: WebcamConfig = {
   enabled: true,
-  mode: "corner",
+  mode: 'corner',
   opacity: 0.85,
-  position: "bottom-right",
+  position: 'bottom-right',
   width: 320,
   height: 240,
 };

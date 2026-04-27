@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { GestureStateMachine } from "./GestureStateMachine.js";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { GestureStateMachine } from './GestureStateMachine.js';
 import type {
   GestureFrame,
   DetectedHand,
   HandLandmark,
   TuningConfig,
-} from "./types.js";
-import { LANDMARKS } from "./constants.js";
+} from './types.js';
+import { LANDMARKS } from './constants.js';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -351,6 +351,48 @@ describe("GestureStateMachine", () => {
     expect(out.rotateDelta).not.toBeNull();
     expect(out.rotateDelta!).toBeGreaterThan(0);
     expect(out.rotateDelta!).toBeLessThan(0.1);
+  });
+
+  // ── rotateDeadzoneRad threshold ────────────────────────────────────────────
+
+  it('suppresses rotateDelta below the rotateDeadzoneRad threshold', () => {
+    const deadzoneFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      rotateDeadzoneRad: 0.05,
+    });
+    const lmL = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5, z: 0 } });
+    // angle ≈ 0 rad (horizontal baseline)
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
+    // tiny tilt: atan2(0.01, 0.6) ≈ 0.017 rad — below 0.05 deadzone
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.51, z: 0 } });
+
+    for (let i = 0; i < 5; i++) {
+      deadzoneFsm.update(makeFrame(0, makeHand('fist', lmL), makeHand('fist', lmR1)));
+    }
+    deadzoneFsm.update(makeFrame(1, makeHand('fist', lmL), makeHand('fist', lmR1)));
+    const out = deadzoneFsm.update(makeFrame(2, makeHand('fist', lmL), makeHand('fist', lmR2)));
+
+    expect(out.rotateDelta).toBeNull();
+  });
+
+  it('emits rotateDelta above the rotateDeadzoneRad threshold', () => {
+    const deadzoneFsm = new GestureStateMachine({
+      ...FAST_TUNING,
+      rotateDeadzoneRad: 0.05,
+    });
+    const lmL = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5, z: 0 } });
+    // angle ≈ 0 rad (horizontal baseline)
+    const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
+    // large tilt: atan2(0.10, 0.6) ≈ 0.165 rad — above 0.05 deadzone
+    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.60, z: 0 } });
+
+    for (let i = 0; i < 5; i++) {
+      deadzoneFsm.update(makeFrame(0, makeHand('fist', lmL), makeHand('fist', lmR1)));
+    }
+    deadzoneFsm.update(makeFrame(1, makeHand('fist', lmL), makeHand('fist', lmR1)));
+    const out = deadzoneFsm.update(makeFrame(2, makeHand('fist', lmL), makeHand('fist', lmR2)));
+
+    expect(out.rotateDelta).not.toBeNull();
   });
 
   // ── reset ──────────────────────────────────────────────────────────────────
