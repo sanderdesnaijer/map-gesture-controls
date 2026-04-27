@@ -81,10 +81,11 @@ const controller = new GestureMapController({
     opacity: 0.7,
   },
   tuning: {
-    actionDwellMs: 40,      // ms before confirming a gesture
-    releaseGraceMs: 80,     // ms grace period after gesture ends
-    panDeadzonePx: 0,       // direct panning for slow movement
-    smoothingAlpha: 0.35,   // smoother but still responsive
+    actionDwellMs: 40,         // ms before confirming a gesture
+    releaseGraceMs: 80,        // ms grace period after gesture ends
+    panDeadzonePx: 0,          // direct panning for slow movement
+    rotateDeadzoneRad: 0.0005, // lower to make slow wrist rotation more responsive
+    smoothingAlpha: 0.35,      // smoother but still responsive
   },
   debug: true,              // log gesture state to console
 });

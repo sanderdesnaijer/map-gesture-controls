@@ -18,6 +18,9 @@ export class OpenLayersGestureInteraction {
   // Wrist vertical delta is ~0.005–0.02 per frame at natural speed (same as pan).
   // zoomScale=15 ≈ 1 zoom level/sec at 30fps with moderate hand movement.
   private zoomScale = 15.0;
+  // Wrist-to-wrist angle delta is small (~0.002–0.01 rad/frame); scale up so
+  // slow wrist tilts produce clearly visible map rotation.
+  private rotateScale = 2.5;
 
   constructor(map: Map) {
     this.map = map;
@@ -80,7 +83,7 @@ export class OpenLayersGestureInteraction {
   private rotate(delta: number): void {
     const view = this.map.getView();
     const currentRotation = view.getRotation() ?? 0;
-    view.setRotation(currentRotation + delta);
+    view.setRotation(currentRotation + delta * this.rotateScale);
   }
 
   /**

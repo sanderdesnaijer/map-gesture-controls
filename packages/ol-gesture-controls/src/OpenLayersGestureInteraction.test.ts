@@ -200,19 +200,21 @@ describe('OpenLayersGestureInteraction', () => {
 
   // ── rotate ────────────────────────────────────────────────────────────────
 
+  const rotateScale = 2.5;
+
   it('calls view.setRotation when rotateDelta is present', () => {
     interaction.apply(rotating(0.1));
     expect(mocks.setRotation).toHaveBeenCalledOnce();
   });
 
-  it('adds rotateDelta to the current rotation', () => {
+  it('adds rotateDelta * rotateScale to the current rotation', () => {
     const delta = 0.2;
     const currentRotation = 0;
 
     interaction.apply(rotating(delta));
 
     const [newRotation] = mocks.setRotation.mock.calls[0] as [number];
-    expect(newRotation).toBeCloseTo(currentRotation + delta);
+    expect(newRotation).toBeCloseTo(currentRotation + delta * rotateScale);
   });
 
   it('rotates clockwise for positive delta', () => {
@@ -240,7 +242,7 @@ describe('OpenLayersGestureInteraction', () => {
 
     i.apply(rotating(0.5));
 
-    expect(setRotationSpy).toHaveBeenCalledWith(expect.closeTo(1.5, 5));
+    expect(setRotationSpy).toHaveBeenCalledWith(expect.closeTo(1.0 + 0.5 * rotateScale, 5));
   });
 
   // ── gracefully handles missing view data ──────────────────────────────────
