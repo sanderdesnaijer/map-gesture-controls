@@ -1,15 +1,15 @@
-# map-gesture-controls
+# Map Gesture Controls: Hand Tracking for OpenLayers, Google Maps & Leaflet
 
 [![npm version](https://img.shields.io/npm/v/@map-gesture-controls/ol?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/ol)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/@map-gesture-controls/ol?style=flat-square&label=minzipped)](https://bundlephobia.com/package/@map-gesture-controls/ol)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-**Control web maps with hand gestures. No mouse, no touch, no backend.**
+**Control web maps with hand gestures using your webcam. No mouse, no touch, no backend.**
 
 Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM running entirely in the browser, users can pan a map with the left hand, zoom with the right hand, and rotate with both hands. Each action can be triggered with either a **fist** or a **pinch** -- whichever feels more natural. This makes maps accessible in kiosk and exhibit environments, enables hands-free interaction for users with limited mobility, and opens up novel touchless UI experiences. Camera data never leaves the device.
 
-Supports **OpenLayers**, **Google Maps**, and **Leaflet**.
+**Supports [OpenLayers](#openlayers) | [Google Maps](#google-maps) | [Leaflet](#leaflet)**
 
 **[Live demo and documentation](https://sanderdesnaijer.github.io/map-gesture-controls/)**
 
@@ -25,12 +25,12 @@ Supports **OpenLayers**, **Google Maps**, and **Leaflet**.
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| `@map-gesture-controls/core` | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
-| `@map-gesture-controls/ol` | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`. |
-| `@map-gesture-controls/google-maps` | Google Maps integration. Re-exports the full core API and adds `GestureMapController` and `GoogleMapsGestureInteraction`. |
-| `@map-gesture-controls/leaflet` | Leaflet integration. Re-exports the full core API and adds `GestureMapController` and `LeafletGestureInteraction`. |
+| Package | npm | Description |
+|---------|-----|-------------|
+| [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/core?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/core) | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
+| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/ol?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/ol) | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`. |
+| [`@map-gesture-controls/google-maps`](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/google-maps?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | Google Maps integration. Re-exports the full core API and adds `GestureMapController` and `GoogleMapsGestureInteraction`. |
+| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/leaflet?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration. Re-exports the full core API and adds `GestureMapController` and `LeafletGestureInteraction`. |
 
 > Most users only need the `ol`, `google-maps`, or `leaflet` package. Each re-exports everything from core.
 

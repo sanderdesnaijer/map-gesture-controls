@@ -1,7 +1,7 @@
 {
   "name": "@map-gesture-controls/core",
   "version": "0.3.0",
-  "description": "Map-agnostic hand gesture detection and state machine (MediaPipe)",
+  "description": "Map-agnostic hand gesture detection engine using MediaPipe. Pan, zoom, and rotate maps with webcam hand tracking in the browser.",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
