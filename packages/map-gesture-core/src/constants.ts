@@ -1,10 +1,10 @@
-import type { WebcamConfig, TuningConfig } from "./types.js";
+import type { WebcamConfig, TuningConfig } from './types.js';
 
 export const DEFAULT_WEBCAM_CONFIG: WebcamConfig = {
   enabled: true,
-  mode: "corner",
+  mode: 'corner',
   opacity: 0.85,
-  position: "bottom-right",
+  position: 'bottom-right',
   width: 320,
   height: 240,
 };
@@ -59,14 +59,14 @@ export const FINGER_BASE_INDICES = [
 
 // Visual colours
 export const COLORS = {
-  idle: "#888888",
-  panning: "#00ccff",
-  zooming: "#00ffcc",
-  rotating: "#ff9900",
-  landmark: "rgba(255,255,255,0.6)",
-  connection: "rgba(255,255,255,0.3)",
-  fingertipGlow: "#4488ff",
+  idle: '#888888',
+  panning: '#00ccff',
+  zooming: '#00ffcc',
+  rotating: '#ff9900',
+  landmark: 'rgba(255,255,255,0.6)',
+  connection: 'rgba(255,255,255,0.3)',
+  fingertipGlow: '#4488ff',
 } as const;
 
 export const MEDIAPIPE_WASM_URL =
-  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm";
+  'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';

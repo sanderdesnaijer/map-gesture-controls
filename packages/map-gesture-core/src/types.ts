@@ -1,8 +1,8 @@
-export type GestureMode = "idle" | "panning" | "zooming" | "rotating";
+export type GestureMode = 'idle' | 'panning' | 'zooming' | 'rotating';
 
-export type HandednessLabel = "Left" | "Right";
+export type HandednessLabel = 'Left' | 'Right';
 
-export type GestureType = "openPalm" | "fist" | "pinch" | "none";
+export type GestureType = 'openPalm' | 'fist' | 'pinch' | 'none';
 
 export interface Point2D {
   x: number;
@@ -32,9 +32,9 @@ export interface GestureFrame {
 export interface WebcamConfig {
   enabled: boolean;
   /** 'full' | 'corner' | 'hidden' */
-  mode: "full" | "corner" | "hidden";
+  mode: 'full' | 'corner' | 'hidden';
   opacity: number;
-  position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  position: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   width: number;
   height: number;
 }
