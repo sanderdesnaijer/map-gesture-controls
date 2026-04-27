@@ -14,7 +14,7 @@ export const DEFAULT_TUNING_CONFIG: TuningConfig = {
   releaseGraceMs: 150,
   panDeadzonePx: 0,
   zoomDeadzoneRatio: 0.005,
-  rotateDeadzoneRad: 0.001,
+  rotateDeadzoneRad: 0.005,
   smoothingAlpha: 0.35,
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
@@ -59,14 +59,14 @@ export const FINGER_BASE_INDICES = [
 
 // Visual colours
 export const COLORS = {
-  idle: "#888888",
-  panning: "#00ccff",
-  zooming: "#00ffcc",
-  rotating: "#ff9900",
-  landmark: "rgba(255,255,255,0.6)",
-  connection: "rgba(255,255,255,0.3)",
-  fingertipGlow: "#4488ff",
+  idle: '#888888',
+  panning: '#00ccff',
+  zooming: '#00ffcc',
+  rotating: '#ff9900',
+  landmark: 'rgba(255,255,255,0.6)',
+  connection: 'rgba(255,255,255,0.3)',
+  fingertipGlow: '#4488ff',
 } as const;
 
 export const MEDIAPIPE_WASM_URL =
-  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm";
+  'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';
