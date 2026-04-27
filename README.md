@@ -244,13 +244,7 @@ Gestures are confirmed after a short dwell period (default 80 ms) to avoid accid
 
 Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam access), and **WASM** (MediaPipe hand landmarker model, ~10 MB, loaded on first `start()` call).
 
-## Roadmap & Contributing
-
-**Planned features:**
-- Additional gesture types: tilt
-- Framework wrappers for React and Vue
-
-**Contributing:**
+## Contributing
 - This project uses [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.)
 - PRs are welcome. Please open an [issue](https://github.com/sanderdesnaijer/map-gesture-controls/issues) first for significant changes
 - Run `npm run type-check` and ensure no TS errors before submitting
