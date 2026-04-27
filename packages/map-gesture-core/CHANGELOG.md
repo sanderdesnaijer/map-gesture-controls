@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.3.0...core-v0.4.0) (2026-04-27)
+
+
+### Features
+
+* **core:** configurable rotate deadzone ([43bdb0f](https://github.com/sanderdesnaijer/map-gesture-controls/commit/43bdb0f8b39503bd0d9e2d129376fc0dcf04ab82))
+* **core:** configurable rotate deadzone ([aa78e55](https://github.com/sanderdesnaijer/map-gesture-controls/commit/aa78e555156d40901577ca8c117d2828f238926a))
+
+
+### Bug Fixes
+
+* adress comments ([e8fda77](https://github.com/sanderdesnaijer/map-gesture-controls/commit/e8fda7778d5f3526226136091628d5f8e35b18ac))
+* comments ([8690c76](https://github.com/sanderdesnaijer/map-gesture-controls/commit/8690c7618514953f156bf2fd4b583ea19831f29c))
+* comments ([6676c7a](https://github.com/sanderdesnaijer/map-gesture-controls/commit/6676c7a8d5182ac6e8c6289fb37589d642ff1e78))
+
 ## [0.3.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/core-v0.2.1...core-v0.3.0) (2026-04-26)
 
 
