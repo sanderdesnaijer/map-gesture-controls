@@ -1,6 +1,6 @@
 {
   "name": "@map-gesture-controls/ol",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "description": "Control OpenLayers maps with hand gestures via MediaPipe webcam hand tracking. Pan, zoom, and rotate with no backend.",
   "type": "module",
   "main": "dist/index.js",

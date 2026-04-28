@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.4.1...ol-v1.0.0) (2026-04-28)
+
+
+### Features
+
+* stable API release ([bfa0872](https://github.com/sanderdesnaijer/map-gesture-controls/commit/bfa08723a8fad4d14a837acf5de4c1a6c709841e))
+
 ## [0.4.1](https://github.com/sanderdesnaijer/map-gesture-controls/compare/ol-v0.4.0...ol-v0.4.1) (2026-04-27)
 
 ### Bug Fixes
