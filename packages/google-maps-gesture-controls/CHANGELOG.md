@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/sanderdesnaijer/map-gesture-controls/compare/google-maps-v0.3.0...google-maps-v0.3.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* fix typecheck ([309de88](https://github.com/sanderdesnaijer/map-gesture-controls/commit/309de88c13f937169fdb506ace68181cfe2df8f8))
+
 ## [0.3.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/google-maps-v0.2.0...google-maps-v0.3.0) (2026-04-26)
 
 ### Features

@@ -1,6 +1,6 @@
 {
   "name": "@map-gesture-controls/google-maps",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Control Google Maps with hand gestures via MediaPipe webcam hand tracking. Pan, zoom, and rotate with no backend.",
   "type": "module",
   "main": "dist/index.js",
