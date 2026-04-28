@@ -2,10 +2,9 @@
 
 ## [1.0.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/leaflet-v0.2.0...leaflet-v1.0.0) (2026-04-28)
 
-
 ### Features
 
-* stable API release ([bfa0872](https://github.com/sanderdesnaijer/map-gesture-controls/commit/bfa08723a8fad4d14a837acf5de4c1a6c709841e))
+- stable API release ([bfa0872](https://github.com/sanderdesnaijer/map-gesture-controls/commit/bfa08723a8fad4d14a837acf5de4c1a6c709841e))
 
 ## [0.2.0](https://github.com/sanderdesnaijer/map-gesture-controls/compare/leaflet-v0.1.0...leaflet-v0.2.0) (2026-04-26)
 
