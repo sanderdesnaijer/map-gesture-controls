@@ -50,6 +50,12 @@ function makeMapMock(
 
 // --- Helpers -------------------------------------------------------------------------
 
+type GoogleMap = google.maps.Map;
+
+function asGoogleMap(map: ReturnType<typeof makeMapMock>['map']): GoogleMap {
+  return map as unknown as GoogleMap;
+}
+
 function idle(): StateMachineOutput {
   return { mode: 'idle', panDelta: null, zoomDelta: null, rotateDelta: null };
 }
@@ -95,8 +101,7 @@ describe('GoogleMapsGestureInteraction', () => {
       width: 800,
       height: 600,
     });
-    // @ts-expect-error - we pass a minimal mock, not a full google.maps.Map
-    interaction = new GoogleMapsGestureInteraction(mocks.map);
+    interaction = new GoogleMapsGestureInteraction(asGoogleMap(mocks.map));
   });
 
   afterEach(() => {
@@ -136,9 +141,8 @@ describe('GoogleMapsGestureInteraction', () => {
       zoom: 10,
       heading: 180,
     });
-    // @ts-expect-error
     const rotatedInteraction = new GoogleMapsGestureInteraction(
-      rotatedMocks.map,
+      asGoogleMap(rotatedMocks.map),
     );
 
     rotatedInteraction.apply(panning(0.1, 0.0));
@@ -224,8 +228,7 @@ describe('GoogleMapsGestureInteraction', () => {
 
   it('accumulates rotation from an existing non-zero heading', () => {
     const rotatedMocks = makeMapMock({ heading: 45 });
-    // @ts-expect-error
-    const i = new GoogleMapsGestureInteraction(rotatedMocks.map);
+    const i = new GoogleMapsGestureInteraction(asGoogleMap(rotatedMocks.map));
 
     i.apply(rotating(Math.PI / 4)); // +45 degrees
 
@@ -299,8 +302,7 @@ describe('GoogleMapsGestureInteraction', () => {
   it('does not throw when getZoom returns undefined', () => {
     const nullMocks = makeMapMock();
     nullMocks.map.getZoom = () => undefined as unknown as number;
-    // @ts-expect-error
-    const i = new GoogleMapsGestureInteraction(nullMocks.map);
+    const i = new GoogleMapsGestureInteraction(asGoogleMap(nullMocks.map));
     // Falls back to default zoom of 10 in constructor
     expect(() => i.apply(zooming(0.01))).not.toThrow();
     i.dispose();
@@ -318,8 +320,7 @@ describe('GoogleMapsGestureInteraction', () => {
       removeHandles.push(handle);
       return handle;
     };
-    // @ts-expect-error
-    const i = new GoogleMapsGestureInteraction(m.map);
+    const i = new GoogleMapsGestureInteraction(asGoogleMap(m.map));
     i.dispose();
     expect(removeSpy).toHaveBeenCalledTimes(2);
   });
