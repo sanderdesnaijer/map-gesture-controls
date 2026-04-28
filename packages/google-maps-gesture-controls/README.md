@@ -61,13 +61,13 @@ You need a Google Maps API key and a Map ID from the [Google Cloud Console](http
 
 Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions, use whichever feels more comfortable.
 
-| Gesture | How to perform | Map action |
-| --- | --- | --- |
-| **Pan** | Left fist or pinch, move hand in any direction | Drags the map |
-| **Zoom** | Right fist or pinch, move hand up or down | Zooms in (up) or out (down) |
-| **Rotate** | Both hands fist or pinch, tilt wrists clockwise or counter-clockwise | Rotates the map |
-| **Reset** | Bring both hands together (pray/namaste), hold 1 second | Resets pan, zoom, and rotation to initial state |
-| **Idle** | Any other hand position | Map stays still |
+| Gesture    | How to perform                                                       | Map action                                      |
+| ---------- | -------------------------------------------------------------------- | ----------------------------------------------- |
+| **Pan**    | Left fist or pinch, move hand in any direction                       | Drags the map                                   |
+| **Zoom**   | Right fist or pinch, move hand up or down                            | Zooms in (up) or out (down)                     |
+| **Rotate** | Both hands fist or pinch, tilt wrists clockwise or counter-clockwise | Rotates the map                                 |
+| **Reset**  | Bring both hands together (pray/namaste), hold 1 second              | Resets pan, zoom, and rotation to initial state |
+| **Idle**   | Any other hand position                                              | Map stays still                                 |
 
 ## Configuration
 
@@ -77,18 +77,18 @@ All options are optional. Defaults work well out of the box.
 const controller = new GestureMapController({
   map,
   webcam: {
-    position: 'top-left',   // overlay corner position
+    position: 'top-left', // overlay corner position
     width: 240,
     height: 180,
     opacity: 0.7,
   },
   tuning: {
-    actionDwellMs: 40,      // ms before confirming a gesture
-    releaseGraceMs: 80,     // ms grace period after gesture ends
-    panDeadzonePx: 0,       // direct panning for slow movement
-    smoothingAlpha: 0.35,   // smoother but still responsive
+    actionDwellMs: 40, // ms before confirming a gesture
+    releaseGraceMs: 80, // ms grace period after gesture ends
+    panDeadzonePx: 0, // direct panning for slow movement
+    smoothingAlpha: 0.35, // smoother but still responsive
   },
-  debug: true,              // log gesture state to console
+  debug: true, // log gesture state to console
 });
 ```
 
@@ -98,11 +98,11 @@ See the full configuration reference in the [documentation](https://sanderdesnai
 
 This package re-exports the entire [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core) API, so you only need one import. On top of core, it adds:
 
-| Export | Type | Description |
-| --- | --- | --- |
-| `GestureMapController` | Class | High-level controller that wires gesture detection to a Google Maps instance |
-| `GoogleMapsGestureInteraction` | Class | Low-level Google Maps interaction for custom setups |
-| `GestureMapControllerConfig` | Type | Configuration interface |
+| Export                         | Type  | Description                                                                  |
+| ------------------------------ | ----- | ---------------------------------------------------------------------------- |
+| `GestureMapController`         | Class | High-level controller that wires gesture detection to a Google Maps instance |
+| `GoogleMapsGestureInteraction` | Class | Low-level Google Maps interaction for custom setups                          |
+| `GestureMapControllerConfig`   | Type  | Configuration interface                                                      |
 
 ## Use cases
 
@@ -121,11 +121,11 @@ This package re-exports the entire [`@map-gesture-controls/core`](https://www.np
 
 ## Related packages
 
-| Package | Description |
-| --- | --- |
-| [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core) | Map-agnostic gesture detection engine (included in this package) |
-| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) | OpenLayers integration |
-| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration |
+| Package                                                                                        | Description                                                      |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core)       | Map-agnostic gesture detection engine (included in this package) |
+| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol)           | OpenLayers integration                                           |
+| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration                                              |
 
 ## Documentation
 

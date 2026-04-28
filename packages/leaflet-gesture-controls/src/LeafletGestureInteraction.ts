@@ -9,7 +9,11 @@ type PositionedPane = HTMLElement & {
 };
 
 type ContinuousZoomLeafletMap = LeafletMap & {
-  _move?: (center: LatLng, zoom: number, data?: { pinch: boolean; round: boolean }) => void;
+  _move?: (
+    center: LatLng,
+    zoom: number,
+    data?: { pinch: boolean; round: boolean },
+  ) => void;
   _moveStart?: (zoomChanged: boolean, noMoveStart: boolean) => void;
   _moveEnd?: (zoomChanged: boolean) => void;
 };
@@ -167,22 +171,38 @@ export class LeafletGestureInteraction {
     this.map.eachLayer((layer) => {
       const gridLayer = layer as RotatableGridLayer;
       const currentBuffer = gridLayer.options?.keepBuffer;
-      if (currentBuffer !== undefined && currentBuffer < LeafletGestureInteraction.minRotationTileBuffer) {
-        gridLayer.options!.keepBuffer = LeafletGestureInteraction.minRotationTileBuffer;
+      if (
+        currentBuffer !== undefined &&
+        currentBuffer < LeafletGestureInteraction.minRotationTileBuffer
+      ) {
+        gridLayer.options!.keepBuffer =
+          LeafletGestureInteraction.minRotationTileBuffer;
       }
 
-      if (!gridLayer._getTiledPixelBounds || gridLayer._mgcOriginalGetTiledPixelBounds) return;
+      if (
+        !gridLayer._getTiledPixelBounds ||
+        gridLayer._mgcOriginalGetTiledPixelBounds
+      )
+        return;
 
-      gridLayer._mgcOriginalGetTiledPixelBounds = gridLayer._getTiledPixelBounds;
-      gridLayer._getTiledPixelBounds = (center) => this.getRotatedTiledPixelBounds(gridLayer, center);
+      gridLayer._mgcOriginalGetTiledPixelBounds =
+        gridLayer._getTiledPixelBounds;
+      gridLayer._getTiledPixelBounds = (center) =>
+        this.getRotatedTiledPixelBounds(gridLayer, center);
       this.patchedGridLayers.add(gridLayer);
     });
 
     this.tileBufferPrepared = true;
   }
 
-  private getRotatedTiledPixelBounds(layer: RotatableGridLayer, center: LatLng): Bounds {
-    const originalBounds = layer._mgcOriginalGetTiledPixelBounds!.call(layer, center);
+  private getRotatedTiledPixelBounds(
+    layer: RotatableGridLayer,
+    center: LatLng,
+  ): Bounds {
+    const originalBounds = layer._mgcOriginalGetTiledPixelBounds!.call(
+      layer,
+      center,
+    );
     if (!this.currentBearing) return originalBounds;
 
     const tileZoom = layer._tileZoom ?? this.map.getZoom();
@@ -191,7 +211,10 @@ export class LeafletGestureInteraction {
       _animateToZoom?: number;
     };
     const mapZoom = mapState._animatingZoom
-      ? Math.max(mapState._animateToZoom ?? this.map.getZoom(), this.map.getZoom())
+      ? Math.max(
+          mapState._animateToZoom ?? this.map.getZoom(),
+          this.map.getZoom(),
+        )
       : this.map.getZoom();
     const scale = this.map.getZoomScale(mapZoom, tileZoom);
     const pixelCenter = this.map.project(center, tileZoom).floor();
@@ -204,7 +227,9 @@ export class LeafletGestureInteraction {
     const halfSize = size.multiplyBy(0);
     halfSize.x = rotatedWidth / (scale * 2);
     halfSize.y = rotatedHeight / (scale * 2);
-    const rotatedBounds = Object.create(Object.getPrototypeOf(originalBounds)) as Bounds & {
+    const rotatedBounds = Object.create(
+      Object.getPrototypeOf(originalBounds),
+    ) as Bounds & {
       min: Point;
       max: Point;
     };
@@ -269,7 +294,9 @@ export class LeafletGestureInteraction {
 
     const mapPane = this.map.getPane('mapPane') as HTMLElement | undefined;
     const tilePane = this.map.getPane('tilePane') as HTMLElement | undefined;
-    const overlayPane = this.map.getPane('overlayPane') as HTMLElement | undefined;
+    const overlayPane = this.map.getPane('overlayPane') as
+      | HTMLElement
+      | undefined;
     if (!mapPane) return null;
 
     const rotatePane = document.createElement('div');
@@ -282,7 +309,9 @@ export class LeafletGestureInteraction {
     rotatePane.style.height = '100%';
 
     mapPane.insertBefore(rotatePane, tilePane ?? overlayPane ?? null);
-    this.rotatedPanes = [tilePane, overlayPane].filter((pane): pane is HTMLElement => !!pane);
+    this.rotatedPanes = [tilePane, overlayPane].filter(
+      (pane): pane is HTMLElement => !!pane,
+    );
     this.rotatedPanes.forEach((pane) => rotatePane.appendChild(pane));
 
     this.rotatePaneEl = rotatePane;
@@ -316,7 +345,10 @@ export class LeafletGestureInteraction {
         this.isZooming = true;
       }
 
-      continuousZoomMap._move(this.map.getCenter(), this.currentZoom, { pinch: true, round: false });
+      continuousZoomMap._move(this.map.getCenter(), this.currentZoom, {
+        pinch: true,
+        round: false,
+      });
 
       if (this.zoomSettleTimer !== null) clearTimeout(this.zoomSettleTimer);
       this.zoomSettleTimer = setTimeout(() => {
@@ -399,7 +431,9 @@ export class LeafletGestureInteraction {
     const mapPane = this.map.getPane('mapPane') as HTMLElement | undefined;
 
     if (mapPane) {
-      this.rotatedPanes.forEach((pane) => mapPane.insertBefore(pane, this.rotatePaneEl));
+      this.rotatedPanes.forEach((pane) =>
+        mapPane.insertBefore(pane, this.rotatePaneEl),
+      );
     }
     this.rotatePaneEl.remove();
     this.rotatePaneEl = null;

@@ -105,10 +105,16 @@ export class GestureStateMachine {
       leftHand.gesture === 'openPalm' &&
       rightHand.gesture === 'openPalm';
     const oneFist =
-      (leftHand !== null && leftHand.gesture === 'fist' && rightHand === null) ||
+      (leftHand !== null &&
+        leftHand.gesture === 'fist' &&
+        rightHand === null) ||
       (rightHand !== null && rightHand.gesture === 'fist' && leftHand === null);
 
-    const desired: GestureMode = bothOpen ? 'zooming' : oneFist ? 'panning' : 'idle';
+    const desired: GestureMode = bothOpen
+      ? 'zooming'
+      : oneFist
+        ? 'panning'
+        : 'idle';
 
     // ── idle ──────────────────────────────────────────────────────────────────
     if (this.mode === 'idle') {
@@ -175,7 +181,10 @@ export class GestureStateMachine {
         return this.buildOutput(null, null);
       }
 
-      const rawDist = getTwoHandDistance(leftHand.landmarks, rightHand.landmarks);
+      const rawDist = getTwoHandDistance(
+        leftHand.landmarks,
+        rightHand.landmarks,
+      );
       const smoothDist = this.zoomSmoother.update(rawDist);
 
       let zoomDelta: number | null = null;

@@ -1,14 +1,14 @@
-import Map from "ol/Map.js";
-import View from "ol/View.js";
-import TileLayer from "ol/layer/Tile.js";
-import OSM from "ol/source/OSM.js";
-import { fromLonLat } from "ol/proj.js";
+import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import TileLayer from 'ol/layer/Tile.js';
+import OSM from 'ol/source/OSM.js';
+import { fromLonLat } from 'ol/proj.js';
 
-import { GestureMapController } from "@map-gesture-controls/ol";
+import { GestureMapController } from '@map-gesture-controls/ol';
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
 const map = new Map({
-  target: "map",
+  target: 'map',
   layers: [
     new TileLayer({
       source: new OSM(),
@@ -23,24 +23,24 @@ const map = new Map({
 
 let gestureCtrl: GestureMapController | null = null;
 
-const btnStart = document.getElementById("btn-start") as HTMLButtonElement;
-const btnStop = document.getElementById("btn-stop") as HTMLButtonElement;
-const statusEl = document.getElementById("status") as HTMLSpanElement;
+const btnStart = document.getElementById('btn-start') as HTMLButtonElement;
+const btnStop = document.getElementById('btn-stop') as HTMLButtonElement;
+const statusEl = document.getElementById('status') as HTMLSpanElement;
 
 function setStatus(msg: string): void {
   statusEl.textContent = msg;
 }
 
-btnStart.addEventListener("click", async () => {
+btnStart.addEventListener('click', async () => {
   btnStart.disabled = true;
-  setStatus("Requesting webcam…");
+  setStatus('Requesting webcam…');
 
   try {
     gestureCtrl = new GestureMapController({
       map,
       webcam: {
-        mode: "corner",
-        position: "bottom-right",
+        mode: 'corner',
+        position: 'bottom-right',
         width: 640,
         height: 480,
         opacity: 0.8,
@@ -51,18 +51,18 @@ btnStart.addEventListener("click", async () => {
     await gestureCtrl.start();
 
     btnStop.disabled = false;
-    setStatus("Gestures active");
+    setStatus('Gestures active');
   } catch (err) {
     console.error(err);
-    setStatus("Error: check console");
+    setStatus('Error: check console');
     btnStart.disabled = false;
   }
 });
 
-btnStop.addEventListener("click", () => {
+btnStop.addEventListener('click', () => {
   gestureCtrl?.stop();
   gestureCtrl = null;
   btnStop.disabled = true;
   btnStart.disabled = false;
-  setStatus("Gestures disabled");
+  setStatus('Gestures disabled');
 });

@@ -24,7 +24,9 @@
   border: 1px solid var(--vp-c-brand-1);
   border-radius: 8px;
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 .demo-open-btn:hover {
   background: var(--vp-c-brand-soft);
@@ -72,7 +74,9 @@
   border-radius: 12px;
   padding: 24px;
   background: var(--vp-c-bg-soft);
-  transition: border-color 0.25s, background-color 0.25s;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s;
   display: flex;
   flex-direction: column;
 }
@@ -139,7 +143,10 @@
   text-decoration: none;
   border: 1px solid var(--vp-c-divider);
   color: var(--vp-c-text-2);
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .map-library-link:hover {

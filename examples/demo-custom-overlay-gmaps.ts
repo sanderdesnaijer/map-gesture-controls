@@ -26,7 +26,12 @@ const mapId = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID ?? '';
     try {
       ctrl = new GestureMapController({
         map,
-        webcam: { position: 'bottom-left', width: 200, height: 150, opacity: 0.6 },
+        webcam: {
+          position: 'bottom-left',
+          width: 200,
+          height: 150,
+          opacity: 0.6,
+        },
       });
       await ctrl.start();
       btnStop.disabled = false;

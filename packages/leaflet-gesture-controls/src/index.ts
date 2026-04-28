@@ -1,7 +1,7 @@
-export { GestureMapController } from "./GestureMapController.js";
-export { LeafletGestureInteraction } from "./LeafletGestureInteraction.js";
+export { GestureMapController } from './GestureMapController.js';
+export { LeafletGestureInteraction } from './LeafletGestureInteraction.js';
 
-export type { GestureMapControllerConfig } from "./types.js";
+export type { GestureMapControllerConfig } from './types.js';
 
 // Re-export the full core public API so consumers only need one package
 export {
@@ -16,7 +16,7 @@ export {
   DEFAULT_TUNING_CONFIG,
   LANDMARKS,
   COLORS,
-} from "@map-gesture-controls/core";
+} from '@map-gesture-controls/core';
 
 export type {
   GestureMode,
@@ -30,4 +30,4 @@ export type {
   SmoothedPoint,
   Point2D,
   HandLandmark,
-} from "@map-gesture-controls/core";
+} from '@map-gesture-controls/core';

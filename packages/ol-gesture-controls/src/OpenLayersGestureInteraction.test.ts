@@ -4,28 +4,30 @@ import type { StateMachineOutput } from '@map-gesture-controls/core';
 
 // ─── Minimal OL map mock ──────────────────────────────────────────────────────
 
-function makeMapMock(opts: {
-  center?: [number, number];
-  zoom?: number;
-  rotation?: number;
-  resolution?: number;
-  size?: [number, number];
-} = {}) {
+function makeMapMock(
+  opts: {
+    center?: [number, number];
+    zoom?: number;
+    rotation?: number;
+    resolution?: number;
+    size?: [number, number];
+  } = {},
+) {
   const center: [number, number] = opts.center ?? [0, 0];
   const zoom = opts.zoom ?? 5;
   const rotation = opts.rotation ?? 0;
   const resolution = opts.resolution ?? 100;
   const size: [number, number] = opts.size ?? [800, 600];
 
-  const setCenter   = vi.fn();
-  const animate     = vi.fn();
+  const setCenter = vi.fn();
+  const animate = vi.fn();
   const setRotation = vi.fn();
 
   const view = {
-    getResolution:   () => resolution,
-    getZoom:         () => zoom,
-    getRotation:     () => rotation,
-    getCenter:       () => [...center] as [number, number],
+    getResolution: () => resolution,
+    getZoom: () => zoom,
+    getRotation: () => rotation,
+    getCenter: () => [...center] as [number, number],
     setCenter,
     animate,
     setRotation,
@@ -62,7 +64,16 @@ function makeMapMock(opts: {
     },
   };
 
-  return { map, view, setCenter, animate, setRotation, centerPixel, resolution, size };
+  return {
+    map,
+    view,
+    setCenter,
+    animate,
+    setRotation,
+    centerPixel,
+    resolution,
+    size,
+  };
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -72,15 +83,30 @@ function idle(): StateMachineOutput {
 }
 
 function panning(dx: number, dy: number): StateMachineOutput {
-  return { mode: 'panning', panDelta: { x: dx, y: dy }, zoomDelta: null, rotateDelta: null };
+  return {
+    mode: 'panning',
+    panDelta: { x: dx, y: dy },
+    zoomDelta: null,
+    rotateDelta: null,
+  };
 }
 
 function zooming(delta: number): StateMachineOutput {
-  return { mode: 'zooming', panDelta: null, zoomDelta: delta, rotateDelta: null };
+  return {
+    mode: 'zooming',
+    panDelta: null,
+    zoomDelta: delta,
+    rotateDelta: null,
+  };
 }
 
 function rotating(delta: number): StateMachineOutput {
-  return { mode: 'rotating', panDelta: null, zoomDelta: null, rotateDelta: delta };
+  return {
+    mode: 'rotating',
+    panDelta: null,
+    zoomDelta: null,
+    rotateDelta: delta,
+  };
 }
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -90,7 +116,13 @@ describe('OpenLayersGestureInteraction', () => {
   let mocks: ReturnType<typeof makeMapMock>;
 
   beforeEach(() => {
-    mocks = makeMapMock({ center: [0, 0], zoom: 5, rotation: 0, resolution: 100, size: [800, 600] });
+    mocks = makeMapMock({
+      center: [0, 0],
+      zoom: 5,
+      rotation: 0,
+      resolution: 100,
+      size: [800, 600],
+    });
     // @ts-expect-error - we pass a minimal mock, not a full ol/Map instance
     interaction = new OpenLayersGestureInteraction(mocks.map);
   });
@@ -114,7 +146,10 @@ describe('OpenLayersGestureInteraction', () => {
   it('negates dx (webcam mirror) and applies panScale', () => {
     const dx = 0.1;
     const dy = 0.0;
-    const { resolution, size: [mapW] } = mocks;
+    const {
+      resolution,
+      size: [mapW],
+    } = mocks;
     const panScale = 2.0;
 
     interaction.apply(panning(dx, dy));
@@ -128,7 +163,10 @@ describe('OpenLayersGestureInteraction', () => {
 
   it('applies positive dy upward (screen-space pan, y axis inverted)', () => {
     const dy = 0.05;
-    const { resolution, size: [, mapH] } = mocks;
+    const {
+      resolution,
+      size: [, mapH],
+    } = mocks;
     const panScale = 2.0;
 
     interaction.apply(panning(0, dy));
@@ -143,7 +181,12 @@ describe('OpenLayersGestureInteraction', () => {
   it('pans correctly at non-zero map rotation (screen-space pan)', () => {
     // At 90-degree rotation, a right-hand move (dx > 0) should still pan
     // the center left on screen (negated dx), not in rotated map coordinates.
-    const { map } = makeMapMock({ center: [0, 0], rotation: Math.PI / 2, resolution: 100, size: [800, 600] });
+    const { map } = makeMapMock({
+      center: [0, 0],
+      rotation: Math.PI / 2,
+      resolution: 100,
+      size: [800, 600],
+    });
     // @ts-expect-error
     const i = new OpenLayersGestureInteraction(map);
     const setRotatedCenter = vi.spyOn(map.getView(), 'setCenter');
@@ -176,7 +219,10 @@ describe('OpenLayersGestureInteraction', () => {
 
     interaction.apply(zooming(delta));
 
-    const args = mocks.animate.mock.calls[0][0] as { zoom: number; duration: number };
+    const args = mocks.animate.mock.calls[0][0] as {
+      zoom: number;
+      duration: number;
+    };
     expect(args.zoom).toBeCloseTo(currentZoom + delta * zoomScale);
     expect(args.duration).toBe(0);
   });
@@ -242,7 +288,9 @@ describe('OpenLayersGestureInteraction', () => {
 
     i.apply(rotating(0.5));
 
-    expect(setRotationSpy).toHaveBeenCalledWith(expect.closeTo(1.0 + 0.5 * rotateScale, 5));
+    expect(setRotationSpy).toHaveBeenCalledWith(
+      expect.closeTo(1.0 + 0.5 * rotateScale, 5),
+    );
   });
 
   // ── gracefully handles missing view data ──────────────────────────────────

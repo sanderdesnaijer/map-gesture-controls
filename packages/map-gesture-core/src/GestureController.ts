@@ -1,4 +1,7 @@
-import type { HandLandmarker, HandLandmarkerResult } from '@mediapipe/tasks-vision';
+import type {
+  HandLandmarker,
+  HandLandmarkerResult,
+} from '@mediapipe/tasks-vision';
 import { FilesetResolver } from '@mediapipe/tasks-vision';
 import type { GestureFrame, TuningConfig } from './types.js';
 import { createHandClassifier } from './gestureClassifier.js';
@@ -66,7 +69,9 @@ export class GestureController {
     this.videoEl.srcObject = this.stream;
 
     await new Promise<void>((resolve) => {
-      this.videoEl!.addEventListener('loadeddata', () => resolve(), { once: true });
+      this.videoEl!.addEventListener('loadeddata', () => resolve(), {
+        once: true,
+      });
     });
 
     return this.videoEl;
@@ -121,17 +126,23 @@ export class GestureController {
     this.onFrame(frame);
   }
 
-  private buildFrame(result: HandLandmarkerResult, timestamp: number): GestureFrame {
-    const hands: import('./types.js').DetectedHand[] = result.landmarks.map((landmarks, i) => {
-      const handednessArr = result.handedness[i];
-      const rawLabel = handednessArr?.[0]?.categoryName;
-      const label: import('./types.js').HandednessLabel =
-        rawLabel === 'Left' ? 'Left' : 'Right';
-      const score = handednessArr?.[0]?.score ?? 0;
-      const classify = label === 'Left' ? this.leftClassifier : this.rightClassifier;
-      const gesture = classify(landmarks);
-      return { handedness: label, score, landmarks, gesture };
-    });
+  private buildFrame(
+    result: HandLandmarkerResult,
+    timestamp: number,
+  ): GestureFrame {
+    const hands: import('./types.js').DetectedHand[] = result.landmarks.map(
+      (landmarks, i) => {
+        const handednessArr = result.handedness[i];
+        const rawLabel = handednessArr?.[0]?.categoryName;
+        const label: import('./types.js').HandednessLabel =
+          rawLabel === 'Left' ? 'Left' : 'Right';
+        const score = handednessArr?.[0]?.score ?? 0;
+        const classify =
+          label === 'Left' ? this.leftClassifier : this.rightClassifier;
+        const gesture = classify(landmarks);
+        return { handedness: label, score, landmarks, gesture };
+      },
+    );
 
     const leftHand = hands.find((h) => h.handedness === 'Left') ?? null;
     const rightHand = hands.find((h) => h.handedness === 'Right') ?? null;

@@ -124,14 +124,16 @@ class FakePoint {
   }
 }
 
-function makeMapMock(opts: {
-  center?: [number, number];
-  zoom?: number;
-  minZoom?: number;
-  maxZoom?: number;
-  size?: { x: number; y: number };
-  keepBuffer?: number;
-} = {}) {
+function makeMapMock(
+  opts: {
+    center?: [number, number];
+    zoom?: number;
+    minZoom?: number;
+    maxZoom?: number;
+    size?: { x: number; y: number };
+    keepBuffer?: number;
+  } = {},
+) {
   const zoom = opts.zoom ?? 5;
   const minZoom = opts.minZoom ?? 0;
   const maxZoom = opts.maxZoom ?? 18;
@@ -149,8 +151,9 @@ function makeMapMock(opts: {
     },
     redraw,
     _tileZoom: zoom,
-    _getTiledPixelBounds: vi.fn((_center: { lat: number; lng: number }) =>
-      new FakeBounds(new FakePoint(0, 0), new FakePoint(0, 0)),
+    _getTiledPixelBounds: vi.fn(
+      (_center: { lat: number; lng: number }) =>
+        new FakeBounds(new FakePoint(0, 0), new FakePoint(0, 0)),
     ),
     _onMoveEnd: onMoveEnd,
   };
@@ -230,15 +233,30 @@ function idle(): StateMachineOutput {
 }
 
 function panning(dx: number, dy: number): StateMachineOutput {
-  return { mode: 'panning', panDelta: { x: dx, y: dy }, zoomDelta: null, rotateDelta: null };
+  return {
+    mode: 'panning',
+    panDelta: { x: dx, y: dy },
+    zoomDelta: null,
+    rotateDelta: null,
+  };
 }
 
 function zooming(delta: number): StateMachineOutput {
-  return { mode: 'zooming', panDelta: null, zoomDelta: delta, rotateDelta: null };
+  return {
+    mode: 'zooming',
+    panDelta: null,
+    zoomDelta: delta,
+    rotateDelta: null,
+  };
 }
 
 function rotating(delta: number): StateMachineOutput {
-  return { mode: 'rotating', panDelta: null, zoomDelta: null, rotateDelta: delta };
+  return {
+    mode: 'rotating',
+    panDelta: null,
+    zoomDelta: null,
+    rotateDelta: delta,
+  };
 }
 
 // --- Tests ------------------------------------------------------------------------------
@@ -248,7 +266,12 @@ describe('LeafletGestureInteraction', () => {
   let mocks: ReturnType<typeof makeMapMock>;
 
   beforeEach(() => {
-    mocks = makeMapMock({ zoom: 5, minZoom: 0, maxZoom: 18, size: { x: 800, y: 600 } });
+    mocks = makeMapMock({
+      zoom: 5,
+      minZoom: 0,
+      maxZoom: 18,
+      size: { x: 800, y: 600 },
+    });
     // Stub document.createElement so the rotate-pane wrapper can be created in node env.
     vi.stubGlobal('document', {
       createElement: (_tag: string) => makeFakeEl(),
@@ -284,7 +307,10 @@ describe('LeafletGestureInteraction', () => {
 
     interaction.apply(panning(dx, 0));
 
-    const [point, options] = mocks.panBy.mock.calls[0] as [number[], { animate: boolean }];
+    const [point, options] = mocks.panBy.mock.calls[0] as [
+      number[],
+      { animate: boolean },
+    ];
     // pixelDx = -dx * mapW * panScale = -0.1 * 800 * 3.5 = -280
     expect(point[0]).toBeCloseTo(-dx * mapW * panScale);
     expect(options.animate).toBe(false);
@@ -351,7 +377,8 @@ describe('LeafletGestureInteraction', () => {
     // Delta that would push past 18: 17 + 1.0 * 15 = 32 -> clamped to 18
     i.apply(zooming(1.0));
 
-    const [_center, newZoom] = (map._move as ReturnType<typeof vi.fn>).mock.calls[0] as [object, number];
+    const [_center, newZoom] = (map._move as ReturnType<typeof vi.fn>).mock
+      .calls[0] as [object, number];
     expect(newZoom).toBe(18);
   });
 
@@ -363,7 +390,8 @@ describe('LeafletGestureInteraction', () => {
     // Delta that would push below 0: 1 + (-1.0) * 15 = -14 -> clamped to 0
     i.apply(zooming(-1.0));
 
-    const [_center, newZoom] = (map._move as ReturnType<typeof vi.fn>).mock.calls[0] as [object, number];
+    const [_center, newZoom] = (map._move as ReturnType<typeof vi.fn>).mock
+      .calls[0] as [object, number];
     expect(newZoom).toBe(0);
   });
 
@@ -381,7 +409,10 @@ describe('LeafletGestureInteraction', () => {
 
     i.apply(zooming(0.01));
 
-    const [newZoom, options] = setZoom.mock.calls[0] as [number, { animate: boolean }];
+    const [newZoom, options] = setZoom.mock.calls[0] as [
+      number,
+      { animate: boolean },
+    ];
     expect(newZoom).toBeCloseTo(5 + 0.01 * 15);
     expect(options.animate).toBe(false);
   });
@@ -445,7 +476,10 @@ describe('LeafletGestureInteraction', () => {
 
   it('uses rotated viewport dimensions for tile bounds', () => {
     interaction.apply(rotating(Math.PI / 4));
-    const bounds = mocks.tileLayer._getTiledPixelBounds({ lat: 52.37, lng: 4.9 });
+    const bounds = mocks.tileLayer._getTiledPixelBounds({
+      lat: 52.37,
+      lng: 4.9,
+    });
 
     expect(bounds.min.x).toBeCloseTo(1000 - 494.9747);
     expect(bounds.max.x).toBeCloseTo(1000 + 494.9747);
@@ -509,7 +543,9 @@ describe('LeafletGestureInteraction', () => {
   it('reuses the same rotate-pane wrapper across multiple rotations', () => {
     interaction.apply(rotating(Math.PI / 4));
     interaction.apply(rotating(Math.PI / 4));
-    const rotatePanes = mocks.containerEl.querySelectorAll('.leaflet-rotate-pane');
+    const rotatePanes = mocks.containerEl.querySelectorAll(
+      '.leaflet-rotate-pane',
+    );
     expect(rotatePanes.length).toBe(1);
   });
 
@@ -549,7 +585,8 @@ describe('LeafletGestureInteraction', () => {
 
     // Next zoom delta should be relative to 10, not 5
     i.apply(zooming(0.01));
-    const [_center, newZoom] = (map._move as ReturnType<typeof vi.fn>).mock.calls[0] as [object, number];
+    const [_center, newZoom] = (map._move as ReturnType<typeof vi.fn>).mock
+      .calls[0] as [object, number];
     expect(newZoom).toBeCloseTo(10 + 0.01 * 15);
   });
 });

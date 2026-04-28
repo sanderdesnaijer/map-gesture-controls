@@ -13,9 +13,9 @@ const map = new Map({
 });
 map.updateSize();
 
-const ctrl   = new GestureMapController({ map });
-const btn    = document.getElementById('toggle-btn') as HTMLButtonElement;
-const status = document.getElementById('status')     as HTMLSpanElement;
+const ctrl = new GestureMapController({ map });
+const btn = document.getElementById('toggle-btn') as HTMLButtonElement;
+const status = document.getElementById('status') as HTMLSpanElement;
 let active = false;
 
 btn.addEventListener('click', async () => {

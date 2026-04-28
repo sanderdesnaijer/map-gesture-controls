@@ -41,14 +41,23 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke": "node scripts/smoke-packages.mjs",
-    "check": "npm run type-check && npm test && npm run build && npm run smoke"
+    "check": "npm run format:check && npm run build && npm run type-check && npm test && npm run smoke",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs,json,md,html,css}": "prettier --write"
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",
     "@types/google.maps": "^3.58.1",
     "@types/leaflet": "^1.9.8",
+    "husky": "^9.1.7",
     "leaflet": "^1.9.4",
+    "lint-staged": "^16.4.0",
     "ol": "^10.2.1",
+    "prettier": "^3.8.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vitepress": "^1.6.3",

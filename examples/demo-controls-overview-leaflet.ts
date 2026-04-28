@@ -1,9 +1,9 @@
-import "./fullscreen-toolbar";
-import L from "leaflet";
-import { GestureMapController } from "@map-gesture-controls/leaflet";
+import './fullscreen-toolbar';
+import L from 'leaflet';
+import { GestureMapController } from '@map-gesture-controls/leaflet';
 
-const map = L.map("map").setView([52.37, 4.9], 6);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+const map = L.map('map').setView([52.37, 4.9], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   keepBuffer: 4,
@@ -12,19 +12,19 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 let ctrl: GestureMapController | null = null;
-const btnStart = document.getElementById("btn-start") as HTMLButtonElement;
-const btnStop = document.getElementById("btn-stop") as HTMLButtonElement;
-const status = document.getElementById("status") as HTMLSpanElement;
+const btnStart = document.getElementById('btn-start') as HTMLButtonElement;
+const btnStop = document.getElementById('btn-stop') as HTMLButtonElement;
+const status = document.getElementById('status') as HTMLSpanElement;
 
-btnStart.addEventListener("click", async () => {
+btnStart.addEventListener('click', async () => {
   btnStart.disabled = true;
-  status.textContent = "Starting…";
+  status.textContent = 'Starting…';
   try {
     ctrl = new GestureMapController({
       map,
       webcam: {
-        mode: "corner",
-        position: "bottom-right",
+        mode: 'corner',
+        position: 'bottom-right',
         width: 240,
         height: 180,
         opacity: 0.8,
@@ -32,17 +32,17 @@ btnStart.addEventListener("click", async () => {
     });
     await ctrl.start();
     btnStop.disabled = false;
-    status.textContent = "Gestures active";
+    status.textContent = 'Gestures active';
   } catch {
-    status.textContent = "Error: check console";
+    status.textContent = 'Error: check console';
     btnStart.disabled = false;
   }
 });
 
-btnStop.addEventListener("click", () => {
+btnStop.addEventListener('click', () => {
   ctrl?.stop();
   ctrl = null;
   btnStop.disabled = true;
   btnStart.disabled = false;
-  status.textContent = "Gestures off";
+  status.textContent = 'Gestures off';
 });

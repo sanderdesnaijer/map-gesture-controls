@@ -1,4 +1,9 @@
-import type { GestureMapControllerConfig, GestureFrame, WebcamConfig, TuningConfig } from './types.js';
+import type {
+  GestureMapControllerConfig,
+  GestureFrame,
+  WebcamConfig,
+  TuningConfig,
+} from './types.js';
 import { mergeConfig } from './constants.js';
 import { GestureController } from './GestureController.js';
 import { GestureStateMachine } from './GestureStateMachine.js';
@@ -19,7 +24,12 @@ import { OpenLayersGestureInteraction } from './OpenLayersGestureInteraction.js'
  *   ctrl.stop();
  */
 export class GestureMapController {
-  private config: { map: GestureMapControllerConfig['map']; webcam: WebcamConfig; tuning: TuningConfig; debug: boolean };
+  private config: {
+    map: GestureMapControllerConfig['map'];
+    webcam: WebcamConfig;
+    tuning: TuningConfig;
+    debug: boolean;
+  };
   private gestureController: GestureController;
   private stateMachine: GestureStateMachine;
   private overlay: WebcamOverlay;
@@ -30,7 +40,10 @@ export class GestureMapController {
   private paused = false;
 
   constructor(userConfig: GestureMapControllerConfig) {
-    const { webcam: webcamConfig, tuning: tuningConfig } = mergeConfig(userConfig.webcam, userConfig.tuning);
+    const { webcam: webcamConfig, tuning: tuningConfig } = mergeConfig(
+      userConfig.webcam,
+      userConfig.tuning,
+    );
 
     this.config = {
       map: userConfig.map,
@@ -45,7 +58,11 @@ export class GestureMapController {
 
     this.stateMachine = new GestureStateMachine(tuningConfig);
     this.overlay = new WebcamOverlay(webcamConfig);
-    this.interaction = new OpenLayersGestureInteraction(userConfig.map, tuningConfig.panScale, tuningConfig.zoomScale);
+    this.interaction = new OpenLayersGestureInteraction(
+      userConfig.map,
+      tuningConfig.panScale,
+      tuningConfig.zoomScale,
+    );
   }
 
   /**
@@ -79,7 +96,10 @@ export class GestureMapController {
       cancelAnimationFrame(this.rafHandle);
       this.rafHandle = null;
     }
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange,
+    );
     this.started = false;
     this.paused = false;
   }

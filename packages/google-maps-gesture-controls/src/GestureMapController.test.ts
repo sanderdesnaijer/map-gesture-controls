@@ -9,8 +9,14 @@ import { LANDMARKS } from '@map-gesture-controls/core';
  * logic into a standalone helper that mirrors the implementation exactly, so
  * we can cover the geometry without spinning up a full Google Maps + MediaPipe stack.
  */
-function makeLandmarks(overrides: Record<number, Partial<HandLandmark>> = {}): HandLandmark[] {
-  const lm: HandLandmark[] = Array.from({ length: 21 }, () => ({ x: 0.5, y: 0.5, z: 0 }));
+function makeLandmarks(
+  overrides: Record<number, Partial<HandLandmark>> = {},
+): HandLandmark[] {
+  const lm: HandLandmark[] = Array.from({ length: 21 }, () => ({
+    x: 0.5,
+    y: 0.5,
+    z: 0,
+  }));
   for (const [idx, vals] of Object.entries(overrides)) {
     lm[Number(idx)] = { ...lm[Number(idx)], ...vals };
   }
@@ -30,49 +36,53 @@ function isPrayPose(left: HandLandmark[], right: HandLandmark[]): boolean {
 
 describe('isPrayPose (Google Maps)', () => {
   it('returns true when wrists are at the same position', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('returns true when wrists are close (distance < 0.45)', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.45, y: 0.6 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.45, y: 0.6 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.55, y: 0.6 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('returns true when wrists are just inside the threshold', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.44, y: 0.5 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
+    const right = makeLandmarks({
+      [LANDMARKS.WRIST]: { x: 0.5 + 0.44, y: 0.5 },
+    });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('returns false when wrists are outside the threshold', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.46, y: 0.5 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
+    const right = makeLandmarks({
+      [LANDMARKS.WRIST]: { x: 0.5 + 0.46, y: 0.5 },
+    });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
   it('returns false when wrists are far apart horizontally', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
   it('returns false when wrists are far apart vertically', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.1 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.1 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.8 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
   it('uses Euclidean distance (diagonal wrists just inside threshold)', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.345, y: 0.345 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.345, y: 0.345 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.655, y: 0.655 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('uses Euclidean distance (diagonal wrists just outside threshold)', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.335, y: 0.335 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.335, y: 0.335 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.665, y: 0.665 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
@@ -171,9 +181,9 @@ describe('reset dwell logic (Google Maps)', () => {
     const { update, resets } = makeResetTracker(1000, 300);
     update(0, true);
     update(500, true);
-    update(600, false);   // pose dropped, grace starts
-    update(900, false);   // 300 ms later, grace expires
-    update(1000, true);   // restart from zero
+    update(600, false); // pose dropped, grace starts
+    update(900, false); // 300 ms later, grace expires
+    update(1000, true); // restart from zero
     expect(update(1100, true)).toBeCloseTo(0.1);
     expect(resets).toHaveLength(0);
   });
@@ -182,8 +192,8 @@ describe('reset dwell logic (Google Maps)', () => {
     const { update, resets } = makeResetTracker(1000, 300);
     update(0, true);
     update(500, true);
-    update(550, false);   // brief dropout, grace starts
-    update(600, true);    // back within grace window (50 ms gap)
+    update(550, false); // brief dropout, grace starts
+    update(600, true); // back within grace window (50 ms gap)
     expect(update(700, true)).toBeCloseTo(0.7);
     expect(resets).toHaveLength(0);
   });
@@ -191,12 +201,12 @@ describe('reset dwell logic (Google Maps)', () => {
   it('can trigger again after pose is broken and grace period expires', () => {
     const { update, resets } = makeResetTracker(1000, 300);
     update(0, true);
-    update(1000, true);   // first trigger
+    update(1000, true); // first trigger
     expect(resets).toHaveLength(1);
-    update(1001, false);  // release, grace starts
-    update(1400, false);  // grace expires, timer cleared
-    update(2000, true);   // new attempt starts from zero
-    update(3000, true);   // second trigger
+    update(1001, false); // release, grace starts
+    update(1400, false); // grace expires, timer cleared
+    update(2000, true); // new attempt starts from zero
+    update(3000, true); // second trigger
     expect(resets).toHaveLength(2);
   });
 });

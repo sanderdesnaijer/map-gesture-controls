@@ -3,7 +3,11 @@ export { GestureController } from './GestureController.js';
 export { GestureStateMachine } from './GestureStateMachine.js';
 export { WebcamOverlay } from './WebcamOverlay.js';
 export { OpenLayersGestureInteraction } from './OpenLayersGestureInteraction.js';
-export { classifyGesture, getHandSize, getTwoHandDistance } from './gestureClassifier.js';
+export {
+  classifyGesture,
+  getHandSize,
+  getTwoHandDistance,
+} from './gestureClassifier.js';
 
 export type {
   GestureMode,

@@ -125,8 +125,7 @@ function fail(msg) {
 
 function isAllowed(filePath, allowedPaths) {
   return allowedPaths.some(
-    (prefix) =>
-      filePath === prefix || filePath.startsWith(prefix),
+    (prefix) => filePath === prefix || filePath.startsWith(prefix),
   );
 }
 
@@ -152,10 +151,7 @@ function checkPackageJsonPaths(pkgDir, pkgJson) {
   // Check conditional exports
   if (pkgJson.exports) {
     for (const [key, value] of Object.entries(pkgJson.exports)) {
-      const paths =
-        typeof value === 'string'
-          ? { default: value }
-          : value;
+      const paths = typeof value === 'string' ? { default: value } : value;
       for (const [condition, target] of Object.entries(paths)) {
         if (typeof target !== 'string') continue;
         const abs = resolve(pkgDir, target);

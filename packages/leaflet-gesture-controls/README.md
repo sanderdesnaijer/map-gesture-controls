@@ -38,13 +38,13 @@ npm install -D @types/leaflet
 ## Quick start
 
 ```ts
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { GestureMapController } from "@map-gesture-controls/leaflet";
-import "@map-gesture-controls/leaflet/style.css";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { GestureMapController } from '@map-gesture-controls/leaflet';
+import '@map-gesture-controls/leaflet/style.css';
 
-const map = L.map("map").setView([52.37, 4.9], 10);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+const map = L.map('map').setView([52.37, 4.9], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
@@ -52,11 +52,11 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 const controller = new GestureMapController({ map });
 
 // Must be called from a user gesture (e.g. button click) for webcam permission
-document.getElementById("start-btn")!.addEventListener("click", async () => {
+document.getElementById('start-btn')!.addEventListener('click', async () => {
   await controller.start();
 });
 
-document.getElementById("stop-btn")!.addEventListener("click", () => {
+document.getElementById('stop-btn')!.addEventListener('click', () => {
   controller.stop();
 });
 ```
@@ -91,7 +91,7 @@ All options are optional. Defaults work well out of the box.
 const controller = new GestureMapController({
   map,
   webcam: {
-    position: "bottom-left",
+    position: 'bottom-left',
     width: 200,
     height: 150,
     opacity: 0.6,

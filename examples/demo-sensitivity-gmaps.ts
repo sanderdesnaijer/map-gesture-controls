@@ -26,7 +26,12 @@ const mapId = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID ?? '';
     try {
       ctrl = new GestureMapController({
         map,
-        tuning: { actionDwellMs: 50, releaseGraceMs: 100, panDeadzonePx: 5, zoomDeadzoneRatio: 0.003 },
+        tuning: {
+          actionDwellMs: 50,
+          releaseGraceMs: 100,
+          panDeadzonePx: 5,
+          zoomDeadzoneRatio: 0.003,
+        },
       });
       await ctrl.start();
       btnStop.disabled = false;

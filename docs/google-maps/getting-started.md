@@ -126,6 +126,7 @@ Restrict the API key to `http://localhost:*` for local use.
 ### Production
 
 Create a separate API key restricted to your production domain:
+
 - HTTP referrer restriction: `yourdomain.com/*`
 - API restriction: Maps JavaScript API only
 - Set a daily quota cap
@@ -147,6 +148,7 @@ Browsers enforce a policy that `getUserMedia()` (webcam access) can only be call
 ## Differences from OpenLayers
 
 The gesture controller API is identical between adapters. The only differences are:
+
 - You import from `@map-gesture-controls/google-maps` instead of `@map-gesture-controls/ol`
 - The `map` property in `GestureMapControllerConfig` expects a `google.maps.Map` instead of an `ol/Map`
 - No coordinate projection needed: Google Maps uses `{ lat, lng }` directly

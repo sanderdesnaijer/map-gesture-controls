@@ -9,8 +9,14 @@ import { LANDMARKS } from '@map-gesture-controls/core';
  * logic into a standalone helper that mirrors the implementation exactly, so
  * we can cover the geometry without spinning up a full Leaflet map + MediaPipe stack.
  */
-function makeLandmarks(overrides: Record<number, Partial<HandLandmark>> = {}): HandLandmark[] {
-  const lm: HandLandmark[] = Array.from({ length: 21 }, () => ({ x: 0.5, y: 0.5, z: 0 }));
+function makeLandmarks(
+  overrides: Record<number, Partial<HandLandmark>> = {},
+): HandLandmark[] {
+  const lm: HandLandmark[] = Array.from({ length: 21 }, () => ({
+    x: 0.5,
+    y: 0.5,
+    z: 0,
+  }));
   for (const [idx, vals] of Object.entries(overrides)) {
     lm[Number(idx)] = { ...lm[Number(idx)], ...vals };
   }
@@ -30,49 +36,53 @@ function isPrayPose(left: HandLandmark[], right: HandLandmark[]): boolean {
 
 describe('isPrayPose', () => {
   it('returns true when wrists are at the same position', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.6 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('returns true when wrists are close (distance < 0.45)', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.45, y: 0.6 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.45, y: 0.6 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.55, y: 0.6 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('returns true when wrists are just inside the threshold', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.44, y: 0.5 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
+    const right = makeLandmarks({
+      [LANDMARKS.WRIST]: { x: 0.5 + 0.44, y: 0.5 },
+    });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('returns false when wrists are outside the threshold', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
-    const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5 + 0.46, y: 0.5 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.5 } });
+    const right = makeLandmarks({
+      [LANDMARKS.WRIST]: { x: 0.5 + 0.46, y: 0.5 },
+    });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
   it('returns false when wrists are far apart horizontally', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.2, y: 0.5 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
   it('returns false when wrists are far apart vertically', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.1 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.1 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.5, y: 0.8 } });
     expect(isPrayPose(left, right)).toBe(false);
   });
 
   it('uses Euclidean distance (diagonal wrists just inside threshold)', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.345, y: 0.345 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.345, y: 0.345 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.655, y: 0.655 } });
     expect(isPrayPose(left, right)).toBe(true);
   });
 
   it('uses Euclidean distance (diagonal wrists just outside threshold)', () => {
-    const left  = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.335, y: 0.335 } });
+    const left = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.335, y: 0.335 } });
     const right = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.665, y: 0.665 } });
     expect(isPrayPose(left, right)).toBe(false);
   });

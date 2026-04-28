@@ -25,12 +25,12 @@ Using [MediaPipe](https://developers.google.com/mediapipe) hand-tracking WASM ru
 
 ## Packages
 
-| Package | npm | Description |
-|---------|-----|-------------|
-| [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/core?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/core) | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
-| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/ol?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/ol) | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`. |
-| [`@map-gesture-controls/google-maps`](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/google-maps?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | Google Maps integration. Re-exports the full core API and adds `GestureMapController` and `GoogleMapsGestureInteraction`. |
-| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/leaflet?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration. Re-exports the full core API and adds `GestureMapController` and `LeafletGestureInteraction`. |
+| Package                                                                                                | npm                                                                                                                                                         | Description                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@map-gesture-controls/core`](https://www.npmjs.com/package/@map-gesture-controls/core)               | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/core?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/core)               | Gesture detection engine, map-agnostic. Exports `GestureController`, `GestureStateMachine`, `WebcamOverlay`, `classifyGesture`, all types, constants, and utility functions. |
+| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol)                   | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/ol?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/ol)                   | OpenLayers integration. Re-exports the full core API and adds `GestureMapController` and `OpenLayersGestureInteraction`.                                                     |
+| [`@map-gesture-controls/google-maps`](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/google-maps?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | Google Maps integration. Re-exports the full core API and adds `GestureMapController` and `GoogleMapsGestureInteraction`.                                                    |
+| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet)         | [![npm](https://img.shields.io/npm/v/@map-gesture-controls/leaflet?style=flat-square)](https://www.npmjs.com/package/@map-gesture-controls/leaflet)         | Leaflet integration. Re-exports the full core API and adds `GestureMapController` and `LeafletGestureInteraction`.                                                           |
 
 > Most users only need the `ol`, `google-maps`, or `leaflet` package. Each re-exports everything from core.
 
@@ -134,7 +134,8 @@ import '@map-gesture-controls/leaflet/style.css';
 
 const map = L.map('map').setView([52.37, 4.9], 10);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
 const controller = new GestureMapController({ map });
@@ -159,46 +160,46 @@ All options are optional. Pass only the keys you want to override; the rest use 
 const controller = new GestureMapController({
   map,
   webcam: {
-    position: 'top-left',  // move overlay to top-left corner
-    width: 240,            // narrower overlay
+    position: 'top-left', // move overlay to top-left corner
+    width: 240, // narrower overlay
     height: 180,
-    margin: 24,            // 24 px from viewport edges
+    margin: 24, // 24 px from viewport edges
     opacity: 0.7,
   },
   tuning: {
-    actionDwellMs: 40,      // faster gesture confirmation
-    releaseGraceMs: 80,     // shorter grace period
-    panDeadzonePx: 0,       // direct panning for slow movement
+    actionDwellMs: 40, // faster gesture confirmation
+    releaseGraceMs: 80, // shorter grace period
+    panDeadzonePx: 0, // direct panning for slow movement
   },
-  debug: true,       // log gesture mode to console
+  debug: true, // log gesture mode to console
 });
 ```
 
 ### `webcam` options (`WebcamConfig`)
 
-| Key        | Type                                                       | Default          | Description                                   |
-| ---------- | ---------------------------------------------------------- | ---------------- | --------------------------------------------- |
-| `enabled`  | `boolean`                                                  | `true`           | Show/hide the overlay entirely.               |
-| `mode`     | `'corner' \| 'full' \| 'hidden'`                           | `'corner'`       | Display mode.                                 |
-| `position` | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | `'bottom-right'` | Corner when `mode === 'corner'`.              |
-| `width`    | `number`                                                   | `320`            | Overlay width in px (corner mode).            |
-| `height`   | `number`                                                   | `240`            | Overlay height in px (corner mode).           |
-| `margin`   | `number`                                                   | `16`             | Distance in px from the nearest edge(s).      |
-| `opacity`  | `number`                                                   | `0.85`           | CSS opacity (0 to 1).                         |
+| Key        | Type                                                           | Default          | Description                              |
+| ---------- | -------------------------------------------------------------- | ---------------- | ---------------------------------------- |
+| `enabled`  | `boolean`                                                      | `true`           | Show/hide the overlay entirely.          |
+| `mode`     | `'corner' \| 'full' \| 'hidden'`                               | `'corner'`       | Display mode.                            |
+| `position` | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | `'bottom-right'` | Corner when `mode === 'corner'`.         |
+| `width`    | `number`                                                       | `320`            | Overlay width in px (corner mode).       |
+| `height`   | `number`                                                       | `240`            | Overlay height in px (corner mode).      |
+| `margin`   | `number`                                                       | `16`             | Distance in px from the nearest edge(s). |
+| `opacity`  | `number`                                                       | `0.85`           | CSS opacity (0 to 1).                    |
 
 ### `tuning` options (`TuningConfig`)
 
-| Key                      | Type     | Default | Description                                                          |
-| ------------------------ | -------- | ------- | -------------------------------------------------------------------- |
-| `actionDwellMs`          | `number` | `80`    | Hold time (ms) before a gesture is confirmed.                        |
-| `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.       |
-| `panDeadzonePx`          | `number` | `0`     | Minimum pixel movement to register a pan.                            |
-| `zoomDeadzoneRatio`      | `number` | `0.005` | Minimum distance-ratio change to register a zoom.                    |
+| Key                      | Type     | Default | Description                                                                                                                                           |
+| ------------------------ | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actionDwellMs`          | `number` | `80`    | Hold time (ms) before a gesture is confirmed.                                                                                                         |
+| `releaseGraceMs`         | `number` | `150`   | Grace period (ms) before returning to idle after gesture ends.                                                                                        |
+| `panDeadzonePx`          | `number` | `0`     | Minimum pixel movement to register a pan.                                                                                                             |
+| `zoomDeadzoneRatio`      | `number` | `0.005` | Minimum distance-ratio change to register a zoom.                                                                                                     |
 | `rotateDeadzoneRad`      | `number` | `0.005` | Minimum wrist-to-wrist angle change (radians) to emit a rotate delta. Lower values respond to smaller wrist tilts; higher values filter micro jitter. |
-| `smoothingAlpha`         | `number` | `0.35`  | Exponential smoothing factor (0 = max smooth, 1 = raw).              |
-| `minDetectionConfidence` | `number` | `0.65`  | MediaPipe minimum detection confidence.                              |
-| `minTrackingConfidence`  | `number` | `0.65`  | MediaPipe minimum tracking confidence.                               |
-| `minPresenceConfidence`  | `number` | `0.60`  | MediaPipe minimum presence confidence.                               |
+| `smoothingAlpha`         | `number` | `0.35`  | Exponential smoothing factor (0 = max smooth, 1 = raw).                                                                                               |
+| `minDetectionConfidence` | `number` | `0.65`  | MediaPipe minimum detection confidence.                                                                                                               |
+| `minTrackingConfidence`  | `number` | `0.65`  | MediaPipe minimum tracking confidence.                                                                                                                |
+| `minPresenceConfidence`  | `number` | `0.60`  | MediaPipe minimum presence confidence.                                                                                                                |
 
 ## Development
 
@@ -223,29 +224,30 @@ npm run type-check
 
 Both **fist** and **pinch** (thumb and index finger touching) trigger the same actions, use whichever feels more comfortable.
 
-| Mode | Condition | Action | How to perform |
-|------|-----------|--------|----------------|
-| Pan | Left hand fist or pinch (right hand absent or open) | Move left hand | Make a fist or pinch with the left hand, then move it in any direction to pan the map |
-| Zoom | Right hand fist or pinch (left hand absent or open) | Move right hand up/down | Make a fist or pinch with the right hand, then move it up to zoom in or down to zoom out |
-| Rotate | Both hands fist or pinch | Tilt wrists | Make a fist or pinch with both hands and tilt them clockwise or counter-clockwise to rotate the map |
-| Reset | Both hands together (pray / namaste), hold 1 second | Resets view | Bring your hands together with wrists close, hold the pose for 1 second: pan, zoom, and rotation return to their initial values |
-| Idle | Any other hand position | None | Let your hands rest or hold any non-recognised pose; the map does nothing |
+| Mode   | Condition                                           | Action                  | How to perform                                                                                                                  |
+| ------ | --------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Pan    | Left hand fist or pinch (right hand absent or open) | Move left hand          | Make a fist or pinch with the left hand, then move it in any direction to pan the map                                           |
+| Zoom   | Right hand fist or pinch (left hand absent or open) | Move right hand up/down | Make a fist or pinch with the right hand, then move it up to zoom in or down to zoom out                                        |
+| Rotate | Both hands fist or pinch                            | Tilt wrists             | Make a fist or pinch with both hands and tilt them clockwise or counter-clockwise to rotate the map                             |
+| Reset  | Both hands together (pray / namaste), hold 1 second | Resets view             | Bring your hands together with wrists close, hold the pose for 1 second: pan, zoom, and rotation return to their initial values |
+| Idle   | Any other hand position                             | None                    | Let your hands rest or hold any non-recognised pose; the map does nothing                                                       |
 
 Gestures are confirmed after a short dwell period (default 80 ms) to avoid accidental triggers, and released after a grace period (default 150 ms) to prevent flickering when hands briefly lose tracking.
 
 ## Browser support
 
-| Browser | Support |
-|---------|---------|
-| Chrome 111+ | Full support |
-| Edge 111+ | Full support |
-| Firefox 115+ | Full support |
-| Safari 17+ | Full support |
-| Mobile browsers | Untested |
+| Browser         | Support      |
+| --------------- | ------------ |
+| Chrome 111+     | Full support |
+| Edge 111+       | Full support |
+| Firefox 115+    | Full support |
+| Safari 17+      | Full support |
+| Mobile browsers | Untested     |
 
 Requirements: **WebGL** (for OpenLayers rendering), **`getUserMedia`** (webcam access), and **WASM** (MediaPipe hand landmarker model, ~10 MB, loaded on first `start()` call).
 
 ## Contributing
+
 - This project uses [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.)
 - PRs are welcome. Please open an [issue](https://github.com/sanderdesnaijer/map-gesture-controls/issues) first for significant changes
 - Run `npm run type-check` and ensure no TS errors before submitting

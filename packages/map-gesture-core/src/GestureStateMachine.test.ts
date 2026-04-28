@@ -364,7 +364,9 @@ describe('GestureStateMachine', () => {
     // angle ≈ 0 rad (horizontal baseline)
     const lmR1 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.5, z: 0 } });
     // tiny tilt: atan2(0.01, 0.6) ≈ 0.017 rad — below 0.05 deadzone
-    const lmR2 = makeLandmarks({ [LANDMARKS.WRIST]: { x: 0.8, y: 0.51, z: 0 } });
+    const lmR2 = makeLandmarks({
+      [LANDMARKS.WRIST]: { x: 0.8, y: 0.51, z: 0 },
+    });
 
     for (let i = 0; i < 5; i++) {
       deadzoneFsm.update(

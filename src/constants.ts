@@ -18,7 +18,7 @@ export const DEFAULT_TUNING_CONFIG: TuningConfig = {
   smoothingAlpha: 0.35,
   minDetectionConfidence: 0.65,
   minTrackingConfidence: 0.65,
-  minPresenceConfidence: 0.60,
+  minPresenceConfidence: 0.6,
   panScale: 2.0,
   zoomScale: 4.0,
 };

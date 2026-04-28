@@ -122,7 +122,8 @@ export class GoogleMapsGestureInteraction {
    * Google Maps uses heading in degrees (0-360).
    */
   private rotate(delta: number): void {
-    this.currentHeading = ((this.currentHeading + (delta * 180) / Math.PI) % 360 + 360) % 360;
+    this.currentHeading =
+      (((this.currentHeading + (delta * 180) / Math.PI) % 360) + 360) % 360;
     this.applyingChange = true;
     this.map.moveCamera({
       heading: this.currentHeading,

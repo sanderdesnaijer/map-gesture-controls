@@ -4,7 +4,7 @@ description: API documentation for @map-gesture-controls/core. GestureController
 head:
   - - meta
     - property: og:title
-      content: "@map-gesture-controls/core API Reference"
+      content: '@map-gesture-controls/core API Reference'
   - - meta
     - property: og:description
       content: API reference for the map-agnostic gesture detection engine. GestureController, state machine, and classifier.
@@ -32,12 +32,12 @@ new GestureController(
 )
 ```
 
-| Method | Returns | Description |
-| --- | --- | --- |
-| `init()` | `Promise<HTMLVideoElement>` | Opens the webcam, initialises MediaPipe WASM, and returns the video element. Must be awaited before calling `start()`. |
-| `start()` | `void` | Begins the per-frame detection loop. Call after `init()` resolves. |
-| `stop()` | `void` | Stops the detection loop and pauses the video stream. |
-| `destroy()` | `void` | Stops detection, closes the webcam stream, and releases all MediaPipe resources. |
+| Method      | Returns                     | Description                                                                                                            |
+| ----------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `init()`    | `Promise<HTMLVideoElement>` | Opens the webcam, initialises MediaPipe WASM, and returns the video element. Must be awaited before calling `start()`. |
+| `start()`   | `void`                      | Begins the per-frame detection loop. Call after `init()` resolves.                                                     |
+| `stop()`    | `void`                      | Stops the detection loop and pauses the video stream.                                                                  |
+| `destroy()` | `void`                      | Stops detection, closes the webcam stream, and releases all MediaPipe resources.                                       |
 
 ---
 
@@ -49,11 +49,11 @@ Classifies raw `GestureFrame` data into stable gesture modes, applying dwell and
 new GestureStateMachine(tuning: TuningConfig)
 ```
 
-| Method | Returns | Description |
-| --- | --- | --- |
+| Method                        | Returns              | Description                                                                                         |
+| ----------------------------- | -------------------- | --------------------------------------------------------------------------------------------------- |
 | `update(frame: GestureFrame)` | `StateMachineOutput` | Process one frame and return the current state machine output including mode, deltas, and metadata. |
-| `getMode()` | `GestureMode` | Return the current active mode without processing a new frame. |
-| `reset()` | `void` | Reset the state machine to idle, clearing all timers and buffered state. |
+| `getMode()`                   | `GestureMode`        | Return the current active mode without processing a new frame.                                      |
+| `reset()`                     | `void`               | Reset the state machine to idle, clearing all timers and buffered state.                            |
 
 ---
 
@@ -65,12 +65,12 @@ Renders the webcam video feed and hand skeleton landmarks on a canvas overlay po
 new WebcamOverlay(config: WebcamConfig)
 ```
 
-| Method | Returns | Description |
-| --- | --- | --- |
-| `mount(el: HTMLElement)` | `void` | Insert the overlay DOM into the given container element. |
-| `unmount()` | `void` | Remove the overlay DOM from the container. |
-| `attachVideo(videoEl: HTMLVideoElement)` | `void` | Connect a video element (from `GestureController.init()`) to the overlay for rendering. |
-| `render(frame: GestureFrame \| null, mode: GestureMode)` | `void` | Draw one frame: video feed, hand skeleton, and colour-coded mode indicator. Pass `null` for `frame` to clear the canvas. |
+| Method                                                   | Returns | Description                                                                                                              |
+| -------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `mount(el: HTMLElement)`                                 | `void`  | Insert the overlay DOM into the given container element.                                                                 |
+| `unmount()`                                              | `void`  | Remove the overlay DOM from the container.                                                                               |
+| `attachVideo(videoEl: HTMLVideoElement)`                 | `void`  | Connect a video element (from `GestureController.init()`) to the overlay for rendering.                                  |
+| `render(frame: GestureFrame \| null, mode: GestureMode)` | `void`  | Draw one frame: video feed, hand skeleton, and colour-coded mode indicator. Pass `null` for `frame` to clear the canvas. |
 
 ---
 
@@ -79,7 +79,7 @@ new WebcamOverlay(config: WebcamConfig)
 ### classifyGesture
 
 ```ts
-function classifyGesture(landmarks: HandLandmark[]): GestureType
+function classifyGesture(landmarks: HandLandmark[]): GestureType;
 ```
 
 Stateless classification of a single hand from its 21 MediaPipe landmarks. Priority: `'fist'` (3+ fingers curled) > `'pinch'` (thumb and index tip within 25% of hand size) > `'openPalm'` (all fingers extended and spread) > `'none'`.
@@ -91,7 +91,7 @@ This function has no pinch hysteresis. For per-hand stateful classification that
 ### createHandClassifier
 
 ```ts
-function createHandClassifier(): (landmarks: HandLandmark[]) => GestureType
+function createHandClassifier(): (landmarks: HandLandmark[]) => GestureType;
 ```
 
 Returns a stateful classify function for a single hand. Pinch detection uses hysteresis: the hand enters `'pinch'` when thumb and index tips are within 25% of hand size, and stays in `'pinch'` until they separate beyond 35% of hand size. This prevents rapid toggling when fingers hover at the entry threshold during a held pinch.
@@ -101,11 +101,11 @@ Create one instance per hand (left and right) and reuse it across frames. `Gestu
 ```ts
 import { createHandClassifier } from '@map-gesture-controls/core';
 
-const classifyLeft  = createHandClassifier();
+const classifyLeft = createHandClassifier();
 const classifyRight = createHandClassifier();
 
 // In your frame loop:
-const leftGesture  = classifyLeft(leftLandmarks);
+const leftGesture = classifyLeft(leftLandmarks);
 const rightGesture = classifyRight(rightLandmarks);
 ```
 
@@ -114,7 +114,7 @@ const rightGesture = classifyRight(rightLandmarks);
 ### getHandSize
 
 ```ts
-function getHandSize(landmarks: HandLandmark[]): number
+function getHandSize(landmarks: HandLandmark[]): number;
 ```
 
 Returns the Euclidean distance between the wrist landmark and the middle-finger MCP (knuckle) landmark. Used as a normalisation factor to make gesture thresholds scale-invariant with distance from the camera.
@@ -126,8 +126,8 @@ Returns the Euclidean distance between the wrist landmark and the middle-finger 
 ```ts
 function getTwoHandDistance(
   landmarksA: HandLandmark[],
-  landmarksB: HandLandmark[]
-): number
+  landmarksB: HandLandmark[],
+): number;
 ```
 
 Returns the Euclidean distance between the index fingertips of two detected hands.
@@ -139,7 +139,7 @@ Returns the Euclidean distance between the index fingertips of two detected hand
 ### DEFAULT_WEBCAM_CONFIG
 
 ```ts
-const DEFAULT_WEBCAM_CONFIG: WebcamConfig
+const DEFAULT_WEBCAM_CONFIG: WebcamConfig;
 ```
 
 Default values for all `WebcamConfig` keys. Merged with any user-provided partial config.
@@ -147,7 +147,7 @@ Default values for all `WebcamConfig` keys. Merged with any user-provided partia
 ### DEFAULT_TUNING_CONFIG
 
 ```ts
-const DEFAULT_TUNING_CONFIG: TuningConfig
+const DEFAULT_TUNING_CONFIG: TuningConfig;
 ```
 
 Default values for all `TuningConfig` keys. See [Configuration](../configuration) for the full table.
@@ -166,7 +166,7 @@ const LANDMARKS: {
   RING_MCP: number;
   PINKY_TIP: number;
   PINKY_MCP: number;
-}
+};
 ```
 
 Named indices into MediaPipe's 21-landmark hand array. Use these instead of magic numbers when working with landmarks directly.
@@ -182,7 +182,7 @@ const COLORS: {
   landmark: string;
   connection: string;
   fingertipGlow: string;
-}
+};
 ```
 
 CSS colour strings used by `WebcamOverlay` to render the hand skeleton in each gesture mode.
@@ -194,7 +194,7 @@ CSS colour strings used by `WebcamOverlay` to render the hand skeleton in each g
 ### GestureMode
 
 ```ts
-type GestureMode = 'idle' | 'panning' | 'zooming' | 'rotating'
+type GestureMode = 'idle' | 'panning' | 'zooming' | 'rotating';
 ```
 
 The active state of the gesture state machine.
@@ -202,7 +202,7 @@ The active state of the gesture state machine.
 ### GestureType
 
 ```ts
-type GestureType = 'fist' | 'pinch' | 'openPalm' | 'none'
+type GestureType = 'fist' | 'pinch' | 'openPalm' | 'none';
 ```
 
 The raw classification result for a single hand from `classifyGesture()` or `createHandClassifier()`.
@@ -210,7 +210,7 @@ The raw classification result for a single hand from `classifyGesture()` or `cre
 ### HandednessLabel
 
 ```ts
-type HandednessLabel = 'Left' | 'Right'
+type HandednessLabel = 'Left' | 'Right';
 ```
 
 Which hand MediaPipe detected.
@@ -292,9 +292,9 @@ A generic 2-D coordinate.
 
 ```ts
 interface HandLandmark {
-  x: number;  // 0 to 1, normalised
-  y: number;  // 0 to 1, normalised
-  z: number;  // depth (relative to wrist)
+  x: number; // 0 to 1, normalised
+  y: number; // 0 to 1, normalised
+  z: number; // depth (relative to wrist)
 }
 ```
 

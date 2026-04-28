@@ -19,19 +19,19 @@ head:
 
 The system operates in one of four modes at any time:
 
-| Mode | Trigger | Map effect |
-| --- | --- | --- |
-| **Idle** | No recognised gesture | None (map stays still) |
-| **Panning** | Left hand fist or pinch (right hand absent or open) | Left wrist movement pans the map in any direction |
-| **Zooming** | Right hand fist or pinch (left hand absent or open) | Moving right wrist up zooms in; moving down zooms out |
-| **Rotating** | Both hands fist or pinch simultaneously | Tilting the wrist-to-wrist line clockwise rotates the map clockwise |
+| Mode         | Trigger                                             | Map effect                                                          |
+| ------------ | --------------------------------------------------- | ------------------------------------------------------------------- |
+| **Idle**     | No recognised gesture                               | None (map stays still)                                              |
+| **Panning**  | Left hand fist or pinch (right hand absent or open) | Left wrist movement pans the map in any direction                   |
+| **Zooming**  | Right hand fist or pinch (left hand absent or open) | Moving right wrist up zooms in; moving down zooms out               |
+| **Rotating** | Both hands fist or pinch simultaneously             | Tilting the wrist-to-wrist line clockwise rotates the map clockwise |
 
 ## Reset gesture (OpenLayers only)
 
 The reset is a separate action layered on top of the mode state machine, available in the OpenLayers integration. It does not correspond to a state-machine mode.
 
-| Gesture | How to trigger | Map effect |
-| --- | --- | --- |
+| Gesture            | How to trigger                                                          | Map effect                                              |
+| ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------- |
 | **Pray / namaste** | Both hands brought together (neither fist nor pinch), held for 1 second | Resets pan, zoom, and rotation back to the initial view |
 
 > **How to reset:** Bring your hands together in a prayer pose, wrists close, palms facing each other. Hold for 1 second while the progress bar fills. The map snaps back to where it started.
@@ -100,15 +100,15 @@ If the same gesture resumes during the grace period, the state machine returns t
 
 ## Tuning parameters
 
-| Parameter | Default | Effect on gestures |
-| --- | --- | --- |
-| `actionDwellMs` | `80` | Lower = gestures activate faster; higher = more stable but slower |
-| `releaseGraceMs` | `150` | Lower = returns to idle faster; higher = more forgiving when hand tracking briefly drops |
-| `panDeadzonePx` | `0` | Lower = reacts to smaller hand movements; higher = filters more tremor |
-| `zoomDeadzoneRatio` | `0.005` | Lower = reacts to smaller wrist movements; higher = requires more deliberate zoom gesture |
-| `smoothingAlpha` | `0.35` | Lower = smoother but more latency; higher = snappier but more jitter |
-| `minDetectionConfidence` | `0.65` | Lower = detects more hands in difficult conditions; higher = fewer false detections |
-| `minTrackingConfidence` | `0.65` | Lower = maintains tracking in poor conditions; higher = drops tracking sooner |
-| `minPresenceConfidence` | `0.60` | Lower = keeps hands in frame longer; higher = drops sooner when partially occluded |
+| Parameter                | Default | Effect on gestures                                                                        |
+| ------------------------ | ------- | ----------------------------------------------------------------------------------------- |
+| `actionDwellMs`          | `80`    | Lower = gestures activate faster; higher = more stable but slower                         |
+| `releaseGraceMs`         | `150`   | Lower = returns to idle faster; higher = more forgiving when hand tracking briefly drops  |
+| `panDeadzonePx`          | `0`     | Lower = reacts to smaller hand movements; higher = filters more tremor                    |
+| `zoomDeadzoneRatio`      | `0.005` | Lower = reacts to smaller wrist movements; higher = requires more deliberate zoom gesture |
+| `smoothingAlpha`         | `0.35`  | Lower = smoother but more latency; higher = snappier but more jitter                      |
+| `minDetectionConfidence` | `0.65`  | Lower = detects more hands in difficult conditions; higher = fewer false detections       |
+| `minTrackingConfidence`  | `0.65`  | Lower = maintains tracking in poor conditions; higher = drops tracking sooner             |
+| `minPresenceConfidence`  | `0.60`  | Lower = keeps hands in frame longer; higher = drops sooner when partially occluded        |
 
 See [Configuration](./configuration) for the full reference and code examples.

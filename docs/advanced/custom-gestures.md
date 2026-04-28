@@ -42,9 +42,14 @@ function classifyExtended(landmarks: HandLandmark[]): ExtendedGestureType {
   if (base !== 'none') return base;
 
   // Custom: index finger extended, others curled
-  const indexExtended = isExtended(landmarks, LANDMARKS.INDEX_TIP, LANDMARKS.INDEX_MCP);
-  const othersDown = isCurled(landmarks, LANDMARKS.MIDDLE_TIP, LANDMARKS.MIDDLE_MCP)
-    && isCurled(landmarks, LANDMARKS.RING_TIP, LANDMARKS.RING_MCP);
+  const indexExtended = isExtended(
+    landmarks,
+    LANDMARKS.INDEX_TIP,
+    LANDMARKS.INDEX_MCP,
+  );
+  const othersDown =
+    isCurled(landmarks, LANDMARKS.MIDDLE_TIP, LANDMARKS.MIDDLE_MCP) &&
+    isCurled(landmarks, LANDMARKS.RING_TIP, LANDMARKS.RING_MCP);
 
   if (indexExtended && othersDown) return 'pointing';
   return 'none';

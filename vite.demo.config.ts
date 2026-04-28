@@ -18,7 +18,7 @@ function mediapipeBrokenSourcemapWorkaround(): Plugin {
       ) {
         const code = readFileSync(path, 'utf-8').replace(
           /\n\/\/# sourceMappingURL=[^\n]+/,
-          ''
+          '',
         );
         return { code, map: null };
       }
@@ -35,10 +35,22 @@ export default defineConfig({
   plugins: [mediapipeBrokenSourcemapWorkaround()],
   resolve: {
     alias: {
-      '@map-gesture-controls/core': resolve(root, 'packages/map-gesture-core/src/index.ts'),
-      '@map-gesture-controls/ol': resolve(root, 'packages/ol-gesture-controls/src/index.ts'),
-      '@map-gesture-controls/google-maps': resolve(root, 'packages/google-maps-gesture-controls/src/index.ts'),
-      '@map-gesture-controls/leaflet': resolve(root, 'packages/leaflet-gesture-controls/src/index.ts'),
+      '@map-gesture-controls/core': resolve(
+        root,
+        'packages/map-gesture-core/src/index.ts',
+      ),
+      '@map-gesture-controls/ol': resolve(
+        root,
+        'packages/ol-gesture-controls/src/index.ts',
+      ),
+      '@map-gesture-controls/google-maps': resolve(
+        root,
+        'packages/google-maps-gesture-controls/src/index.ts',
+      ),
+      '@map-gesture-controls/leaflet': resolve(
+        root,
+        'packages/leaflet-gesture-controls/src/index.ts',
+      ),
     },
   },
   build: {
@@ -46,21 +58,48 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        'demo-basic':              resolve(root, 'examples/demo-basic.html'),
-        'demo-controls-overview':  resolve(root, 'examples/demo-controls-overview.html'),
-        'demo-toggle':             resolve(root, 'examples/demo-toggle.html'),
-        'demo-custom-overlay':     resolve(root, 'examples/demo-custom-overlay.html'),
-        'demo-sensitivity':        resolve(root, 'examples/demo-sensitivity.html'),
-        'demo-controls-overview-gmaps': resolve(root, 'examples/demo-controls-overview-gmaps.html'),
-        'demo-controls-overview-leaflet': resolve(root, 'examples/demo-controls-overview-leaflet.html'),
-        'demo-basic-gmaps':        resolve(root, 'examples/demo-basic-gmaps.html'),
-        'demo-toggle-gmaps':       resolve(root, 'examples/demo-toggle-gmaps.html'),
-        'demo-custom-overlay-gmaps': resolve(root, 'examples/demo-custom-overlay-gmaps.html'),
-        'demo-sensitivity-gmaps':  resolve(root, 'examples/demo-sensitivity-gmaps.html'),
-        'demo-basic-leaflet':      resolve(root, 'examples/demo-basic-leaflet.html'),
-        'demo-toggle-leaflet':     resolve(root, 'examples/demo-toggle-leaflet.html'),
-        'demo-custom-overlay-leaflet': resolve(root, 'examples/demo-custom-overlay-leaflet.html'),
-        'demo-sensitivity-leaflet': resolve(root, 'examples/demo-sensitivity-leaflet.html'),
+        'demo-basic': resolve(root, 'examples/demo-basic.html'),
+        'demo-controls-overview': resolve(
+          root,
+          'examples/demo-controls-overview.html',
+        ),
+        'demo-toggle': resolve(root, 'examples/demo-toggle.html'),
+        'demo-custom-overlay': resolve(
+          root,
+          'examples/demo-custom-overlay.html',
+        ),
+        'demo-sensitivity': resolve(root, 'examples/demo-sensitivity.html'),
+        'demo-controls-overview-gmaps': resolve(
+          root,
+          'examples/demo-controls-overview-gmaps.html',
+        ),
+        'demo-controls-overview-leaflet': resolve(
+          root,
+          'examples/demo-controls-overview-leaflet.html',
+        ),
+        'demo-basic-gmaps': resolve(root, 'examples/demo-basic-gmaps.html'),
+        'demo-toggle-gmaps': resolve(root, 'examples/demo-toggle-gmaps.html'),
+        'demo-custom-overlay-gmaps': resolve(
+          root,
+          'examples/demo-custom-overlay-gmaps.html',
+        ),
+        'demo-sensitivity-gmaps': resolve(
+          root,
+          'examples/demo-sensitivity-gmaps.html',
+        ),
+        'demo-basic-leaflet': resolve(root, 'examples/demo-basic-leaflet.html'),
+        'demo-toggle-leaflet': resolve(
+          root,
+          'examples/demo-toggle-leaflet.html',
+        ),
+        'demo-custom-overlay-leaflet': resolve(
+          root,
+          'examples/demo-custom-overlay-leaflet.html',
+        ),
+        'demo-sensitivity-leaflet': resolve(
+          root,
+          'examples/demo-sensitivity-leaflet.html',
+        ),
       },
     },
   },

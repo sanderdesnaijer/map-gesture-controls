@@ -1,4 +1,9 @@
-import type { GestureFrame, HandLandmark, WebcamConfig, TuningConfig } from '@map-gesture-controls/core';
+import type {
+  GestureFrame,
+  HandLandmark,
+  WebcamConfig,
+  TuningConfig,
+} from '@map-gesture-controls/core';
 import {
   DEFAULT_WEBCAM_CONFIG,
   DEFAULT_TUNING_CONFIG,
@@ -24,7 +29,12 @@ import { OpenLayersGestureInteraction } from './OpenLayersGestureInteraction.js'
  *   ctrl.stop();
  */
 export class GestureMapController {
-  private config: { map: GestureMapControllerConfig['map']; webcam: WebcamConfig; tuning: TuningConfig; debug: boolean };
+  private config: {
+    map: GestureMapControllerConfig['map'];
+    webcam: WebcamConfig;
+    tuning: TuningConfig;
+    debug: boolean;
+  };
   private gestureController: GestureController;
   private stateMachine: GestureStateMachine;
   private overlay: WebcamOverlay;
@@ -98,7 +108,10 @@ export class GestureMapController {
       cancelAnimationFrame(this.rafHandle);
       this.rafHandle = null;
     }
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange,
+    );
     this.started = false;
     this.paused = false;
   }
@@ -165,7 +178,10 @@ export class GestureMapController {
       // Pose dropped — start grace period before resetting the timer
       if (this.resetPoseGraceTimer === null) {
         this.resetPoseGraceTimer = timestamp;
-      } else if (timestamp - this.resetPoseGraceTimer >= this.resetPoseGraceMs) {
+      } else if (
+        timestamp - this.resetPoseGraceTimer >=
+        this.resetPoseGraceMs
+      ) {
         this.resetPoseStart = null;
         this.resetPoseTriggered = false;
         this.resetPoseGraceTimer = null;

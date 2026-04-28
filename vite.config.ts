@@ -18,7 +18,7 @@ function mediapipeBrokenSourcemapWorkaround(): Plugin {
       ) {
         const code = readFileSync(path, 'utf-8').replace(
           /\n\/\/# sourceMappingURL=[^\n]+/,
-          ''
+          '',
         );
         return { code, map: null };
       }
@@ -33,10 +33,22 @@ export default defineConfig({
   plugins: [mediapipeBrokenSourcemapWorkaround()],
   resolve: {
     alias: {
-      '@map-gesture-controls/core': resolve(root, 'packages/map-gesture-core/src/index.ts'),
-      '@map-gesture-controls/ol': resolve(root, 'packages/ol-gesture-controls/src/index.ts'),
-      '@map-gesture-controls/google-maps': resolve(root, 'packages/google-maps-gesture-controls/src/index.ts'),
-      '@map-gesture-controls/leaflet': resolve(root, 'packages/leaflet-gesture-controls/src/index.ts'),
+      '@map-gesture-controls/core': resolve(
+        root,
+        'packages/map-gesture-core/src/index.ts',
+      ),
+      '@map-gesture-controls/ol': resolve(
+        root,
+        'packages/ol-gesture-controls/src/index.ts',
+      ),
+      '@map-gesture-controls/google-maps': resolve(
+        root,
+        'packages/google-maps-gesture-controls/src/index.ts',
+      ),
+      '@map-gesture-controls/leaflet': resolve(
+        root,
+        'packages/leaflet-gesture-controls/src/index.ts',
+      ),
     },
   },
   server: {
@@ -46,7 +58,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        index:    resolve(root, 'examples/index.html'),
+        index: resolve(root, 'examples/index.html'),
         examples: resolve(root, 'examples/examples.html'),
       },
     },

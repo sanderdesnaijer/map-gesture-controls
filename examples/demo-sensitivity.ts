@@ -15,8 +15,8 @@ map.updateSize();
 
 let ctrl: GestureMapController | null = null;
 const btnStart = document.getElementById('btn-start') as HTMLButtonElement;
-const btnStop  = document.getElementById('btn-stop')  as HTMLButtonElement;
-const status   = document.getElementById('status')    as HTMLSpanElement;
+const btnStop = document.getElementById('btn-stop') as HTMLButtonElement;
+const status = document.getElementById('status') as HTMLSpanElement;
 
 btnStart.addEventListener('click', async () => {
   btnStart.disabled = true;
@@ -24,7 +24,12 @@ btnStart.addEventListener('click', async () => {
   try {
     ctrl = new GestureMapController({
       map,
-      tuning: { actionDwellMs: 50, releaseGraceMs: 100, panDeadzonePx: 5, zoomDeadzoneRatio: 0.003 },
+      tuning: {
+        actionDwellMs: 50,
+        releaseGraceMs: 100,
+        panDeadzonePx: 5,
+        zoomDeadzoneRatio: 0.003,
+      },
     });
     await ctrl.start();
     btnStop.disabled = false;

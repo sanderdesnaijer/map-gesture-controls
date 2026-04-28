@@ -54,17 +54,17 @@ controller.start();
 
 ## Exports
 
-| Export | Type | Description |
-| --- | --- | --- |
-| `GestureController` | Class | Opens the webcam, runs MediaPipe detection, and emits gesture frames |
-| `GestureStateMachine` | Class | Manages gesture state transitions with dwell and grace timers |
-| `WebcamOverlay` | Class | Renders a configurable camera preview overlay |
-| `classifyGesture` | Function | Stateless classifier: returns `fist`, `pinch`, `openPalm`, or `none` for a set of landmarks |
-| `createHandClassifier` | Function | Returns a stateful per-hand classifier with pinch hysteresis (use this instead of `classifyGesture` in custom pipelines) |
-| `getHandSize` | Function | Computes the bounding size of a hand from its landmarks |
-| `getTwoHandDistance` | Function | Measures the distance between two detected hands |
-| `DEFAULT_WEBCAM_CONFIG` | Constant | Default webcam overlay settings |
-| `DEFAULT_TUNING_CONFIG` | Constant | Default tuning parameters |
+| Export                  | Type     | Description                                                                                                              |
+| ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `GestureController`     | Class    | Opens the webcam, runs MediaPipe detection, and emits gesture frames                                                     |
+| `GestureStateMachine`   | Class    | Manages gesture state transitions with dwell and grace timers                                                            |
+| `WebcamOverlay`         | Class    | Renders a configurable camera preview overlay                                                                            |
+| `classifyGesture`       | Function | Stateless classifier: returns `fist`, `pinch`, `openPalm`, or `none` for a set of landmarks                              |
+| `createHandClassifier`  | Function | Returns a stateful per-hand classifier with pinch hysteresis (use this instead of `classifyGesture` in custom pipelines) |
+| `getHandSize`           | Function | Computes the bounding size of a hand from its landmarks                                                                  |
+| `getTwoHandDistance`    | Function | Measures the distance between two detected hands                                                                         |
+| `DEFAULT_WEBCAM_CONFIG` | Constant | Default webcam overlay settings                                                                                          |
+| `DEFAULT_TUNING_CONFIG` | Constant | Default tuning parameters                                                                                                |
 
 Full TypeScript types are exported for `GestureMode`, `GestureFrame`, `DetectedHand`, `WebcamConfig`, `TuningConfig`, and more.
 
@@ -72,14 +72,14 @@ Full TypeScript types are exported for `GestureMode`, `GestureFrame`, `DetectedH
 
 Both **fist** and **pinch** trigger the same map actions, users can use whichever is more comfortable.
 
-| Gesture | Detection rule | Map action |
-| --- | --- | --- |
-| **Left fist** | Left hand, 3+ fingers curled | Pan / drag |
-| **Left pinch** | Left hand, thumb and index tip within 25% of hand size (exits at 35%) | Pan / drag |
-| **Right fist** | Right hand, 3+ fingers curled | Zoom (move up = in, down = out) |
-| **Right pinch** | Right hand, thumb and index tip within 25% of hand size (exits at 35%) | Zoom (move up = in, down = out) |
-| **Both hands active** | Both hands fist or pinch (mixed is fine) | Rotate map |
-| **Idle** | Anything else | No action |
+| Gesture               | Detection rule                                                         | Map action                      |
+| --------------------- | ---------------------------------------------------------------------- | ------------------------------- |
+| **Left fist**         | Left hand, 3+ fingers curled                                           | Pan / drag                      |
+| **Left pinch**        | Left hand, thumb and index tip within 25% of hand size (exits at 35%)  | Pan / drag                      |
+| **Right fist**        | Right hand, 3+ fingers curled                                          | Zoom (move up = in, down = out) |
+| **Right pinch**       | Right hand, thumb and index tip within 25% of hand size (exits at 35%) | Zoom (move up = in, down = out) |
+| **Both hands active** | Both hands fist or pinch (mixed is fine)                               | Rotate map                      |
+| **Idle**              | Anything else                                                          | No action                       |
 
 > **Reset (OpenLayers only):** `@map-gesture-controls/ol` adds a reset gesture on top of the above. Bring both hands together in a prayer/namaste pose (wrists close, neither hand making a fist or pinch) and hold for 1 second. A progress bar fills in the webcam overlay; when it completes, pan, zoom, and rotation all snap back to their initial values.
 
@@ -100,11 +100,11 @@ Requires **WebGL**, **`getUserMedia`** (webcam), and **WASM** support. Works in 
 
 ## Related packages
 
-| Package | Description |
-| --- | --- |
-| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol) | OpenLayers integration |
+| Package                                                                                                | Description             |
+| ------------------------------------------------------------------------------------------------------ | ----------------------- |
+| [`@map-gesture-controls/ol`](https://www.npmjs.com/package/@map-gesture-controls/ol)                   | OpenLayers integration  |
 | [`@map-gesture-controls/google-maps`](https://www.npmjs.com/package/@map-gesture-controls/google-maps) | Google Maps integration |
-| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet) | Leaflet integration |
+| [`@map-gesture-controls/leaflet`](https://www.npmjs.com/package/@map-gesture-controls/leaflet)         | Leaflet integration     |
 
 ## Documentation
 

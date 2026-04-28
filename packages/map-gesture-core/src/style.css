@@ -25,7 +25,9 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   pointer-events: none;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
   z-index: 1;
 }
 

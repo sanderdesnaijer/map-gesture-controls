@@ -3,7 +3,7 @@ import type {
   HandLandmark,
   WebcamConfig,
   TuningConfig,
-} from "@map-gesture-controls/core";
+} from '@map-gesture-controls/core';
 import {
   DEFAULT_WEBCAM_CONFIG,
   DEFAULT_TUNING_CONFIG,
@@ -11,9 +11,9 @@ import {
   GestureController,
   GestureStateMachine,
   WebcamOverlay,
-} from "@map-gesture-controls/core";
-import type { GestureMapControllerConfig } from "./types.js";
-import { LeafletGestureInteraction } from "./LeafletGestureInteraction.js";
+} from '@map-gesture-controls/core';
+import type { GestureMapControllerConfig } from './types.js';
+import { LeafletGestureInteraction } from './LeafletGestureInteraction.js';
 
 /**
  * GestureMapController
@@ -30,7 +30,7 @@ import { LeafletGestureInteraction } from "./LeafletGestureInteraction.js";
  */
 export class GestureMapController {
   private config: {
-    map: GestureMapControllerConfig["map"];
+    map: GestureMapControllerConfig['map'];
     webcam: WebcamConfig;
     tuning: TuningConfig;
     debug: boolean;
@@ -100,7 +100,7 @@ export class GestureMapController {
 
       // Pause when tab is hidden to save resources
       document.addEventListener(
-        "visibilitychange",
+        'visibilitychange',
         this.handleVisibilityChange,
       );
     } catch (error) {
@@ -110,7 +110,7 @@ export class GestureMapController {
       this.started = false;
       this.paused = false;
       document.removeEventListener(
-        "visibilitychange",
+        'visibilitychange',
         this.handleVisibilityChange,
       );
       throw error;
@@ -131,7 +131,7 @@ export class GestureMapController {
       this.rafHandle = null;
     }
     document.removeEventListener(
-      "visibilitychange",
+      'visibilitychange',
       this.handleVisibilityChange,
     );
     this.started = false;
@@ -157,13 +157,13 @@ export class GestureMapController {
     this.rafHandle = requestAnimationFrame(() => this.renderLoop());
 
     if (this.paused) {
-      this.overlay.render(null, "idle");
+      this.overlay.render(null, 'idle');
       return;
     }
 
     const frame = this.lastFrame;
     if (frame === null) {
-      this.overlay.render(null, "idle");
+      this.overlay.render(null, 'idle');
       return;
     }
 
@@ -175,10 +175,10 @@ export class GestureMapController {
     const resetPoseActive =
       !!leftHand &&
       !!rightHand &&
-      leftHand.gesture !== "fist" &&
-      leftHand.gesture !== "pinch" &&
-      rightHand.gesture !== "fist" &&
-      rightHand.gesture !== "pinch" &&
+      leftHand.gesture !== 'fist' &&
+      leftHand.gesture !== 'pinch' &&
+      rightHand.gesture !== 'fist' &&
+      rightHand.gesture !== 'pinch' &&
       this.isPrayPose(leftHand.landmarks, rightHand.landmarks);
 
     if (resetPoseActive) {
@@ -260,7 +260,7 @@ export class GestureMapController {
   private logDebug(mode: string, frame: GestureFrame): void {
     const hands = frame.hands
       .map((h) => `${h.handedness}:${h.gesture}(${h.score.toFixed(2)})`)
-      .join(" ");
+      .join(' ');
     console.debug(`[leaflet-gestures] mode=${mode} ${hands}`);
   }
 }

@@ -277,9 +277,9 @@ const map = new Map({
 const controller = new GestureMapController({
   map,
   tuning: {
-    actionDwellMs: 50,        // confirm gestures faster (default 80 ms)
-    releaseGraceMs: 100,      // shorter grace period (default 150 ms)
-    panDeadzonePx: 5,         // add a small tremor filter (default 0)
+    actionDwellMs: 50, // confirm gestures faster (default 80 ms)
+    releaseGraceMs: 100, // shorter grace period (default 150 ms)
+    panDeadzonePx: 5, // add a small tremor filter (default 0)
     zoomDeadzoneRatio: 0.003, // finer zoom control (default 0.005)
   },
 });

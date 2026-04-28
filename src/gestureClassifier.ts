@@ -1,5 +1,9 @@
 import type { HandLandmark, GestureType } from './types.js';
-import { LANDMARKS, FINGERTIP_INDICES, FINGER_BASE_INDICES } from './constants.js';
+import {
+  LANDMARKS,
+  FINGERTIP_INDICES,
+  FINGER_BASE_INDICES,
+} from './constants.js';
 
 /**
  * Euclidean distance between two landmarks (ignoring Z).

@@ -3,12 +3,29 @@ import { COLORS, LANDMARKS } from './constants.js';
 
 // MediaPipe hand connection pairs (landmark index pairs)
 const HAND_CONNECTIONS: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4],       // thumb
-  [0, 5], [5, 6], [6, 7], [7, 8],       // index
-  [0, 9], [9, 10], [10, 11], [11, 12],  // middle
-  [0, 13], [13, 14], [14, 15], [15, 16], // ring
-  [0, 17], [17, 18], [18, 19], [19, 20], // pinky
-  [5, 9], [9, 13], [13, 17],            // palm cross
+  [0, 1],
+  [1, 2],
+  [2, 3],
+  [3, 4], // thumb
+  [0, 5],
+  [5, 6],
+  [6, 7],
+  [7, 8], // index
+  [0, 9],
+  [9, 10],
+  [10, 11],
+  [11, 12], // middle
+  [0, 13],
+  [13, 14],
+  [14, 15],
+  [15, 16], // ring
+  [0, 17],
+  [17, 18],
+  [18, 19],
+  [19, 20], // pinky
+  [5, 9],
+  [9, 13],
+  [13, 17], // palm cross
 ];
 
 const FINGERTIP_LANDMARKS = [
@@ -48,7 +65,8 @@ export class WebcamOverlay {
 
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'ol-gesture-canvas';
-    this.canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;';
+    this.canvas.style.cssText =
+      'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;';
 
     this.badge = document.createElement('div');
     this.badge.className = 'ol-gesture-badge ol-gesture-badge--idle';
@@ -60,7 +78,9 @@ export class WebcamOverlay {
       '<span class="ol-gesture-reset-label">Reset</span>' +
       '<div class="ol-gesture-reset-track"><div class="ol-gesture-reset-fill"></div></div>';
     this.resetBar.style.opacity = '0';
-    this.resetFill = this.resetBar.querySelector('.ol-gesture-reset-fill') as HTMLDivElement;
+    this.resetFill = this.resetBar.querySelector(
+      '.ol-gesture-reset-fill',
+    ) as HTMLDivElement;
 
     this.container.appendChild(this.canvas);
     this.container.appendChild(this.badge);
@@ -89,7 +109,11 @@ export class WebcamOverlay {
   }
 
   /** Called each frame with the latest gesture frame, mode, and optional reset progress (0 to 1). */
-  render(frame: GestureFrame | null, mode: GestureMode, resetProgress = 0): void {
+  render(
+    frame: GestureFrame | null,
+    mode: GestureMode,
+    resetProgress = 0,
+  ): void {
     this.updateBadge(mode);
     this.updateResetBar(resetProgress);
 
@@ -142,9 +166,7 @@ export class WebcamOverlay {
       const lm = landmarks[i];
       const isTip = (FINGERTIP_LANDMARKS as readonly number[]).includes(i);
       const color =
-        mode !== 'idle' && isTip
-          ? COLORS.fingertipGlow
-          : COLORS.landmark;
+        mode !== 'idle' && isTip ? COLORS.fingertipGlow : COLORS.landmark;
 
       ctx.beginPath();
       ctx.arc(px(lm), py(lm), isTip ? 5 : 3, 0, Math.PI * 2);

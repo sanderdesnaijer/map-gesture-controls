@@ -1,0 +1,9 @@
+node_modules/
+dist/
+examples/dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/public/demo/
+coverage/
+*.timestamp-*.mjs
+package-lock.json

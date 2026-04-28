@@ -1,5 +1,11 @@
 import type { HandLandmark, GestureType } from './types.js';
-import { LANDMARKS, FINGERTIP_INDICES, FINGER_BASE_INDICES, PINCH_THRESHOLD, PINCH_RELEASE_THRESHOLD } from './constants.js';
+import {
+  LANDMARKS,
+  FINGERTIP_INDICES,
+  FINGER_BASE_INDICES,
+  PINCH_THRESHOLD,
+  PINCH_RELEASE_THRESHOLD,
+} from './constants.js';
 
 /**
  * Euclidean distance between two landmarks (ignoring Z).
@@ -162,7 +168,9 @@ export function classifyGesture(landmarks: HandLandmark[]): GestureType {
  *
  * Use one instance per hand (left / right) and reset between hand sessions.
  */
-export function createHandClassifier(): (landmarks: HandLandmark[]) => GestureType {
+export function createHandClassifier(): (
+  landmarks: HandLandmark[],
+) => GestureType {
   let pinching = false;
 
   return function classify(landmarks: HandLandmark[]): GestureType {

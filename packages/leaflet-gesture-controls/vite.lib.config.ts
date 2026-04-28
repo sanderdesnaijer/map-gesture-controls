@@ -10,7 +10,11 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: ['leaflet', '@mediapipe/tasks-vision', '@map-gesture-controls/core'],
+      external: [
+        'leaflet',
+        '@mediapipe/tasks-vision',
+        '@map-gesture-controls/core',
+      ],
     },
     outDir: 'dist',
     emptyOutDir: false,
