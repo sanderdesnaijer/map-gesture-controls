@@ -9,6 +9,7 @@ export const DEFAULT_WEBCAM_CONFIG: WebcamConfig = {
   height: 240,
 };
 
+// Default tuning configuration for gesture recognition.
 export const DEFAULT_TUNING_CONFIG: TuningConfig = {
   actionDwellMs: 80,
   releaseGraceMs: 150,

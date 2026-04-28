@@ -4,6 +4,7 @@ export { GoogleMapsGestureInteraction } from './GoogleMapsGestureInteraction.js'
 export type { GestureMapControllerConfig } from './types.js';
 
 // Re-export the full core public API so consumers only need one package
+
 export {
   GestureController,
   GestureStateMachine,
