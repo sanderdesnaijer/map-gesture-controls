@@ -41,7 +41,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke": "node scripts/smoke-packages.mjs",
-    "check": "npm run format:check && npm run type-check && npm test && npm run build && npm run smoke",
+    "check": "npm run format:check && npm run build && npm run type-check && npm test && npm run smoke",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
