@@ -1,19 +1,19 @@
 ---
-title: OpenLayers API Reference
-description: API documentation for @map-gesture-controls/ol. GestureMapController, configuration types, events, and full TypeScript reference.
+title: OpenLayers Gesture Controls API Reference
+description: Complete API documentation for @map-gesture-controls/ol. Covers GestureMapController, configuration options, lifecycle events, TypeScript types, and integration patterns for OpenLayers.
 head:
   - - meta
     - property: og:title
       content: '@map-gesture-controls/ol API Reference'
   - - meta
     - property: og:description
-      content: API documentation for the OpenLayers gesture control integration. Full TypeScript reference.
+      content: Complete API docs for @map-gesture-controls/ol. GestureMapController, configuration, events, and TypeScript types for OpenLayers gesture controls.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/api/ol
 ---
 
-# @map-gesture-controls/ol
+# @map-gesture-controls/ol API Reference
 
 This package is the OpenLayers integration layer. It re-exports the **full** `@map-gesture-controls/core` API, so you only need to install and import from this package.
 

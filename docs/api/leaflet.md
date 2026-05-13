@@ -1,19 +1,19 @@
 ---
-title: Leaflet API Reference
-description: API documentation for @map-gesture-controls/leaflet. GestureMapController, configuration types, and full TypeScript reference.
+title: Leaflet Gesture Controls API Reference
+description: Complete API documentation for @map-gesture-controls/leaflet. Covers GestureMapController, configuration options, lifecycle events, TypeScript types, and integration patterns for Leaflet.
 head:
   - - meta
     - property: og:title
       content: '@map-gesture-controls/leaflet API Reference'
   - - meta
     - property: og:description
-      content: API documentation for the Leaflet gesture control integration. Full TypeScript reference.
+      content: Complete API docs for @map-gesture-controls/leaflet. GestureMapController, configuration, events, and TypeScript types for Leaflet gesture controls.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/api/leaflet
 ---
 
-# @map-gesture-controls/leaflet
+# @map-gesture-controls/leaflet API Reference
 
 This package is the Leaflet integration layer. It re-exports the **full** `@map-gesture-controls/core` API, so you only need to install and import from this package.
 

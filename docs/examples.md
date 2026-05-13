@@ -1,16 +1,19 @@
 ---
-title: Examples
-description: Live demos and code examples for hand gesture map controls.
+title: Hand Gesture Map Control Examples
+description: Browse live demos and interactive code examples for hand gesture map controls. Try pan, zoom, and rotate gestures with OpenLayers, Google Maps, and Leaflet directly in your browser.
 head:
   - - meta
     - property: og:title
-      content: Examples - Map Gesture Controls
+      content: Hand Gesture Map Control Examples - Map Gesture Controls
+  - - meta
+    - property: og:description
+      content: Browse live demos and interactive code examples for hand gesture map controls. Try pan, zoom, and rotate gestures with OpenLayers, Google Maps, and Leaflet.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/examples
 ---
 
-# Examples
+# Hand Gesture Map Control Examples
 
 Choose your mapping library:
 

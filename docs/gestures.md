@@ -13,7 +13,7 @@ head:
       content: https://sanderdesnaijer.github.io/map-gesture-controls/gestures
 ---
 
-# Gestures
+# Supported Hand Gestures
 
 ## Gesture modes
 

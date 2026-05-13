@@ -1,19 +1,19 @@
 ---
-title: Leaflet Examples
-description: Live demos and code examples for hand gesture map controls with Leaflet. Basic setup, sensitivity tuning, custom overlays, and toggle controls.
+title: Leaflet Hand Gesture Control Examples
+description: Interactive demos and code examples for Leaflet hand gesture controls. Try basic setup, sensitivity tuning, custom webcam overlays, and toggle controls directly in your browser.
 head:
   - - meta
     - property: og:title
-      content: Leaflet Examples - Map Gesture Controls
+      content: Leaflet Hand Gesture Control Examples - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Live demos and code examples for hand gesture map controls with Leaflet.
+      content: Interactive demos and code examples for Leaflet hand gesture controls. Basic setup, sensitivity tuning, custom overlays, and toggle controls.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/leaflet/examples
 ---
 
-# Leaflet Examples
+# Leaflet Gesture Control Examples
 
 All examples are self-contained TypeScript snippets. Each assumes you have an HTML element with the appropriate `id`, and both `leaflet/dist/leaflet.css` and `@map-gesture-controls/leaflet/style.css` imported in your entry file.
 

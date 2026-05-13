@@ -1,13 +1,13 @@
 ---
-title: Getting Started with Leaflet
-description: Install and set up hand gesture controls for Leaflet maps in minutes. Step-by-step guide for integrating webcam-based gesture navigation.
+title: Getting Started with Leaflet Gesture Controls
+description: Install and configure hand gesture controls for Leaflet maps. Follow this step-by-step guide to add webcam-based pan, zoom, and rotate navigation powered by MediaPipe to your Leaflet app.
 head:
   - - meta
     - property: og:title
-      content: Getting Started with Leaflet - Map Gesture Controls
+      content: Getting Started with Leaflet Gesture Controls - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Install and set up hand gesture controls for Leaflet maps in minutes.
+      content: Install and configure hand gesture controls for Leaflet maps. Step-by-step guide for webcam-based pan, zoom, and rotate navigation.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/leaflet/getting-started

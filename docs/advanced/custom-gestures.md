@@ -1,19 +1,19 @@
 ---
-title: Custom Gestures
-description: Extend Map Gesture Controls with custom hand gestures. Hook into the classification and application pipeline to add your own gesture behaviors.
+title: Custom Gestures for Map Gesture Controls
+description: Extend Map Gesture Controls with your own custom hand gestures. Learn how to hook into the classification and application pipeline to define new gesture behaviors and map interactions.
 head:
   - - meta
     - property: og:title
       content: Custom Gestures - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Extend the gesture pipeline with custom hand gestures and behaviors.
+      content: Extend Map Gesture Controls with custom hand gestures. Hook into the classification pipeline to define new gesture behaviors and map interactions.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/advanced/custom-gestures
 ---
 
-# Custom Gestures
+# Building Custom Gestures
 
 ::: warning Placeholder
 This page is a placeholder for future documentation. The API described here reflects the current internal structure and may change as custom gesture support is formalised in an upcoming release.

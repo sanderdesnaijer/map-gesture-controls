@@ -1,13 +1,13 @@
 ---
-title: Getting Started with Google Maps
-description: Install and set up hand gesture controls for Google Maps in minutes. Step-by-step guide for integrating webcam-based gesture navigation.
+title: Getting Started with Google Maps Gesture Controls
+description: Install and configure hand gesture controls for Google Maps. Follow this step-by-step guide to add webcam-based pan, zoom, and rotate navigation using the Maps JavaScript API.
 head:
   - - meta
     - property: og:title
-      content: Getting Started with Google Maps - Map Gesture Controls
+      content: Getting Started with Google Maps Gesture Controls - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Install and set up hand gesture controls for Google Maps in minutes.
+      content: Install and configure hand gesture controls for Google Maps. Step-by-step guide for webcam-based pan, zoom, and rotate navigation.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/google-maps/getting-started

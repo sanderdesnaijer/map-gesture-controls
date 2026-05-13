@@ -1,19 +1,19 @@
 ---
-title: OpenLayers Examples
-description: Live demos and code examples for hand gesture map controls with OpenLayers. Basic setup, sensitivity tuning, custom overlays, and toggle controls.
+title: OpenLayers Hand Gesture Control Examples
+description: Interactive demos and code examples for OpenLayers hand gesture controls. Try basic setup, sensitivity tuning, custom webcam overlays, and toggle controls directly in your browser.
 head:
   - - meta
     - property: og:title
-      content: OpenLayers Examples - Map Gesture Controls
+      content: OpenLayers Hand Gesture Control Examples - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Live demos and code examples for hand gesture map controls with OpenLayers.
+      content: Interactive demos and code examples for OpenLayers hand gesture controls. Basic setup, sensitivity tuning, custom overlays, and toggle controls.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/ol/examples
 ---
 
-# OpenLayers Examples
+# OpenLayers Gesture Control Examples
 
 All examples are self-contained TypeScript snippets. Each assumes you have an HTML element with the appropriate `id` and `@map-gesture-controls/ol/style.css` imported in your entry file.
 

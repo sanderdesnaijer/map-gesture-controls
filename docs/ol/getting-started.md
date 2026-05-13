@@ -1,13 +1,13 @@
 ---
-title: Getting Started with OpenLayers
-description: Install and set up hand gesture controls for OpenLayers maps in minutes. Step-by-step guide for integrating webcam-based gesture navigation.
+title: Getting Started with OpenLayers Gesture Controls
+description: Install and configure hand gesture controls for OpenLayers maps. Follow this step-by-step guide to add webcam-based pan, zoom, and rotate navigation powered by MediaPipe.
 head:
   - - meta
     - property: og:title
-      content: Getting Started with OpenLayers - Map Gesture Controls
+      content: Getting Started with OpenLayers Gesture Controls - Map Gesture Controls
   - - meta
     - property: og:description
-      content: Install and set up hand gesture controls for OpenLayers maps in minutes.
+      content: Install and configure hand gesture controls for OpenLayers maps. Step-by-step guide for webcam-based pan, zoom, and rotate navigation.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/ol/getting-started

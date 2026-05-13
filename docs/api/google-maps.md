@@ -1,19 +1,19 @@
 ---
-title: Google Maps API Reference
-description: API documentation for @map-gesture-controls/google-maps. GestureMapController, configuration types, and full TypeScript reference.
+title: Google Maps Gesture Controls API Reference
+description: Complete API documentation for @map-gesture-controls/google-maps. Covers GestureMapController, configuration options, lifecycle events, TypeScript types, and integration patterns.
 head:
   - - meta
     - property: og:title
       content: '@map-gesture-controls/google-maps API Reference'
   - - meta
     - property: og:description
-      content: API documentation for the Google Maps gesture control integration. Full TypeScript reference.
+      content: Complete API docs for @map-gesture-controls/google-maps. GestureMapController, configuration, events, and TypeScript types for gesture controls.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/api/google-maps
 ---
 
-# @map-gesture-controls/google-maps
+# @map-gesture-controls/google-maps API Reference
 
 This package is the Google Maps integration layer. It re-exports the **full** `@map-gesture-controls/core` API, so you only need to install and import from this package.
 

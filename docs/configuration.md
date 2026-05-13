@@ -13,7 +13,7 @@ head:
       content: https://sanderdesnaijer.github.io/map-gesture-controls/configuration
 ---
 
-# Configuration
+# Configuration Reference
 
 All configuration is passed to `GestureMapController` at construction time. Every key is optional; unspecified keys use the defaults shown below. The configuration is shared across all adapters (OpenLayers, Google Maps).
 

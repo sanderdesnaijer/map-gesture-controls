@@ -1,19 +1,19 @@
 ---
 title: Getting Started with Map Gesture Controls
-description: Choose your mapping library and set up hand gesture controls in minutes. Supports OpenLayers, Google Maps, and Leaflet.
+description: Choose your mapping library and add hand gesture controls to your web maps in minutes. Step-by-step setup guides for OpenLayers, Google Maps, and Leaflet with MediaPipe.
 head:
   - - meta
     - property: og:title
       content: Getting Started with Map Gesture Controls
   - - meta
     - property: og:description
-      content: Choose your mapping library and set up hand gesture controls in minutes.
+      content: Choose your mapping library and add hand gesture controls to your web maps in minutes. Setup guides for OpenLayers, Google Maps, and Leaflet.
   - - meta
     - property: og:url
       content: https://sanderdesnaijer.github.io/map-gesture-controls/getting-started
 ---
 
-# Getting Started
+# Getting Started with Map Gesture Controls
 
 Map Gesture Controls works with multiple mapping libraries. Pick yours to get started:
 
